@@ -232,8 +232,8 @@ array_t* array_pop(array_t *a, void **ret_obj) {
 int default_compare(const void *ent, const void *obj) {
 	return !(ent == obj);
 }
-arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, int (*compare)(const void *ent, const void *obj)) {
-	int (*use_compare)(const void *ent, const void *obj);
+arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, int (*compare)(const void *obj, const void *ent)) {
+	int (*use_compare)(const void *obj, const void *ent);
 
 	ASSERT_ARRAY(a);
 
@@ -253,7 +253,7 @@ arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, in
 
 	return (arlen_t )-1;
 }
-void* array_find_object(const array_t *a, const void *object, int (*compare)(const void *ent, const void *obj)) {
+void* array_find_object(const array_t *a, const void *object, int (*compare)(const void *obj, const void *ent)) {
 	arlen_t i;
 
 	if ((i = array_find_index(a, 0, object, compare)) == (arlen_t )-1) {

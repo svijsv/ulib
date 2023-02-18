@@ -79,7 +79,9 @@ typedef struct {
 	// The function used to compare objects when required. If the search function
 	// is given a different comparison function, that takes precedence. If both
 	// are NULL, do a simple pointer comparison.
-	int (*compare)(const void *a, const void *b);
+	// obj is the object to find, ent is the current array item being checked
+	// against it.
+	int (*compare)(const void *obj, const void *ent);
 } array_t;
 
 typedef struct {
@@ -122,12 +124,12 @@ array_t* array_pop(array_t *a, void **ret_obj);
 // If compare() is NULL, use a->compare() if that's non-NULL. Otherwise check
 // if the pointers are the same.
 // Returns (arlen_t )-1 if no match is found.
-arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, int (*compare)(const void *ent, const void *obj));
+arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, int (*compare)(const void *obj, const void *ent));
 // Find object in the array.
 // If compare() is NULL, use a->compare() if that's non-NULL. Otherwise check
 // if the pointers are the same.
 // Returns NULL if no match is found.
-void* array_find_object(const array_t *a, const void *object, int (*compare)(const void *ent, const void *obj));
+void* array_find_object(const array_t *a, const void *object, int (*compare)(const void *obj, const void *ent));
 
 
 #endif // ULIB_ENABLE_ARRAYS
