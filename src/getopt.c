@@ -26,13 +26,14 @@
  extern "C" {
 #endif
 
+#include "getopt.h"
+#if ULIB_ENABLE_GETOPT
+
 #include "bits.h"
 #include "cstrings.h"
 #include "debug.h"
-#include "getopt.h"
 #include "msg.h"
 
-#if ULIB_ENABLE_GETOPT
 
 #include <stdio.h>
 #include <stdlib.h>

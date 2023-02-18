@@ -26,10 +26,11 @@
  extern "C" {
 #endif
 
-#include "debug.h"
 #include "printf.h"
-
 #if ULIB_ENABLE_PRINTF
+
+#include "debug.h"
+
 
 void printf_vv(void (*pputc)(int c), const char *restrict fmt, ...) {
 	va_list arp;

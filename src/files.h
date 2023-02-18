@@ -46,10 +46,10 @@
 #define _ULIB_FILES_H
 
 #include "configify.h"
+#if ULIB_ENABLE_FILES
+
 #include "strings.h"
 #include "types.h"
-
-#if ULIB_ENABLE_FILES
 
 #include <sys/stat.h>
 

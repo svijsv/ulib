@@ -29,9 +29,10 @@
 #define _ULIB_UTIL_H
 
 #include "configify.h"
+#if ULIB_ENABLE_UTIL
+
 #include "types.h"
 
-#if ULIB_ENABLE_UTIL
 
 //
 // Initialize a block of memory

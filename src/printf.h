@@ -29,11 +29,12 @@
 #define _ULIB_PRINTF_H
 
 #include "configify.h"
-#include "types.h"
-
 #if ULIB_ENABLE_PRINTF
 
+#include "types.h"
+
 #include <stdarg.h>
+
 
 // Print printf-formatted strings one character at a time using pputc().
 // printf_vv() is comparable to printf() and printf_va() to vprintf().

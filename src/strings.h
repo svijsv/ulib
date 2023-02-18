@@ -44,10 +44,11 @@
 #define _ULIB_STRINGS_H
 
 #include "configify.h"
+#if ULIB_ENABLE_STRINGS
+
 #include "types.h"
 #include "util.h"
 
-#if ULIB_ENABLE_STRINGS
 
 #include <stdarg.h>
 

@@ -31,16 +31,17 @@
  extern "C" {
 #endif
 
+#include "strings.h"
+#if ULIB_ENABLE_STRINGS
+
 #include "cstrings.h"
 #include "debug.h"
 #include "printf.h"
-#include "strings.h"
 #include "util.h"
-
-#if ULIB_ENABLE_STRINGS
 
 #include <stdlib.h>
 #include <string.h>
+
 
 #if ! HAVE_PRINTF_VA
 # include <stdio.h>

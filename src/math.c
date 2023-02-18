@@ -31,10 +31,11 @@
  extern "C" {
 #endif
 
-#include "debug.h"
 #include "math.h"
-
 #if ULIB_ENABLE_MATH
+
+#include "debug.h"
+
 
 //
 // logE(2) and log10(2) converted to our fixed-point notation.

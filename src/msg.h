@@ -38,9 +38,9 @@
 #define _ULIB_MSG_H
 
 #include "configify.h"
-#include "types.h"
-
 #if ULIB_ENABLE_MSG
+
+#include "types.h"
 
 #include <time.h>
 

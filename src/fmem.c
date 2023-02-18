@@ -32,9 +32,10 @@
 #endif
 
 #include "fmem.h"
+#if ULIB_ENABLE_FMEM
+
 #include "debug.h"
 
-#if ULIB_ENABLE_FMEM
 #if HAVE_FMEM_NAMESPACE
 
 #define FS_NULL (FMEM_STR_T *)0U

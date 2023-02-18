@@ -39,13 +39,13 @@
  extern "C" {
 #endif
 
+#include "files.h"
+#if ULIB_ENABLE_FILES
+
 #include "bits.h"
 #include "debug.h"
-#include "files.h"
 #include "math.h"
 #include "msg.h"
-
-#if ULIB_ENABLE_FILES
 
 #include <dirent.h>
 #include <errno.h>
@@ -54,6 +54,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
 
 #ifdef FILE_PROVIDED_BUF
 extern uint8_t* FILE_PROVIDED_BUF;

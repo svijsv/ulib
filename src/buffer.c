@@ -27,10 +27,11 @@
 #endif
 
 #include "buffer.h"
+#if ULIB_ENABLE_BUFFERS
+
 #include "debug.h"
 #include "util.h"
 
-#if ULIB_ENABLE_BUFFERS
 
 #if BUFFERS_USE_MALLOC
 # include <stdlib.h>
@@ -71,7 +72,7 @@
 #endif
 
 buffer_t* buffer_init(buffer_t *b, const buffer_init_t *init) {
-	ASSERT_BUFFER(b);
+	assert(POINTER_IS_VALID(b));
 
 #if DO_BUFFER_SAFETY_CHECKS
 	if (b == NULL) {

@@ -29,9 +29,10 @@
 #define _ULIB_CSTRINGS_H
 
 #include "configify.h"
+#if ULIB_ENABLE_CSTRINGS
+
 #include "types.h"
 
-#if ULIB_ENABLE_CSTRINGS
 
 // Check if two cstrings are the same
 bool cstring_eq(const char *s1, const char *s2);

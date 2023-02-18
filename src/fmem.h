@@ -54,9 +54,10 @@
 #define _ULIB_FMEM_H
 
 #include "configify.h"
+#if ULIB_ENABLE_FMEM
+
 #include "types.h"
 
-#if ULIB_ENABLE_FMEM
 
 /*
 // Dummy struct used to wrap PROGMEM strings to provide stronger type-checking

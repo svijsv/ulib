@@ -26,10 +26,11 @@
  extern "C" {
 #endif
 
-#include "debug.h"
 #include "time.h"
-
 #if ULIB_ENABLE_TIME
+
+#include "debug.h"
+
 
 #if ((((TIME_YEAR_0) % 4) == 0) && ((((TIME_YEAR_0) % 100) != 0) || (((TIME_YEAR_0) % 400) == 0)))
 # error "TIME_YEAR_0 Cannot be a leap year"

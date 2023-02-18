@@ -26,10 +26,10 @@
  extern "C" {
 #endif
 
-#include "debug.h"
 #include "util.h"
-
 #if ULIB_ENABLE_UTIL
+
+#include "debug.h"
 
 #include <string.h>
 

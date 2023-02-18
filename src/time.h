@@ -28,11 +28,12 @@
 #define _ULIB_TIME_H
 
 #include "configify.h"
+#if ULIB_ENABLE_TIME
+
 #include "fmem.h"
 #include "types.h"
 #include "util.h"
 
-#if ULIB_ENABLE_TIME
 
 // A possibly-smaller-than-time_t unsigned time-tracking type for embedded systems.
 typedef uint32_t utime_t;

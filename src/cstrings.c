@@ -26,12 +26,13 @@
  extern "C" {
 #endif
 
-#include "debug.h"
 #include "cstrings.h"
-
 #if ULIB_ENABLE_CSTRINGS
 
+#include "debug.h"
+
 #include <string.h>
+
 
 bool cstring_eq(const char *s1, const char *s2) {
 	assert(s1 != NULL);

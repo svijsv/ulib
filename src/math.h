@@ -29,10 +29,11 @@
 #define _ULIB_MATH_H
 
 #include "configify.h"
+#if ULIB_ENABLE_MATH
+
 #include "types.h"
 #include "util.h"
 
-#if ULIB_ENABLE_MATH
 
 /*
 * Integer operations

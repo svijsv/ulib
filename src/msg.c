@@ -26,15 +26,15 @@
  extern "C" {
 #endif
 
+#include "msg.h"
+#if ULIB_ENABLE_MSG
+
 #include "array.h"
 #include "bits.h"
 #include "buffer.h"
 #include "cstrings.h"
 #include "debug.h"
-#include "msg.h"
 #include "strings.h"
-
-#if ULIB_ENABLE_MSG
 
 #include <errno.h>
 #include <fcntl.h>

@@ -31,10 +31,11 @@
 #define _ULIB_BUFFER_H
 
 #include "configify.h"
+#if ULIB_ENABLE_BUFFERS
+
 #include "types.h"
 #include "util.h"
 
-#if ULIB_ENABLE_BUFFERS
 
 // Method of buffer growth. See config_template.h for descriptions.
 #define BUFFER_GROW_NONE 1
