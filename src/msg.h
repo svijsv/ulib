@@ -188,7 +188,7 @@ void msg_error(const char *restrict fmt, ...)
  * Same as msg_error(), but after printing the message the result of strerror(errnum)
  * is printed in the format ': %s.\n'
  */
-void msg_errno(const int errnum, const char *restrict fmt, ...)
+void msg_errno(int errnum, const char *restrict fmt, ...)
 	__attribute__ ((format(printf, 2, 3)));
 /*
  * msg_liberrno()
@@ -196,7 +196,7 @@ void msg_errno(const int errnum, const char *restrict fmt, ...)
  *
  * Same as msg_errno(), but output is disabled unless MSG_LIBERRORS is set.
  */
-void msg_liberrno(const int errnum, const char *restrict fmt, ...)
+void msg_liberrno(int errnum, const char *restrict fmt, ...)
 	__attribute__ ((format(printf, 2, 3)));
 /*
  * msg_warn()
@@ -206,6 +206,14 @@ void msg_liberrno(const int errnum, const char *restrict fmt, ...)
  */
 void msg_warn(const char *restrict fmt, ...)
 	__attribute__ ((format(printf, 1, 2)));
+/*
+ * msg_warnno()
+ * Print a warning message to stderr, followed by a newline.
+ *
+ * Same as msg_errno() but prefixed with the warning prefix.
+ */
+void msg_warnno(int errnum, const char *restrict fmt, ...)
+	__attribute__ ((format(printf, 2, 3)));
 /*
  * msg_debug()
  * Print a string to stderr if the macro DEBUG is non-zero.

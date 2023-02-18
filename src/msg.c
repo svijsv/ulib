@@ -400,7 +400,7 @@ void msg_error(const char *restrict fmt, ...) {
 	return;
 }
 
-void _msg_errno(const int errnum, const char *restrict fmt, va_list args) {
+static void _msg_errno(int errnum, const char *restrict fmt, va_list args) {
 	assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
@@ -420,7 +420,7 @@ void _msg_errno(const int errnum, const char *restrict fmt, va_list args) {
 
 	return;
 }
-void msg_errno(const int errnum, const char *restrict fmt, ...) {
+void msg_errno(int errnum, const char *restrict fmt, ...) {
 	va_list args;
 
 	va_start(args, fmt);
@@ -429,7 +429,7 @@ void msg_errno(const int errnum, const char *restrict fmt, ...) {
 
 	return;
 }
-void msg_liberrno(const int errnum, const char *restrict fmt, ...) {
+void msg_liberrno(int errnum, const char *restrict fmt, ...) {
 	if (BIT_IS_SET(config.flags, MSG_LIBERRORS)) {
 		va_list args;
 
@@ -441,6 +441,30 @@ void msg_liberrno(const int errnum, const char *restrict fmt, ...) {
 	return;
 }
 
+void msg_warnno(int errnum, const char *restrict fmt, ...) {
+	va_list args;
+
+	assert(fmt != NULL);
+#if DO_MSG_SAFETY_CHECKS
+	if (fmt == NULL) {
+		return;
+	}
+#endif
+
+	if (config.program_name[0] != 0) {
+		dprintf(config.stderr_fd, "%s: ", config.program_name);
+	}
+	if (config.warn_prefix[0] != 0) {
+		dprintf(config.stderr_fd, "%s: ", config.warn_prefix);
+	}
+
+	va_start(args, fmt);
+	vdprintf(config.stderr_fd, fmt, args);
+	va_end(args);
+	dprintf(config.stderr_fd, "%s.\n", strerror(errnum));
+
+	return;
+}
 void msg_warn(const char *restrict fmt, ...) {
 	va_list args;
 
