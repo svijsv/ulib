@@ -1,0 +1,7 @@
+out
+todo
+temp
+src/config.h
+*.gz
+*.xz
+*.lz
