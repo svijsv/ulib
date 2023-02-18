@@ -34,10 +34,11 @@
 #define _ULIB_ARRAY_H
 
 #include "configify.h"
+#if ULIB_ENABLE_ARRAYS
+
 #include "types.h"
 #include "util.h"
 
-#if ULIB_ENABLE_ARRAYS
 
 // Method of array growth. See config_template.h for descriptions.
 #define ARRAY_GROW_NONE 0
@@ -75,7 +76,9 @@ typedef struct {
 	arlen_t used;
 	// The function used to free the objects when required. May be NULL.
 	void (*free_obj)(void *obj);
-	// The function used to compare objects when required. May *not* be NULL.
+	// The function used to compare objects when required. If the search function
+	// is given a different comparison function, that takes precedence. If both
+	// are NULL, do a simple pointer comparison.
 	int (*compare)(const void *a, const void *b);
 } array_t;
 
@@ -115,11 +118,16 @@ array_t* array_push(array_t *a, void *ptr);
 // the removed object, otherwise free the object with free_obj().
 array_t* array_pop(array_t *a, void **ret_obj);
 // Find the index of an object, starting at index 'start'. If the search
-// reaches the end of the array, it doesn't wrap around. Returns (arlen_t )-1
-// if no match is found.
-arlen_t array_find_index(const array_t *a, arlen_t start, const void *object);
-// Find object in the array. Returns NULL if no match is found.
-void* array_find_object(const array_t *a, const void *object);
+// reaches the end of the array, it doesn't wrap around.
+// If compare() is NULL, use a->compare() if that's non-NULL. Otherwise check
+// if the pointers are the same.
+// Returns (arlen_t )-1 if no match is found.
+arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, int (*compare)(const void *ent, const void *obj));
+// Find object in the array.
+// If compare() is NULL, use a->compare() if that's non-NULL. Otherwise check
+// if the pointers are the same.
+// Returns NULL if no match is found.
+void* array_find_object(const array_t *a, const void *object, int (*compare)(const void *ent, const void *obj));
 
 
 #endif // ULIB_ENABLE_ARRAYS

@@ -28,14 +28,15 @@
 #endif
 
 #include "array.h"
+#if ULIB_ENABLE_ARRAYS
+
 #include "debug.h"
 #include "util.h"
-
-#if ULIB_ENABLE_ARRAYS
 
 #if BUFFERS_USE_MALLOC
 # include <stdlib.h>
 #endif
+
 
 #if ARRAY_GROW_FACTOR < 1
 # error "ARRAY_GROW_FACTOR < 1"
@@ -61,20 +62,18 @@
 		(IS_ARRAY_ID(a)) && \
 		((a)->used <= ARRAY_MAX_OBJECTS) && \
 		((a)->used <= (a)->allocated) && \
-		((a)->bank != NULL) && \
-		((a)->compare != NULL) \
+		((a)->bank != NULL) \
 		)
 #else
 # define ASSERT_ARRAY(a) assert( \
 		(POINTER_IS_VALID(a)) && \
 		(IS_ARRAY_ID(a)) && \
-		((a)->used <= ARRAY_MAX_OBJECTS) && \
-		((a)->compare != NULL) \
+		((a)->used <= ARRAY_MAX_OBJECTS) \
 		)
 #endif
 
 array_t* array_init(array_t *a, const array_init_t *init) {
-	ASSERT_ARRAY(a);
+	assert(POINTER_IS_VALID(a));
 
 #if DO_ARRAY_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(a)) {
@@ -230,7 +229,12 @@ array_t* array_pop(array_t *a, void **ret_obj) {
 	return a;
 }
 
-arlen_t array_find_index(const array_t *a, arlen_t start, const void *object) {
+int default_compare(const void *ent, const void *obj) {
+	return !(ent == obj);
+}
+arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, int (*compare)(const void *ent, const void *obj)) {
+	int (*use_compare)(const void *ent, const void *obj);
+
 	ASSERT_ARRAY(a);
 
 #if DO_ARRAY_SAFETY_CHECKS
@@ -239,18 +243,20 @@ arlen_t array_find_index(const array_t *a, arlen_t start, const void *object) {
 	}
 #endif
 
+	use_compare = (compare != NULL) ? compare : (a->compare != NULL) ? a->compare : default_compare;
+
 	for (arlen_t i = start; i < a->used; ++i) {
-		if (a->compare(object, a->bank[i]) == 0) {
+		if (use_compare(object, a->bank[i]) == 0) {
 			return i;
 		}
 	}
 
 	return (arlen_t )-1;
 }
-void* array_find_object(const array_t *a, const void *object) {
+void* array_find_object(const array_t *a, const void *object, int (*compare)(const void *ent, const void *obj)) {
 	arlen_t i;
 
-	if ((i = array_find_index(a, 0, object)) == (arlen_t )-1) {
+	if ((i = array_find_index(a, 0, object, compare)) == (arlen_t )-1) {
 		return NULL;
 	}
 	return a->bank[i];
