@@ -126,7 +126,14 @@ char* FROM_FSTR3(FMEM_STR_T *fs) {
 	return from_fstr(fs, buf);
 }
 
+
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy1;
 #endif // HAVE_FMEM_NAMESPACE
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy2;
 #endif // ULIB_ENABLE_FMEM
 #ifdef __cplusplus
  }

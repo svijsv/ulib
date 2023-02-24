@@ -44,6 +44,10 @@ void mem_init(void *mem, uint8_t value, uint32_t size) {
 	return;
 }
 
+
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_UTIL
 #ifdef __cplusplus
  }

@@ -294,6 +294,9 @@ void opt_print_help(const char *prefix, const opt_option_t *opts) {
 	return;
 }
 
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_GETOPT
 #ifdef __cplusplus
  }

@@ -133,6 +133,9 @@ const char* cstring_basename(const char *s) {
 	return bn;
 }
 
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_CSTRINGS
 #ifdef __cplusplus
  }

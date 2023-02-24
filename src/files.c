@@ -1414,6 +1414,9 @@ int file_fsync_path(const char *path, file_flag_t flags) {
 }
 
 
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_FILES
 #ifdef __cplusplus
  }

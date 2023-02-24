@@ -173,6 +173,9 @@ buflen_t buffer_grow(buffer_t *b, buflen_t add) {
 }
 
 
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_BUFFERS
 #ifdef __cplusplus
  }

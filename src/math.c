@@ -364,6 +364,9 @@ int32_t log2_fp(int32_t x) {
 }
 */
 
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_MATH
 #ifdef __cplusplus
  }

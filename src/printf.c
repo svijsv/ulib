@@ -68,6 +68,9 @@ void printf_va(void (*pputc)(int c), const char *restrict fmt, va_list arp) {
 }
 #endif // HAVE_XPRINTF
 
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_PRINTF
 #ifdef __cplusplus
  }

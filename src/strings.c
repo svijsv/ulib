@@ -847,6 +847,10 @@ string_t* string_pad_from_char(string_t *s, char c, strlen_t len) {
 	return s;
 }
 
+
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_STRINGS
 #ifdef __cplusplus
  }

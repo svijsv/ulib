@@ -546,6 +546,9 @@ void msg_debug(const char *restrict fmt, ...) {
 }
 
 
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_MSG
 #ifdef __cplusplus
  }
