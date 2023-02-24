@@ -55,7 +55,7 @@
 #endif
 
 //
-// Option flags for opt_t.pflags.
+// Option flags for opt_option_t.pflags.
 //
 typedef uint_fast8_t opt_pflags_t;
 // The option has no arguments.
@@ -72,7 +72,7 @@ typedef struct {
 	// The single-character flag representing an option. This is also the value
 	// returned when the option is found, so options with only long names must
 	// be set to non-printing characters.
-	// 0 is reserved to mark the end of opt_t arrays.
+	// 0 is reserved to mark the end of opt_option_t arrays.
 	// Values < 0 are reserved for special return codes.
 	signed char oflag;
 	// The long name of an option. If NULL, there is none.
@@ -83,7 +83,7 @@ typedef struct {
 	opt_pflags_t pflags;
 	// The description printed from opt_print_help().
 	char   *desc;
-} opt_t;
+} opt_option_t;
 //
 // Option flags for opt_ctx_t.flags.
 //
@@ -125,9 +125,9 @@ typedef struct {
 	// The number of strings in argv. Use argc-1 to convert from main()'s argc
 	// to this one.
 	opt_iter_t argc;
-	// An array of opt_t objects describing the desired options with the final
+	// An array of opt_option_t objects describing the desired options with the final
 	// object having it's oflag field set to 0.
-	const opt_t *opts;
+	const opt_option_t *opts;
 	//
 	// These fields hold the details of the most recent match.
 	//
@@ -157,14 +157,14 @@ typedef struct {
 #define OPT_ERROR_EXTRA_ARG -5
 
 // Parse a command line described in an opt_ctx_t structure.
-// The return value is either the oflag field of the matched opt_t structure
+// The return value is either the oflag field of the matched opt_option_t structure
 // or one of the codes defined above.
 int opt_getopt(opt_ctx_t *ctx);
 //
-// Print a help message based on the information in an opt_t structure.
+// Print a help message based on the information in an opt_option_t structure.
 // prefix is printed before each line.
 // opts is as with the opts field of the opt_ctx_t structure.
-void opt_print_help(const char *prefix, const opt_t *opts);
+void opt_print_help(const char *prefix, const opt_option_t *opts);
 
 
 #endif // ULIB_ENABLE_GETOPT

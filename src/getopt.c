@@ -237,7 +237,7 @@ int opt_getopt(opt_ctx_t *ctx) {
 	return OPT_DONE;
 }
 
-void opt_print_help(const char *prefix, const opt_t *opts) {
+void opt_print_help(const char *prefix, const opt_option_t *opts) {
 	uint16_t i;
 	const char *char_lead, *word_lead, *char_arg, *long_name_arg;
 
