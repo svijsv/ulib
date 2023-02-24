@@ -99,6 +99,8 @@ array_t* array_init(array_t *a, const array_init_t *init) {
 		a->compare = init->compare;
 	}
 
+	ASSERT_ARRAY(a);
+
 	return a;
 }
 #if ARRAYS_USE_MALLOC
@@ -219,7 +221,7 @@ array_t* array_pop(array_t *a, void **ret_obj) {
 
 	if (a->used > 0) {
 		--a->used;
-		if ((ret_obj != NULL) && (*ret_obj != NULL)) {
+		if (ret_obj != NULL) {
 			*ret_obj = a->bank[a->used];
 		} else if (a->free_obj != NULL) {
 			a->free_obj(a->bank[a->used]);
