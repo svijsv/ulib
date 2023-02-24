@@ -57,6 +57,14 @@
 # endif
 #endif
 
+#if ULIB_ENABLE_FILES
+# if !ULIB_ENABLE_MATH
+#  undef ULIB_ENABLE_MATH
+#  define ULIB_ENABLE_MATH 1
+#  pragma message "Enabling MATH module for FILES module."
+# endif
+#endif
+
 #if HAVE_XPRINTF && ULIB_ENABLE_PRINTF
 # define HAVE_PRINTF_VA 1
 #else
