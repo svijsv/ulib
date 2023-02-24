@@ -29,7 +29,7 @@
 #ifndef _ULIB_CONFIGIFY_H
 #define _ULIB_CONFIGIFY_H
 
-#include "config.h"
+#include "ulibconfig.h"
 
 #if ULIB_ENABLE_GETOPT
 # if !ULIB_ENABLE_CSTRINGS

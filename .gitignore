@@ -1,7 +1,7 @@
 out
 todo
 temp
-src/config.h
+ulibconfig.h
 *.gz
 *.xz
 *.lz
