@@ -30,7 +30,13 @@
 
 #include "configify.h"
 #include "fmem.h"
+#include "msg.h"
 #include "types.h"
+
+#if !ULIB_ENABLE_FMEM
+# define F(s) (s)
+# define F1(s) (s)
+#endif
 
 #if USE_ULIB_ASSERT
 # ifndef NDEBUG
