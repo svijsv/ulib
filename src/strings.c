@@ -277,7 +277,7 @@ string_t* string_printf(string_t *restrict s, const char *restrict format, ...) 
 * Appending functions
 */
 // Helper function to grow a string correctly.
-INLINE void grow_allocated(string_t *s, strlen_t n) {
+static void grow_allocated(string_t *s, strlen_t n) {
 	//ASSERT_STRING(s);
 	//assert(n > 0);
 
@@ -667,7 +667,7 @@ string_t* string_basename(string_t *s, char sep) {
 
 	for (i = s->length-1; ((i > 0) && (s->cstring[i] == sep)); --i) {
 		// Nothing to do here
-	};
+	}
 	// This means the string was just '/' or '////' or something:
 	if ((i == 0) && (s->cstring[0] == sep)) {
 		s->cstring[1] = 0;
@@ -686,7 +686,7 @@ string_t* string_basename(string_t *s, char sep) {
 	if (start > 0) {
 		strlen_t j;
 
-		for (i = 0, j = 0; i < s->length; ++i, ++j) {
+		for (i = 0, j = start; i < s->length; ++i, ++j) {
 			s->cstring[i] = s->cstring[j];
 		}
 	}
