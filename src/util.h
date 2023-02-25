@@ -76,7 +76,7 @@ void mem_init(void *mem, uint8_t value, uint32_t size);
 //
 // Add two unsigned numbers without going over some value, which may be the
 // maximum the type can hold.
-#define CLIP_UADD(a, b, max) ((((max) - (a)) > (b)) ? (max) : ((a) + (b)))
+#define CLIP_UADD(a, b, max) ((((max) - (a)) > (b)) ? ((a) + (b)) : (max))
 //
 // Multiply two unsigned numbers without going over some value, which may be
 // the maximum the type can hold.
