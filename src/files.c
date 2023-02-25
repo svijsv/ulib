@@ -136,10 +136,6 @@ static int v_unlinkat(int atfd, const char *path, int flags) {
 		return -1;
 	}
 
-	/*
-	UNUSED(flags);
-	msg_debug("pretend remove '%s' at %d", path, (int )atfd);
-	*/
 	return 0;
 }
 static ssize_t v_write(int fd, const void *buf, size_t count) {
@@ -1089,7 +1085,7 @@ static int file_copy_dir_recursive(const char *src, int src_atfd, struct stat *s
 	if ((FILE_MAX_RECURSION > 0) && (depth > FILE_MAX_RECURSION)) {
 		return -ELOOP;
 	}
-msg_debug("copy depth %u", (uint_t )depth);
+
 	if ((tmp = file_copy_bare_dir(src, src_atfd, src_st, dest, dest_atfd, flags)) != 0) {
 		if (tmp < 0) {
 			return tmp;
@@ -1247,11 +1243,9 @@ int file_copy_pathat_to_pathat(const char *src, int src_atfd, const char *dest, 
 
 	switch (file_get_type_stat(&sst, flags)) {
 		case FILE_FT_REG:
-msg_debug("regular: %s", src);
 			return file_copy_file_pathat_to_pathat(src, src_atfd, dest, dest_atfd, buf, bufsize, copy_callback, flags);
 			break;
 		case FILE_FT_DIR:
-msg_debug("dir: %s", src);
 			return file_copy_dir_pathat_to_pathat(src, src_atfd, dest, dest_atfd, buf, bufsize, copy_callback, flags);
 			break;
 #if _XOPEN_SOURCE >= 500
@@ -1259,12 +1253,10 @@ msg_debug("dir: %s", src);
 		case FILE_FT_CHR:
 		case FILE_FT_FIFO:
 		case FILE_FT_SOCK:
-msg_debug("special: %s", src);
 			return file_copy_special_pathat_to_pathat(src, src_atfd, dest, dest_atfd, flags);
 			break;
 #endif // _XOPEN_SOURCE >= 500
 		case FILE_FT_LNK:
-msg_debug("link: %s", src);
 			return file_copy_symlink_pathat_to_pathat(src, src_atfd, dest, dest_atfd, buf, bufsize, flags);
 			break;
 		case FILE_FT_NONE:
