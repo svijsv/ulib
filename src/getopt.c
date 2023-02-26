@@ -280,14 +280,15 @@ void opt_print_help(const char *prefix, const opt_option_t *opts) {
 			long_name_arg = "";
 		}
 
-		if (isprint(opts[i].oflag)) {
-			msg_print(100, "%s%s%c%s", prefix, char_lead, opts[i].oflag, char_arg);
-		}
-		if ((opts[i].long_name != NULL) && (opts[i].long_name[0] != 0)) {
-			msg_print(100, "%s%s%s%s", prefix, word_lead, opts[i].long_name, long_name_arg);
+		if (isprint(opts[i].oflag) && ((opts[i].long_name != NULL) && (opts[i].long_name[0] != 0))) {
+			msg_print(-100, "%s%s%c%s, %s%s%s", prefix, char_lead, opts[i].oflag, char_arg, word_lead, opts[i].long_name, long_name_arg);
+		} else if (isprint(opts[i].oflag)) {
+			msg_print(-100, "%s%s%c%s", prefix, char_lead, opts[i].oflag, char_arg);
+		} else if ((opts[i].long_name != NULL) && (opts[i].long_name[0] != 0)) {
+			msg_print(-100, "%s%s%s%s", prefix, word_lead, opts[i].long_name, long_name_arg);
 		}
 		if (opts[i].desc != NULL) {
-			msg_print(100, "%s    %s", prefix, opts[i].desc);
+			msg_print(-100, "%s    %s", prefix, opts[i].desc);
 		}
 	}
 
