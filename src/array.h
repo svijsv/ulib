@@ -111,11 +111,13 @@ INLINE array_t* array_free(array_t *a) {
 // Empty an array's bank, calling free_obj() on each object.
 array_t* array_clear(array_t *a);
 // Add an object to the end of the array.
-array_t* array_append(array_t *a, void *ptr);
+array_t* array_append(array_t *a, void *object);
 // Add an object to the end of the array if it's not already stored.
-array_t* array_append_checked(array_t *a, void *object);
+array_t* array_append_checked(array_t *a, void *object, int (*compare)(const void *obj, const void *ent));
 // Synonym for array_append().
-array_t* array_push(array_t *a, void *ptr);
+INLINE array_t* array_push(array_t *a, void *object) {
+	return array_append(a, object);
+}
 // Remove an object from the end of the array. If ret_obj != NULL set it to
 // the removed object, otherwise free the object with free_obj().
 array_t* array_pop(array_t *a, void **ret_obj);

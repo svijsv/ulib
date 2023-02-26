@@ -33,7 +33,7 @@
 #include "debug.h"
 #include "util.h"
 
-#if BUFFERS_USE_MALLOC
+#if ARRAYS_USE_MALLOC
 # include <stdlib.h>
 #endif
 
@@ -139,7 +139,7 @@ array_t* array_clear(array_t *a) {
 	}
 	a->used = 0;
 
-	return NULL;
+	return a;
 }
 
 array_t* array_append(array_t *a, void *object) {
@@ -190,24 +190,10 @@ array_t* array_append(array_t *a, void *object) {
 
 	return a;
 }
-array_t* array_append_checked(array_t *a, void *object) {
-	ASSERT_ARRAY(a);
-
-#if DO_ARRAY_SAFETY_CHECKS
-	if (!POINTER_IS_VALID(a)) {
-		return NULL;
+array_t* array_append_checked(array_t *a, void *object, int (*compare)(const void *obj, const void *ent)) {
+	if (array_find_object(a, object, compare) != NULL) {
+		return a;
 	}
-#endif
-
-	for (arlen_t i = 0; i < a->used; ++i) {
-		if (a->compare(object, a->bank[i]) == 0) {
-			return a;
-		}
-	}
-
-	return array_append(a, object);
-}
-array_t* array_push(array_t *a, void *object) {
 	return array_append(a, object);
 }
 array_t* array_pop(array_t *a, void **ret_obj) {
@@ -231,7 +217,7 @@ array_t* array_pop(array_t *a, void **ret_obj) {
 	return a;
 }
 
-int default_compare(const void *ent, const void *obj) {
+static int default_compare(const void *ent, const void *obj) {
 	return !(ent == obj);
 }
 arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, int (*compare)(const void *obj, const void *ent)) {
@@ -258,10 +244,10 @@ arlen_t array_find_index(const array_t *a, arlen_t start, const void *object, in
 void* array_find_object(const array_t *a, const void *object, int (*compare)(const void *obj, const void *ent)) {
 	arlen_t i;
 
-	if ((i = array_find_index(a, 0, object, compare)) == (arlen_t )-1) {
-		return NULL;
+	if ((i = array_find_index(a, 0, object, compare)) != (arlen_t )-1) {
+		return a->bank[i];
 	}
-	return a->bank[i];
+	return NULL;
 }
 
 #else
