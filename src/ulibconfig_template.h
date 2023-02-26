@@ -169,6 +169,26 @@
 
 
 /*
+* Linked-list module configuration
+*/
+// Enable this module
+#define ULIB_ENABLE_LISTS ULIB_ENABLE_DEFAULT
+//
+// The size of listlen_t is based on the size of LIST_MAX_OBJECTS+1, so using
+// one less than the max of an unsigned int type will result in less used
+// space than using the max value itself.
+#define LIST_MAX_OBJECTS (0xFFFFU - 1U)
+//
+// If non-zero, new entries are created with malloc. Otherwise a pointer to
+// a list_entry_t struct will need to be supplied when adding to the list.
+#define LISTS_USE_MALLOC ULIB_USE_MALLOC
+//
+// If non-zero, perform additional checks to handle common problems like being
+// passed NULL inputs.
+#define DO_LIST_SAFETY_CHECKS ULIB_DO_SAFETY_CHECKS
+
+
+/*
 * Math module configuration
 */
 // Enable this module

@@ -41,9 +41,10 @@ typedef unsigned int uint_t;
 // This needs to be a struct rather than a plain int to avoid breaking strict
 // aliasing: https://blog.regehr.org/archives/1307
 typedef enum {
-	ID_ARRAY = 1,
+	ID_ARRAY  = 1,
 	ID_BUFFER = 2,
 	ID_STRING = 3,
+	ID_LIST   = 4,
 } struct_id_value_t;
 typedef struct {
 	struct_id_value_t value;
