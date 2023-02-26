@@ -162,9 +162,10 @@ typedef struct {
 int opt_getopt(opt_ctx_t *ctx);
 //
 // Print a help message based on the information in an opt_option_t structure.
-// prefix is printed before each line.
+// prefix is printed before each line. It can't be NULL but can be an empty string ("").
+// postfix is printed after each description. It can't be NULL but can be an empty string ("").
 // opts is as with the opts field of the opt_ctx_t structure.
-void opt_print_help(const char *prefix, const opt_option_t *opts);
+void opt_print_help(const char *prefix, const char *postfix, const opt_option_t *opts);
 
 
 #endif // ULIB_ENABLE_GETOPT

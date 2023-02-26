@@ -237,16 +237,20 @@ int opt_getopt(opt_ctx_t *ctx) {
 	return OPT_DONE;
 }
 
-void opt_print_help(const char *prefix, const opt_option_t *opts) {
+void opt_print_help(const char *prefix, const char *postfix, const opt_option_t *opts) {
 	uint16_t i;
 	const char *char_lead, *word_lead, *char_arg, *long_name_arg;
 
 	assert(POINTER_IS_VALID(prefix));
+	assert(POINTER_IS_VALID(postfix));
 	assert(POINTER_IS_VALID(opts));
 
 #if DO_OPT_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(prefix)) {
-		return;
+		prefix = "";
+	}
+	if (!POINTER_IS_VALID(postfix)) {
+		postfix = "";
 	}
 	if (!POINTER_IS_VALID(opts)) {
 		return;
@@ -288,7 +292,7 @@ void opt_print_help(const char *prefix, const opt_option_t *opts) {
 			msg_print(-100, "%s%s%s%s", prefix, word_lead, opts[i].long_name, long_name_arg);
 		}
 		if (opts[i].desc != NULL) {
-			msg_print(-100, "%s    %s", prefix, opts[i].desc);
+			msg_print(-100, "%s    %s%s", prefix, opts[i].desc, postfix);
 		}
 	}
 
