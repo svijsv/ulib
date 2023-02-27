@@ -388,7 +388,7 @@ void msg_error(const char *restrict fmt, ...) {
 		dprintf(config.stderr_fd, "%s: ", config.program_name);
 	}
 	if (config.error_prefix[0] != 0) {
-		dprintf(config.stderr_fd, "%s: ", config.error_prefix);
+		dprintf(config.stderr_fd, "%s", config.error_prefix);
 	}
 
 	va_start(args, fmt);
@@ -412,11 +412,11 @@ static void _msg_errno(int errnum, const char *restrict fmt, va_list args) {
 		dprintf(config.stderr_fd, "%s: ", config.program_name);
 	}
 	if (config.error_prefix[0] != 0) {
-		dprintf(config.stderr_fd, "%s: ", config.error_prefix);
+		dprintf(config.stderr_fd, "%s", config.error_prefix);
 	}
 
 	vdprintf(config.stderr_fd, fmt, args);
-	dprintf(config.stderr_fd, "%s.\n", strerror(errnum));
+	dprintf(config.stderr_fd, ": %s.\n", strerror(errnum));
 
 	return;
 }
@@ -455,7 +455,7 @@ void msg_warnno(int errnum, const char *restrict fmt, ...) {
 		dprintf(config.stderr_fd, "%s: ", config.program_name);
 	}
 	if (config.warn_prefix[0] != 0) {
-		dprintf(config.stderr_fd, "%s: ", config.warn_prefix);
+		dprintf(config.stderr_fd, "%s", config.warn_prefix);
 	}
 
 	va_start(args, fmt);
@@ -479,7 +479,7 @@ void msg_warn(const char *restrict fmt, ...) {
 		dprintf(config.stderr_fd, "%s: ", config.program_name);
 	}
 	if (config.warn_prefix[0] != 0) {
-		dprintf(config.stderr_fd, "%s: ", config.warn_prefix);
+		dprintf(config.stderr_fd, "%s", config.warn_prefix);
 	}
 
 	va_start(args, fmt);
@@ -530,7 +530,7 @@ void msg_debug(const char *restrict fmt, ...) {
 		dprintf(config.stderr_fd, "%s: ", config.program_name);
 	}
 	if (config.debug_prefix[0] != 0) {
-		dprintf(config.stderr_fd, "%s: ", config.debug_prefix);
+		dprintf(config.stderr_fd, "%s", config.debug_prefix);
 	}
 
 	va_start(args, fmt);
