@@ -158,6 +158,7 @@ string_t* string_pad_from_char(string_t *s, char c, strlen_t size);
 * Content test functions
 */
 // Check whether a string is empty
+// Returns true if s->length == 0 or s == NULL
 bool string_is_empty(const string_t *s);
 //
 // Check whether a string is the same a cstring

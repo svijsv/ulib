@@ -535,13 +535,11 @@ string_t* string_append_from_int_div(string_t *s, int n, int d) {
 * Content test functions
 */
 bool string_is_empty(const string_t *s) {
-	ASSERT_STRING(s);
-
-#if DO_STRING_SAFETY_CHECKS
 	if (s == NULL) {
 		return true;
 	}
-#endif
+
+	ASSERT_STRING(s);
 
 	return (s->length == 0);
 }
