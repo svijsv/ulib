@@ -1248,14 +1248,19 @@ int file_copy_pathat_to_pathat(const char *src, int src_atfd, const char *dest, 
 		case FILE_FT_DIR:
 			return file_copy_dir_pathat_to_pathat(src, src_atfd, dest, dest_atfd, buf, bufsize, copy_callback, flags);
 			break;
-#if _XOPEN_SOURCE >= 500
 		case FILE_FT_BLK:
 		case FILE_FT_CHR:
 		case FILE_FT_FIFO:
 		case FILE_FT_SOCK:
-			return file_copy_special_pathat_to_pathat(src, src_atfd, dest, dest_atfd, flags);
-			break;
+			if (BIT_IS_SET(flags, FILE_COPY_CONTENTS)) {
+				return file_copy_file_pathat_to_pathat(src, src_atfd, dest, dest_atfd, buf, bufsize, copy_callback, flags);
+			}
+#if _XOPEN_SOURCE >= 500
+			else {
+				return file_copy_special_pathat_to_pathat(src, src_atfd, dest, dest_atfd, flags);
+			}
 #endif // _XOPEN_SOURCE >= 500
+			break;
 		case FILE_FT_LNK:
 			return file_copy_symlink_pathat_to_pathat(src, src_atfd, dest, dest_atfd, buf, bufsize, flags);
 			break;

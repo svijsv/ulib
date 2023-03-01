@@ -100,6 +100,8 @@ static const file_flag_t FILE_RECURSIVE    = 0x0080U;
 // Merge the contents during recursive copies when the target directory already
 // exists:
 static const file_flag_t FILE_MERGE_CONTENTS = 0x0100U;
+// Copy the contents of special files instead of the file itself:
+static const file_flag_t FILE_COPY_CONTENTS = 0x0200U;
 
 //
 // Callbacks
@@ -282,6 +284,7 @@ int file_copy_dir_path_to_path(const char *src, const char *dest, uint8_t *restr
 //  Returns -EINVAL if src and dest are the same file.
 //
 //  Flags:
+//     FILE_COPY_CONTENTS: Copy the contents of special files.
 //     FILE_DEREF: Dereference 'src' and 'dest'.
 //     FILE_FORCE: If FILE_UNLINK is set and unlink fails, continue anyway.
 //     FILE_UNLINK: Try to unlink destination before copying.
