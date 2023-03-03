@@ -16,7 +16,8 @@ SPLINT_FLAGS := \
 
 _CFLAGS        := -std=c99 -fstrict-aliasing -fno-common -fshort-enums \
                   -ffunction-sections -fdata-sections \
-                  -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500
+                  -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500 \
+                  -I.
 _DEBUG_CFLAGS  := -Werror -Wall -Wextra -pedantic \
                   -Wstrict-prototypes -Wconversion -Winit-self -Wunreachable-code \
                   -Wdouble-promotion -Wformat-security \
@@ -38,12 +39,14 @@ _LDFLAGS       := -Wl,-soname,lib$(NAME).so.$(VERSION_MAJOR)
 C_FILES := $(wildcard src/*.c)
 O_FILES := $(patsubst src/%.c, %.o, $(C_FILES))
 STATIC_O_FILES := $(addprefix $(STATIC_TMP)/, $(O_FILES))
+STATIC_SU_FILES := $(patsubst %.o, %.su, $(STATIC_O_FILES))
 SHARED_O_FILES := $(addprefix $(SHARED_TMP)/, $(O_FILES))
+SHARED_SU_FILES := $(patsubst %.o, %.su, $(SHARED_O_FILES))
 STATIC_LIB := $(STATIC_TMP)/lib$(NAME).a
 SHARED_LIB := $(SHARED_TMP)/lib$(NAME).so.$(VERSION)
 
-CLEAN_STATIC_FILES := $(STATIC_O_FILES) $(STATIC_LIB)
-CLEAN_SHARED_FILES := $(SHARED_O_FILES) $(SHARED_LIB)
+CLEAN_STATIC_FILES := $(STATIC_O_FILES) $(STATIC_SU_FILES) $(STATIC_LIB)
+CLEAN_SHARED_FILES := $(SHARED_O_FILES) $(SHARED_SU_FILES) $(SHARED_LIB)
 
 #
 # Misc Rules
