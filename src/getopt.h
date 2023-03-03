@@ -90,13 +90,13 @@ typedef struct {
 typedef uint_fast8_t opt_ctxflags_t;
 // Disable option parsing - all encountered strings are treated as arguments
 // while this is set.
-static const opt_pflags_t OPT_PARSE_DISABLE_OPTIONS      = 0x01U;
+static const opt_ctxflags_t OPT_PARSE_DISABLE_OPTIONS      = 0x01U;
 // If the string '--' is encountered set OPT_PARSE_DISABLE_OPTIONS.
-static const opt_pflags_t OPT_PARSE_AUTO_DISABLE_OPTIONS = 0x02U;
+static const opt_ctxflags_t OPT_PARSE_AUTO_DISABLE_OPTIONS = 0x02U;
 // If the string '++' is encountered unset OPT_PARSE_DISABLE_OPTIONS.
-static const opt_pflags_t OPT_PARSE_AUTO_ENABLE_OPTIONS  = 0x04U;
+static const opt_ctxflags_t OPT_PARSE_AUTO_ENABLE_OPTIONS  = 0x04U;
 // Options can be preceded by '-' or '+' instead of just '-'.
-static const opt_pflags_t OPT_PARSE_ALLOW_PLUS           = 0x08U;
+static const opt_ctxflags_t OPT_PARSE_ALLOW_PLUS           = 0x08U;
 
 //
 // Structure for storing parser state.
