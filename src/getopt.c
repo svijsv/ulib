@@ -192,10 +192,18 @@ int opt_getopt(opt_ctx_t *ctx) {
 		}
 
 		if (BIT_IS_SET(ctx->flags, OPT_PARSE_DISABLE_OPTIONS)) {
-			ctx->arg = &ctx->argv[ctx->pos][ctx->wpos];
-			++ctx->pos;
-			ctx->wpos = 0;
-			return OPT_ARGUMENT;
+			const char *c = &ctx->argv[ctx->pos][0];
+
+			if (BIT_IS_SET(ctx->flags, OPT_PARSE_AUTO_ENABLE_OPTIONS) && (c[0] == '+') && (c[1] == '+') && (c[2] == 0)) {
+				CLEAR_BIT(ctx->flags, OPT_PARSE_DISABLE_OPTIONS);
+				++ctx->pos;
+				return opt_getopt(ctx);
+			} else {
+				ctx->arg = &ctx->argv[ctx->pos][ctx->wpos];
+				++ctx->pos;
+				ctx->wpos = 0;
+				return OPT_ARGUMENT;
+			}
 		}
 
 		if (ctx->wpos == 0) {
@@ -208,10 +216,6 @@ int opt_getopt(opt_ctx_t *ctx) {
 			} else if (ctx->argv[ctx->pos][2] == 0) {
 				if (BIT_IS_SET(ctx->flags, OPT_PARSE_AUTO_DISABLE_OPTIONS) && (ctx->argv[ctx->pos][0] == '-') && (ctx->argv[ctx->pos][1] == '-')) {
 					SET_BIT(ctx->flags, OPT_PARSE_DISABLE_OPTIONS);
-					++ctx->pos;
-					return opt_getopt(ctx);
-				} else if (BIT_IS_SET(ctx->flags, OPT_PARSE_AUTO_ENABLE_OPTIONS) && (ctx->argv[ctx->pos][0] == '+') && (ctx->argv[ctx->pos][1] == '+')) {
-					CLEAR_BIT(ctx->flags, OPT_PARSE_DISABLE_OPTIONS);
 					++ctx->pos;
 					return opt_getopt(ctx);
 				}
