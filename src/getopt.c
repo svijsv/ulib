@@ -69,6 +69,7 @@ static int _opt_find_flag(opt_ctx_t *ctx) {
 			continue;
 		}
 
+		ctx->opts_i = i;
 		ctx->arg = NULL;
 		if (BIT_IS_SET(ctx->opts[i].pflags, OPT_ARG_REQUIRED)) {
 			if (ctx->argv[ctx->pos][ctx->wpos] != 0) {
