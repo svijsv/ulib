@@ -163,6 +163,7 @@ static ssize_t v_write(int fd, const void *buf, size_t count) {
 			}
 		} else {
 			count -= (size_t )bytes;
+			buf += bytes;
 			total_bytes += bytes;
 		}
 	}
