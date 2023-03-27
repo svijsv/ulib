@@ -55,7 +55,7 @@
 INLINE uint_t _set_bit(uint_t field, uint_t bits) {
 	return SET_BIT(field, bits);
 }
-#define set_bit(field, bits) (field = (__typeof__(field) )_set_bit(field, bits))
+#define set_bit(field, bits) (field = _set_bit(field, bits))
 
 // Unset one or more bits in a field
 #ifndef CLEAR_BIT
@@ -64,45 +64,44 @@ INLINE uint_t _set_bit(uint_t field, uint_t bits) {
 INLINE uint_t _clear_bit(uint_t field, uint_t bits) {
 	return CLEAR_BIT(field, bits);
 }
-#define clear_bit(field, bits) (field = (__typeof__(field) )_clear_bit(field, bits))
+#define clear_bit(field, bits) (field = _clear_bit(field, bits))
 
 // Toggle one or more bits in a field
 #define TOGGLE_BIT(field, bits) ((field) ^= (bits))
 INLINE uint_t _toggle_bit(uint_t field, uint_t bits) {
 	return TOGGLE_BIT(field, bits);
 }
-#define toggle_bit(field, bits) (field = (__typeof__(field) )_toggle_bit(field, bits))
+#define toggle_bit(field, bits) (field = _toggle_bit(field, bits))
 
 // Set or clear bits in a field limited by a mask
 #define MODIFY_BITS(field, mask, bits) ((field) = (((field) & ~(mask)) | ((bits) & (mask))))
 INLINE uint_t _modify_bits(uint_t field, uint_t mask, uint_t bits) {
 	return MODIFY_BITS(field, mask, bits);
 }
-#define modify_bits(field, mask, bits) (field = (__typeof__(field) )_modify_bits(field, mask, bits))
+#define modify_bits(field, mask, bits) (field = _modify_bits(field, mask, bits))
 
 // Select every set bit in field that's also set in mask
 #define SELECT_BITS(field, mask) ((field) & (mask))
 INLINE uint_t _select_bits(uint_t field, uint_t mask) {
 	return SELECT_BITS(field, mask);
 }
-#define select_bits(field, bits) ((__typeof__(field) )_select_bits(field, bits))
+#define select_bits(field, bits) (_select_bits(field, bits))
 
 // Select every set bit in field except those set in mask
 #define MASK_BITS(field, mask)   ((field) & ~(mask))
 INLINE uint_t _mask_bits(uint_t field, uint_t mask) {
 	return MASK_BITS(field, mask);
 }
-#define mask_bits(field, mask) ((__typeof__(field) )_mask_bits(field, mask))
+#define mask_bits(field, mask) (_mask_bits(field, mask))
 
 // Select every bit in a mask at some offset and then shift those bits to the
 // LSB end
-// offset is expanded twice for convenience
 //#define GATHER_BITS(field, mask, offset) (SELECT_BITS((field), ((mask) << (offset))) >> (offset))
 #define GATHER_BITS(field, mask, offset) (((field) >> (offset)) & (mask))
 INLINE uint_t _gather_bits(uint_t field, uint_t mask, uint_t offset) {
 	return GATHER_BITS(field, mask, offset);
 }
-#define gather_bits(field, mask, offset) ((__typeof__(field) )_gather_bits(field, mask, offset))
+#define gather_bits(field, mask, offset) (_gather_bits(field, mask, offset))
 
 // Check if any bit set in mask is set in field
 #define BIT_IS_SET(field, mask)    (((field) & (mask)) != 0)
