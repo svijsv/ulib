@@ -38,6 +38,8 @@
 bool cstring_eq(const char *s1, const char *s2);
 // Check if two cstrings are the same up to a given length.
 bool cstring_eqn(const char *s1, const char *s2, uint_t n);
+// Check if two cstrings are the same up to the length of the first string.
+bool cstring_eqz(const char *s1, const char *s2);
 // Return a pointer to the first non-whitespace character in s.
 const char* cstring_eat_whitespace(const char *s);
 // Return a pointer to the first non-delim character after the first delim
@@ -51,6 +53,20 @@ const char* cstring_next_token(const char *cs, char delim);
 // This differs from basename() in that paths ending in '/' will be returned
 // as ".".
 const char* cstring_basename(const char *s);
+
+// In-line conversion of a segment of a c-string (_s) to an integer (_i).
+// This will increment _s and expects to deal only with characters 0-9, signs
+// will have to be handled by the caller beforehand.
+#define UINT_FROM_CSTRING_BASE10(_i, _s) \
+	do { \
+		(_i) = 0; \
+		while (*(_s) >= '0' && *(_s) <= '9') { \
+			(_i) = (_i) * 10; \
+			(_i) += *(_s) - '0'; \
+			++(_s); \
+		} \
+	while (0);
+#define UINT_FROM_CSTRING(_ii, _ss) UINT_FROM_CSTRING_BASE10(_ii, _ss)
 
 #endif // ULIB_ENABLE_CSTRINGS
 #endif // _ULIB_CSTRINGS_H
