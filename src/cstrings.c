@@ -56,6 +56,27 @@ bool cstring_eqn(const char *s1, const char *s2, uint_t n) {
 #endif
 	return (strncmp(s1, s2, n) == 0);
 }
+bool cstring_eqz(const char *s1, const char *s2) {
+	assert(s1 != NULL);
+	assert(s2 != NULL);
+
+#if DO_CSTRING_SAFETY_CHECKS
+	if ((s1 == NULL) || (s2 == NULL)) {
+		return false;
+	}
+#endif
+
+	const unsigned char *a = (const unsigned char *)s1;
+	const unsigned char *b = (const unsigned char *)s2;
+
+	while (*a != 0) {
+		if (*a != *b) {
+			return (int )*a - (int )*b;
+		}
+		++a, ++b;
+	}
+	return 0;
+}
 const char* cstring_eat_whitespace(const char *s) {
 	assert(s != NULL);
 
