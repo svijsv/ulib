@@ -33,6 +33,7 @@
 
 #include <string.h>
 
+static const char CAP_DIFF = 'a' - 'A';
 
 bool cstring_eq(const char *s1, const char *s2) {
 	assert(s1 != NULL);
@@ -69,13 +70,13 @@ bool cstring_eqz(const char *s1, const char *s2) {
 	const unsigned char *a = (const unsigned char *)s1;
 	const unsigned char *b = (const unsigned char *)s2;
 
-	while (*a != 0) {
+	while ((*a != 0) && (*b != 0)) {
 		if (*a != *b) {
-			return (int )*a - (int )*b;
+			return false;
 		}
 		++a, ++b;
 	}
-	return 0;
+	return (*a == 0);
 }
 const char* cstring_eat_whitespace(const char *s) {
 	assert(s != NULL);
@@ -152,6 +153,25 @@ const char* cstring_basename(const char *s) {
 	}
 
 	return bn;
+}
+char *cstring_to_upper(char *s) {
+	char *c;
+
+	assert(s != NULL);
+
+#if DO_CSTRING_SAFETY_CHECKS
+	if (s == NULL) {
+		return NULL;
+	}
+#endif
+
+	for (c = s; *c != 0; ++c) {
+		if (*c >= 'a' && *c <= 'z') {
+			*c -= CAP_DIFF;
+		}
+	}
+
+	return s;
 }
 
 #else

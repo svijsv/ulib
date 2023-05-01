@@ -34,26 +34,36 @@
 #include "types.h"
 
 
+//
 // Check if two cstrings are the same
 bool cstring_eq(const char *s1, const char *s2);
+//
 // Check if two cstrings are the same up to a given length.
 bool cstring_eqn(const char *s1, const char *s2, uint_t n);
+//
 // Check if two cstrings are the same up to the length of the first string.
 bool cstring_eqz(const char *s1, const char *s2);
+//
 // Return a pointer to the first non-whitespace character in s.
 const char* cstring_eat_whitespace(const char *s);
+//
 // Return a pointer to the first non-delim character after the first delim
 // character in s - that is to say, eat one token if present then find the
 // next.
 // Repeating delimiters are treated as a single one.
 const char* cstring_next_token(const char *cs, char delim);
+//
 // Like basename(), but accepting a const string.
 // This normally returns a pointer inside s, but may return a statically-
 // allocated string for ".".
 // This differs from basename() in that paths ending in '/' will be returned
 // as ".".
 const char* cstring_basename(const char *s);
+//
+// Convert all the lowercase letters in s to uppercase.
+char *cstring_to_upper(char *s);
 
+//
 // In-line conversion of a segment of a c-string (_s) to an integer (_i).
 // This will increment _s and expects to deal only with characters 0-9, signs
 // will have to be handled by the caller beforehand.
