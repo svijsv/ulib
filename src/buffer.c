@@ -130,7 +130,6 @@ buffer_t* _buffer_free(buffer_t *b) {
 
 buflen_t buffer_grow(buffer_t *b, buflen_t add) {
 	buflen_t old_size, new_size;
-	uint8_t *tmp;
 
 	ASSERT_BUFFER(b);
 
@@ -158,7 +157,7 @@ buflen_t buffer_grow(buffer_t *b, buflen_t add) {
 	}
 	new_size = CLIP_UADD(b->allocated, add, b->max_size);
 	if (new_size != old_size) {
-		tmp = realloc(b->bank, new_size);
+		uint8_t *tmp = realloc(b->bank, new_size);
 		if (tmp != NULL) {
 			b->allocated = new_size;
 			b->bank = tmp;
