@@ -75,7 +75,7 @@ char *cstring_to_upper(char *s);
 			(_i) += *(_s) - '0'; \
 			++(_s); \
 		} \
-	while (0);
+	} while (0);
 #define UINT_FROM_CSTRING(_ii, _ss) UINT_FROM_CSTRING_BASE10(_ii, _ss)
 
 #endif // ULIB_ENABLE_CSTRINGS
