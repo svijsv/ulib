@@ -47,11 +47,19 @@ bool cstring_eqz(const char *s1, const char *s2);
 // Return a pointer to the first non-whitespace character in s.
 const char* cstring_eat_whitespace(const char *s);
 //
-// Return a pointer to the first non-delim character after the first delim
+// Return a pointer to the first non-sep character after the first sep
 // character in s - that is to say, eat one token if present then find the
 // next.
-// Repeating delimiters are treated as a single one.
-const char* cstring_next_token(const char *cs, char delim);
+// Repeating separators are treated as a single one.
+// Parsing is done when the returned string is empty.
+const char* cstring_next_token(const char *cs, char sep);
+//
+// Return a pointer to the character after the first sep character. The first
+// sep character is changed to a NUL so that input becomes a NUL-terminated
+// string representing the first (possibly empty) token.
+// Repeating separators are *NOT* treated as a single one.
+// Parsing is done when the returned string is empty.
+char *cstring_pop_token(char *input, char sep, uint_t *len);
 //
 // Like basename(), but accepting a const string.
 // This normally returns a pointer inside s, but may return a statically-

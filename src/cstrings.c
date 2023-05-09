@@ -102,27 +102,71 @@ const char* cstring_eat_whitespace(const char *s) {
 
 	return (char *)s;
 }
-const char* cstring_next_token(const char *cs, char delim) {
+const char* cstring_next_token(const char *cs, char sep) {
 	assert(cs != NULL);
-	assert(delim != 0);
+	assert(sep != 0);
 
 #if DO_CSTRING_SAFETY_CHECKS
+	if (sep == 0) {
+		while (*cs != 0) {
+			++cs;
+		}
+		return cs;
+	}
 	if (cs == NULL) {
 		return NULL;
 	}
 #endif
 
 	// Eat current token
-	for (; ((*cs != delim) && (*cs != 0)); ++cs) {
+	for (; ((*cs != sep) && (*cs != 0)); ++cs) {
 		// Nothing to do in here
 	}
-	// Eat delimiters
-	for (; (*cs == delim); ++cs) {
+	// Eat separators
+	for (; (*cs == sep); ++cs) {
 		// Nothing to do in here
 	}
 
 	return cs;
 }
+char *cstring_pop_token(char *input, char sep, uint_t *len) {
+	uint_t l = 0;
+	char *cs = input;
+
+	assert(input != NULL);
+	assert(sep != 0);
+
+#if DO_CSTRING_SAFETY_CHECKS
+	if (sep == 0) {
+		while (*cs != 0) {
+			++cs;
+		}
+		goto END;
+	}
+	if (input == NULL) {
+		if (len != NULL) {
+			*len = 0;
+		}
+		return NULL;
+	}
+#endif
+
+	// Eat current token
+	for (; ((*cs != sep) && (*cs != 0)); ++cs, ++l) {
+		// Nothing to do in here
+	}
+	if (*cs == sep) {
+		*cs = 0;
+		++cs;
+	}
+
+END:
+	if (len != NULL) {
+		*len = l;
+	}
+	return cs;
+}
+
 const char* cstring_basename(const char *s) {
 	const char *bn;
 	static const char *dot = ".";
