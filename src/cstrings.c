@@ -217,6 +217,19 @@ char *cstring_to_upper(char *s) {
 
 	return s;
 }
+char *cstring_tr(char *s, char old, char new) {
+	assert(s != NULL);
+	assert(new != 0);
+
+#if DO_CSTRING_SAFETY_CHECKS
+	if ((s == NULL) || (new == 0)) {
+		return s;
+	}
+#endif
+
+	CSTRING_TR(s, old, new);
+	return s;
+}
 
 #else
 	// ISO C forbids empty translation units, this makes it happy.

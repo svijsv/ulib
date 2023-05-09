@@ -70,6 +70,9 @@ const char* cstring_basename(const char *s);
 //
 // Convert all the lowercase letters in s to uppercase.
 char *cstring_to_upper(char *s);
+//
+// Convert all occurances of one character to another.
+char *cstring_tr(char *s, char old, char new);
 
 //
 // In-line conversion of a segment of a c-string (_s) to an integer (_i).
@@ -85,6 +88,17 @@ char *cstring_to_upper(char *s);
 		} \
 	} while (0);
 #define UINT_FROM_CSTRING(_ii, _ss) UINT_FROM_CSTRING_BASE10(_ii, _ss)
+
+//
+// In-line replacement of one character with another in a string.
+#define CSTRING_TR(_s, _old, _new) \
+	do { \
+		for (char *_c = (_s); *_c != 0; ++_c) { \
+			if (*_c == _old) { \
+				*_c = _new; \
+			} \
+		} \
+	} while (0);
 
 #endif // ULIB_ENABLE_CSTRINGS
 #endif // _ULIB_CSTRINGS_H
