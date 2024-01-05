@@ -38,6 +38,12 @@
 typedef signed   int  int_t;
 typedef unsigned int uint_t;
 
+#if ! __bool_true_false_are_defined
+typedef uint_fast8_t bool;
+# define true  1
+# define false 0
+#endif
+
 // This needs to be a struct rather than a plain int to avoid breaking strict
 // aliasing: https://blog.regehr.org/archives/1307
 typedef enum {
