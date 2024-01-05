@@ -39,7 +39,7 @@
 void mem_init(void *mem, uint8_t value, uint32_t size);
 
 //
-// Determine 
+// Determine the system endianess
 #if (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__) || defined(__BIG_ENDIAN) || defined(_BIG_ENDIAN)
 # define HAVE_BIG_ENDIAN 1
 # define HAVE_LITTLE_ENDIAN 0
