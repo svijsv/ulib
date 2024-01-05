@@ -57,9 +57,9 @@ void mem_init(void *mem, uint8_t value, uint32_t size);
 
 //
 // Check if a value is between two others.
-#define IS_BETWEEN_INCLUSIVE(x, min, max) ((x >= (min)) && (x <= (max)))
-#define IS_BETWEEN_EXCLUSIVE(x, min, max) ((x >  (min)) && (x <  (max)))
-//#define IS_BETWEEN(x, min, max) IS_BETWEEN_INCLUSIVE(x, min, max)
+#define IS_IN_RANGE_INCL(x, min, max) ((x >= (min)) && (x <= (max)))
+#define IS_IN_RANGE_EXCL(x, min, max) ((x >  (min)) && (x <  (max)))
+#define IS_IN_RANGE(x, min, max) IS_IN_RANGE_INCL(x, min, max)
 //
 // Find the smaller of two values.
 #ifndef MIN

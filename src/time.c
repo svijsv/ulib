@@ -62,8 +62,8 @@ utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
 	/*
 	assert(year <= MAX_YEARS);
 	*/
-	assert(IS_BETWEEN_INCLUSIVE(month, 1, 12));
-	assert(IS_BETWEEN_INCLUSIVE(day, 1, 31));
+	assert(IS_IN_RANGE_INCL(month, 1, 12));
+	assert(IS_IN_RANGE_INCL(day, 1, 31));
 
 #if DO_TIME_SAFETY_CHECKS
 	// This is always false because year is only 8 bits
@@ -72,10 +72,10 @@ utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
 		year = 0;
 	}
 	*/
-	if (!IS_BETWEEN_INCLUSIVE(month, 1, 12)) {
+	if (!IS_IN_RANGE_INCL(month, 1, 12)) {
 		month = 1;
 	}
-	if (!IS_BETWEEN_INCLUSIVE(day, 1, 31)) {
+	if (!IS_IN_RANGE_INCL(day, 1, 31)) {
 		day = 1;
 	}
 #endif
