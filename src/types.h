@@ -37,6 +37,7 @@
 
 typedef signed   int  int_t;
 typedef unsigned int uint_t;
+typedef uint_t       uint;
 
 #if ! __bool_true_false_are_defined
 typedef uint_fast8_t bool;
