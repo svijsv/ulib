@@ -32,26 +32,28 @@
 #include "debug.h"
 
 
-#if ((((TIME_YEAR_0) % 4) == 0) && ((((TIME_YEAR_0) % 100) != 0) || (((TIME_YEAR_0) % 400) == 0)))
-# error "TIME_YEAR_0 Cannot be a leap year"
-#endif
-
 #define MAX_YEARS (((utime_t )-1) / SECONDS_PER_YEAR)
 
-// Calculate the number of leap years up to some year
-// This calculation excludes TIME_YEAR_0 when it's a multiple of the factor
-// This calculation includes year y when it's a multiple of the factor and not 0
-#define _GET_LEAPS(y, f) (((TIME_YEAR_0 + (y)) - (TIME_YEAR_0 - (TIME_YEAR_0 % (f)))) / (f))
-// Determine if a year relative to TIME_YEAR_0 is a leap year
-#define _IS_LEAP_YEAR(y) ((((TIME_YEAR_0 + (y)) % 4) == 0) && ((((TIME_YEAR_0 + (y)) % 100) != 0) || (((TIME_YEAR_0 + (y)) % 400) == 0)))
 
 FMEM_STORAGE const uint8_t days_per_month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-INLINE uint8_t GET_LEAPS(uint16_t year, uint16_t factor) {
-	return (uint8_t )_GET_LEAPS(year, factor);
+// This will return the number of matching years between TIME_YEAR_0 and year
+// excluding TIME_YEAR_0 and year themselves
+uint8_t GET_LEAPS(uint8_t year, uint16_t factor) {
+	uint16_t check;
+	uint8_t count;
+
+	check = factor - (TIME_YEAR_0 % factor);
+	for (count = 0; check < year; check += factor) {
+		++count;
+	}
+
+	return count;
 }
-INLINE bool IS_LEAP_YEAR(uint16_t year) {
-	return _IS_LEAP_YEAR(year);
+bool IS_LEAP_YEAR(uint16_t year) {
+	uint16_t check = TIME_YEAR_0 + year;
+
+	return (((check % 4) == 0) && ((check % 100) != 0)) || ((check % 400) == 0);
 }
 
 utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
@@ -94,17 +96,17 @@ utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
 	year_100s = GET_LEAPS(year, 100);
 	year_400s = GET_LEAPS(year, 400);
 	leap_days = (uint8_t )(year_4s - year_100s) + year_400s;
-	if (IS_LEAP_YEAR(0)) {
+	if ((year != 0) && IS_LEAP_YEAR(0)) {
 		++leap_days;
 	}
 	if (IS_LEAP_YEAR(year)) {
-		if (month < 3) {
-			--leap_days;
+		if (month > 2) {
+			++leap_days;
 		}
 	}
 	days += leap_days;
 
-	return (utime_t )(year * SECONDS_PER_YEAR) + (utime_t )(days * SECONDS_PER_DAY);
+	return (utime_t )((utime_t )year * (utime_t )SECONDS_PER_YEAR) + (utime_t )((utime_t )days * (utime_t )SECONDS_PER_DAY);
 }
 void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day) {
 	uint8_t tmp_month;
@@ -122,14 +124,14 @@ void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restr
 	// that are divisible by 400
 	// Exclude the current year from the calculation to simplify things later
 	// on
-	year_4s   = GET_LEAPS(tmp_year-1, 4);
-	year_100s = GET_LEAPS(tmp_year-1, 100);
-	year_400s = GET_LEAPS(tmp_year-1, 400);
+	year_4s   = GET_LEAPS((uint8_t)(tmp_year-1), 4);
+	year_100s = GET_LEAPS((uint8_t)(tmp_year-1), 100);
+	year_400s = GET_LEAPS((uint8_t)(tmp_year-1), 400);
 	leap_days = (uint8_t )(year_4s - year_100s) + year_400s;
-	if ((IS_LEAP_YEAR(0)) && (tmp_year != 0)) {
+	if ((tmp_year != 0) && (IS_LEAP_YEAR(0))) {
 		++leap_days;
 	}
-	// TODO: Handle leap_days > 365?
+	// FIXME: Handle leap_days > 365?
 	if (leap_days > tmp_day) {
 		// FIXME: Handle tmp_year == 0
 		--tmp_year;
@@ -220,7 +222,7 @@ utime_t time_to_seconds(uint8_t hour, uint8_t minute, uint8_t second) {
 	}
 #endif
 
-	return ((utime_t )hour * SECONDS_PER_HOUR) + ((utime_t )minute * SECONDS_PER_MINUTE) + (utime_t )second;
+	return ((utime_t )hour * (utime_t )SECONDS_PER_HOUR) + ((utime_t )minute * (utime_t )SECONDS_PER_MINUTE) + (utime_t )second;
 }
 
 
