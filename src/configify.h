@@ -29,7 +29,10 @@
 #ifndef _ULIB_CONFIGIFY_H
 #define _ULIB_CONFIGIFY_H
 
-#include "ulibconfig.h"
+#ifndef ULIB_CONFIG_HEADER
+# define ULIB_CONFIG_HEADER "ulibconfig.h"
+#endif
+#include ULIB_CONFIG_HEADER
 
 #if ULIB_ENABLE_GETOPT
 # if !ULIB_ENABLE_CSTRINGS
