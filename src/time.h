@@ -48,15 +48,15 @@ typedef uint32_t utime_t;
 #define DAYS(x)    ((x) * SECONDS_PER_DAY)
 #define YEARS(x)   ((x) * SECONDS_PER_YEAR)
 */
-#define SECONDS_PER_MINUTE (60U)
-#define SECONDS_PER_HOUR   (SECONDS_PER_MINUTE * 60U)
-#define SECONDS_PER_DAY    (SECONDS_PER_HOUR   * 24U)
-#define SECONDS_PER_YEAR   (SECONDS_PER_DAY    * 365U)
+#define SECONDS_PER_MINUTE (60UL)
+#define SECONDS_PER_HOUR   (SECONDS_PER_MINUTE * 60UL)
+#define SECONDS_PER_DAY    (SECONDS_PER_HOUR   * 24UL)
+#define SECONDS_PER_YEAR   (SECONDS_PER_DAY    * 365UL)
 //
 // Minutes in a given time period.
-#define MINUTES_PER_HOUR (60U)
-#define MINUTES_PER_DAY  (MINUTES_PER_HOUR * 24U)
-#define MINUTES_PER_YEAR (MINUTES_PER_DAY  * 365U)
+#define MINUTES_PER_HOUR (60UL)
+#define MINUTES_PER_DAY  (MINUTES_PER_HOUR * 24UL)
+#define MINUTES_PER_YEAR (MINUTES_PER_DAY  * 365UL)
 //
 // Convert a frequency to a millisecond time period, truncated.
 #define HZ_TO_MS_TRUNC(freq) (1000 / freq)
