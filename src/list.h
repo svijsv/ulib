@@ -69,7 +69,7 @@ typedef struct {
 #if ! LISTS_USE_MALLOC
 	// The function used to free the memory used by a list_entry_t when required.
 	// May be NULL.
-	void (*free_entry)(void *obj);
+	void (*free_entry)(list_entry_t *e);
 #endif
 	// The function used to compare objects when required. If the search function
 	// is given a different comparison function, that takes precedence. If both
