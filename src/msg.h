@@ -58,15 +58,15 @@
  * Flags passed to msg_init() to change msg.c behavior
  */
 // Set forced mode for questions
-#define MSG_FORCE         0x01
+#define MSG_FORCE         0x01U
 // Set interactive mode for questions
-#define MSG_INTERACT      0x02
+#define MSG_INTERACT      0x02U
 // Allow modules to print error messages
-#define MSG_LIBERRORS     0x04
+#define MSG_LIBERRORS     0x04U
 // Print the time before log messages
-#define MSG_LOG_PRINTTIME 0x08
+#define MSG_LOG_PRINTTIME 0x08U
 // Use direct I/O when writing to log files
-#define MSG_LOG_DIRECT    0x10
+#define MSG_LOG_DIRECT    0x10U
 
 /*
  * Structure passed to msg_init() to initialize the module.

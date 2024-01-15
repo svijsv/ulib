@@ -47,16 +47,16 @@
 // logE(2)  == 0.69314718055995
 // log10(2) == 0.30102999566398
 #if FIXED_PNT_BITS <= 32
-# define FIXED_PNT_LOG_ADJUST_SHIFT ((31 - (31 - (FIXED_PNT_BITS-1))) - FIXED_PNT_FRACT_BITS)
-# define FIXED_PNT_LOGE_2Q31 0x58B90BFB // ln(2) * (1 << 31)
+# define FIXED_PNT_LOG_ADJUST_SHIFT ((31U - (31U - (FIXED_PNT_BITS-1U))) - FIXED_PNT_FRACT_BITS)
+# define FIXED_PNT_LOGE_2Q31 0x58B90BFBU // ln(2) * (1 << 31)
 # define FIXED_PNT_LOGE_2 (FIXED_PNT_LOGE_2Q31 >> FIXED_PNT_LOG_ADJUST_SHIFT)
-# define FIXED_PNT_LOG10_2Q31 0x268826A1 // log10(2) * (1 << 31)
+# define FIXED_PNT_LOG10_2Q31 0x268826A1U // log10(2) * (1 << 31)
 # define FIXED_PNT_LOG10_2 (FIXED_PNT_LOG10_2Q31 >> FIXED_PNT_LOG_ADJUST_SHIFT)
 #else
-# define FIXED_PNT_LOG_ADJUST_SHIFT ((63 - (63 - (FIXED_PNT_BITS-1))) - FIXED_PNT_FRACT_BITS)
-# define FIXED_PNT_LOGE_2Q63 0x58B90BFBE8E865D4 // ln(2) * (1 << 63)
+# define FIXED_PNT_LOG_ADJUST_SHIFT ((63U - (63U - (FIXED_PNT_BITS-1U))) - FIXED_PNT_FRACT_BITS)
+# define FIXED_PNT_LOGE_2Q63 0x58B90BFBE8E865D4U // ln(2) * (1 << 63)
 # define FIXED_PNT_LOGE_2 (FIXED_PNT_LOGE_2Q63 >> FIXED_PNT_LOG_ADJUST_SHIFT)
-# define FIXED_PNT_LOG10_2Q63 0x268826A13EF3D2D6 // log10(2) * (1 << 63)
+# define FIXED_PNT_LOG10_2Q63 0x268826A13EF3D2D6U // log10(2) * (1 << 63)
 # define FIXED_PNT_LOG10_2 (FIXED_PNT_LOG10_2Q63 >> FIXED_PNT_LOG_ADJUST_SHIFT)
 #endif
 
@@ -312,29 +312,29 @@ fixed_pnt_t log2_fixed_pnt(fixed_pnt_t x) {
 #define INT_BITS_IN   (32-FIXED_PNT_FRACT_BITS)
 #define RND_SHIFT     (31 - FRAC_BITS_OUT)
 #define RND_CONST     ((1 << RND_SHIFT) / 2)
-#define RND_ADJUST    (0x10d) // established heuristically
+#define RND_ADJUST    (0x10dU) // established heuristically
 #define LOG2_TBL_SIZE (6)
 #define TBL_SIZE      ((1 << LOG2_TBL_SIZE) + 2)
 int32_t log2_fp(int32_t x) {
 	// for i = [0,65]: log2(1 + i/64) * (1 << 31)
 	static FMEM_STORAGE const uint32_t log2Tab [TBL_SIZE] = {
-		0x00000000, 0x02dcf2d1, 0x05aeb4dd, 0x08759c50, 
-		0x0b31fb7d, 0x0de42120, 0x108c588d, 0x132ae9e2, 
-		0x15c01a3a, 0x184c2bd0, 0x1acf5e2e, 0x1d49ee4c, 
-		0x1fbc16b9, 0x22260fb6, 0x24880f56, 0x26e2499d, 
-		0x2934f098, 0x2b803474, 0x2dc4439b, 0x30014ac6, 
-		0x32377512, 0x3466ec15, 0x368fd7ee, 0x38b25f5a, 
-		0x3acea7c0, 0x3ce4d544, 0x3ef50ad2, 0x40ff6a2e, 
-		0x43041403, 0x450327eb, 0x46fcc47a, 0x48f10751, 
-		0x4ae00d1d, 0x4cc9f1ab, 0x4eaecfeb, 0x508ec1fa, 
-		0x5269e12f, 0x5440461c, 0x5612089a, 0x57df3fd0, 
-		0x59a80239, 0x5b6c65aa, 0x5d2c7f59, 0x5ee863e5, 
-		0x60a02757, 0x6253dd2c, 0x64039858, 0x65af6b4b, 
-		0x675767f5, 0x68fb9fce, 0x6a9c23d6, 0x6c39049b, 
-		0x6dd2523d, 0x6f681c73, 0x70fa728c, 0x72896373, 
-		0x7414fdb5, 0x759d4f81, 0x772266ad, 0x78a450b8, 
-		0x7a231ace, 0x7b9ed1c7, 0x7d17822f, 0x7e8d3846, 
-		0x80000000, 0x816fe50b
+		0x00000000U, 0x02dcf2d1U, 0x05aeb4ddU, 0x08759c50U, 
+		0x0b31fb7dU, 0x0de42120U, 0x108c588dU, 0x132ae9e2U, 
+		0x15c01a3aU, 0x184c2bd0U, 0x1acf5e2eU, 0x1d49ee4cU, 
+		0x1fbc16b9U, 0x22260fb6U, 0x24880f56U, 0x26e2499dU, 
+		0x2934f098U, 0x2b803474U, 0x2dc4439bU, 0x30014ac6U, 
+		0x32377512U, 0x3466ec15U, 0x368fd7eeU, 0x38b25f5aU, 
+		0x3acea7c0U, 0x3ce4d544U, 0x3ef50ad2U, 0x40ff6a2eU, 
+		0x43041403U, 0x450327ebU, 0x46fcc47aU, 0x48f10751U, 
+		0x4ae00d1dU, 0x4cc9f1abU, 0x4eaecfebU, 0x508ec1faU, 
+		0x5269e12fU, 0x5440461cU, 0x5612089aU, 0x57df3fd0U, 
+		0x59a80239U, 0x5b6c65aaU, 0x5d2c7f59U, 0x5ee863e5U, 
+		0x60a02757U, 0x6253dd2cU, 0x64039858U, 0x65af6b4bU, 
+		0x675767f5U, 0x68fb9fceU, 0x6a9c23d6U, 0x6c39049bU, 
+		0x6dd2523dU, 0x6f681c73U, 0x70fa728cU, 0x72896373U, 
+		0x7414fdb5U, 0x759d4f81U, 0x772266adU, 0x78a450b8U, 
+		0x7a231aceU, 0x7b9ed1c7U, 0x7d17822fU, 0x7e8d3846U, 
+		0x80000000U, 0x816fe50bU
 	};
 	int32_t f1, f2, dx, a, b, approx, lz, i, idx;
 	uint32_t t;

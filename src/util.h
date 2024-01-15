@@ -87,23 +87,23 @@ void mem_init(void *mem, uint8_t value, uint32_t size);
 // Copy an integer composed of smaller integers
 #define READ_SPLIT_U16(combined, high, low) \
 	do { \
-		((combined) = (uint16_t )((((uint16_t )(high)) << 8) | (((uint16_t )(low)) & 0xFF))); \
+		((combined) = (uint16_t )((((uint16_t )(high)) << 8U) | (((uint16_t )(low)) & 0xFFU))); \
 	} while (0);
 #define READ_SPLIT_S16(combined, high, low) \
 	do { \
-		((combined) = (int16_t )((((int16_t )(high)) << 8) | (((int16_t )(low)) & 0xFF))); \
+		((combined) = (int16_t )((((int16_t )(high)) << 8U) | (((int16_t )(low)) & 0xFFU))); \
 	} while (0);
 //
 // Copy a split register while making sure the low half doesn't overflow into
 // high in the process
 #define READ_SPLITREG32(combined, high, low) \
 	do { \
-		((combined) = (((uint32_t )(high)) << 16) | (((uint32_t )(low)) & 0xFFFF)); \
-	} while ((((combined) >> 16) & 0xFFFF) != (high));
+		((combined) = (((uint32_t )(high)) << 16U) | (((uint32_t )(low)) & 0xFFFFU)); \
+	} while ((((combined) >> 16U) & 0xFFFFU) != (high));
 #define READ_SPLITREG16(combined, high, low) \
 	do { \
-		((combined) = (((uint16_t )(high)) << 8) | (((uint16_t )(low)) & 0xFF)); \
-	} while ((((combined) >> 8) & 0xFF) != (high));
+		((combined) = (((uint16_t )(high)) << 8U) | (((uint16_t )(low)) & 0xFFU)); \
+	} while ((((combined) >> 8U) & 0xFFU) != (high));
 //
 // Write to a split register
 // Certain registers (like the RTC counter on the STM32) aren't updated
@@ -112,16 +112,16 @@ void mem_init(void *mem, uint8_t value, uint32_t size);
 // is possible, so just skip the check
 #define WRITE_SPLITREG32(combined, high, low) \
 	do { \
-		(high) = (uint16_t )((combined) >> 16); \
-		(low)  = (uint16_t )((combined) & 0xFFFF); \
+		(high) = (uint16_t )((combined) >> 16U); \
+		(low)  = (uint16_t )((combined) & 0xFFFFU); \
 	} while (0);
-	//} while ((((combined) >> 16) & 0xFFFF) != (high));
+	//} while ((((combined) >> 16) & 0xFFFFU) != (high));
 #define WRITE_SPLITREG16(combined, high, low) \
 	do { \
-		(high) = (uint8_t )((combined) >> 8); \
-		(low)  = (uint8_t )((combined) & 0xFF); \
+		(high) = (uint8_t )((combined) >> 8U); \
+		(low)  = (uint8_t )((combined) & 0xFFU); \
 	} while (0);
-	//} while ((((combined) >> 8) & 0xFF) != (high));
+	//} while ((((combined) >> 8) & 0xFFU) != (high));
 //
 // Write a volatile variable without atomic access; this doesn't protect
 // anything trying to read it during the write

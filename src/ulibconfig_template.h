@@ -59,10 +59,10 @@
 #define ARRAY_MAX_OBJECTS (0xFFFFU - 1U)
 //
 // Allocated size of an array when first created.
-#define ARRAY_INITIAL_SIZE 4
+#define ARRAY_INITIAL_SIZE 4U
 //
 // Factor by which to grow an array by when it would otherwise overflow.
-#define ARRAY_GROW_FACTOR 2
+#define ARRAY_GROW_FACTOR 2U
 //
 // Method of array growth.
 //    ARRAY_GROW_NONE: The array is never grown - if an overflow would occur,
@@ -104,10 +104,10 @@
 #define BUFFER_MAX_BYTES (0xFFFFU - 1U)
 //
 // Size of a buffer when first created.
-#define BUFFER_INITIAL_SIZE 32
+#define BUFFER_INITIAL_SIZE 32U
 //
 // Factor by which to grow the buffer by when it would otherwise overflow.
-#define BUFFER_GROW_FACTOR 2
+#define BUFFER_GROW_FACTOR 2U
 //
 // Method of buffer growth. See the description for ARRAY_GROW_METHOD for
 // details.
@@ -195,10 +195,10 @@
 //
 // The number of bits used in fixed-point representations. This includes the
 // sign bit.
-#define FIXED_PNT_BITS 32
+#define FIXED_PNT_BITS 32U
 //
 // The number of bits of a fixed-point representation devoted to the fraction.
-#define FIXED_PNT_FRACT_BITS 8
+#define FIXED_PNT_FRACT_BITS 8U
 //
 // If non-zero, perform additional checks to handle common problems like
 // division by 0.

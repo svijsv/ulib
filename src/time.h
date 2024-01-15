@@ -59,14 +59,14 @@ typedef uint32_t utime_t;
 #define MINUTES_PER_YEAR (MINUTES_PER_DAY  * 365UL)
 //
 // Convert a frequency to a millisecond time period, truncated.
-#define HZ_TO_MS_TRUNC(freq) (1000 / freq)
+#define HZ_TO_MS_TRUNC(freq) (1000U / freq)
 // Convert a frequency to a millisecond time period, rounded.
-#define HZ_TO_MS(freq) ((1000 + (freq/2)) / freq)
+#define HZ_TO_MS(freq) ((1000U + (freq/2U)) / freq)
 //
 // Convert a frequency to a microsecond time period, truncated.
-#define HZ_TO_US_TRUNC(freq) (1000000 / freq)
+#define HZ_TO_US_TRUNC(freq) (1000000U / freq)
 // Convert a frequency to a microsecond time period, rounded.
-#define HZ_TO_US(freq) ((1000000 + (freq/2)) / freq)
+#define HZ_TO_US(freq) ((1000000U + (freq/2U)) / freq)
 
 
 /*
