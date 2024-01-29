@@ -35,6 +35,10 @@
 
 static const char CAP_DIFF = 'a' - 'A';
 
+static const char base16_table[] = {
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+};
+
 bool cstring_eq(const char *s1, const char *s2) {
 	assert(s1 != NULL);
 	assert(s2 != NULL);
@@ -229,6 +233,42 @@ char *cstring_tr(char *s, char old, char new) {
 
 	CSTRING_TR(s, old, new);
 	return s;
+}
+
+uint_t cstring_from_uint(char *dest, uint_t size, uint_t src, uint_t base) {
+	uint_t i = 0, w = 0;
+
+	assert(dest != NULL);
+	assert(size > 0);
+	assert((base > 1) && (base <= 16));
+
+#if DO_CSTRING_SAFETY_CHECKS
+	if ((dest == NULL) || (size == 0) || (base <= 1) || (base > 16)) {
+		return 0;
+	}
+#endif
+
+	if (src == 0) {
+		w = 1;
+	} else {
+		for (uint_t x = 1; x <= src; x *= base, ++w) {
+			// Nothing to do here
+		}
+	}
+
+	if (w < size) {
+		i = w;
+		dest[i] = 0;
+
+		do {
+			--i;
+			dest[i] = base16_table[(src % base)];
+			src /= base;
+		} while ((src != 0));
+	}
+
+	// Add 1 for the trailing NUL byte
+	return w + 1;
 }
 
 #else
