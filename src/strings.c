@@ -82,7 +82,9 @@ INLINE strlen_t COMBINED_LENGTH(strlen_t a, strlen_t b) {
 // strlen_t is set to unsigned always, so it's guaranteed to be >= 0.
 //#define ASSERT_LENGTH(l) assert((l) >= 0)
 #define ASSERT_LENGTH(l) assert(true)
-#define ASSERT_ARP(a) assert(POINTER_IS_VALID(a))
+// arp may be a pointer or array, so we can't check it like this
+//#define ASSERT_ARP(a) assert(POINTER_IS_VALID(a))
+#define ASSERT_ARP(a) ((void )0U)
 
 // A pointer set by string_appendf_va and used by the non-reentrant string_putc()
 // function so that it can have the same signature as putc().

@@ -51,13 +51,16 @@ void xvfprintf (void(*func)(int), const char* fmt, va_list arp);
 void printf_va(void (*pputc)(int c), const char *restrict fmt, va_list arp) {
 	assert(pputc != NULL);
 	assert(fmt   != NULL);
-	assert(arp   != NULL);
+	// arp may be a pointer or array, so we can't check it like this
+	//assert(arp   != NULL);
+	//assert(arp   != (typeof(arp) )NULL);
 
 #if DO_PRINTF_SAFETY_CHECKS
 	if (pputc == NULL) {
 		return;
 	}
-	if ((fmt == NULL) || (arp == NULL)) {
+	//if ((fmt == NULL) || (arp == NULL)) {
+	if ((fmt == NULL)) {
 		return;
 	}
 #endif
