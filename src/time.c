@@ -110,8 +110,7 @@ utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
 }
 void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day) {
 	uint8_t tmp_month;
-	uint16_t tmp_year, tmp_day, leap_days;
-	uint8_t year_4s, year_100s, year_400s;
+	uint16_t tmp_year, tmp_day, leap_days = 0;
 
 	assert(ret_year != NULL);
 	assert(ret_month != NULL);
@@ -124,19 +123,25 @@ void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restr
 	// that are divisible by 400
 	// Exclude the current year from the calculation to simplify things later
 	// on
-	year_4s   = GET_LEAPS((uint8_t)(tmp_year-1), 4);
-	year_100s = GET_LEAPS((uint8_t)(tmp_year-1), 100);
-	year_400s = GET_LEAPS((uint8_t)(tmp_year-1), 400);
-	leap_days = (uint8_t )(year_4s - year_100s) + year_400s;
+	if (tmp_year > 0) {
+		uint8_t year_4s, year_100s, year_400s;
+
+		year_4s   = GET_LEAPS((uint8_t)(tmp_year-1), 4);
+		year_100s = GET_LEAPS((uint8_t)(tmp_year-1), 100);
+		year_400s = GET_LEAPS((uint8_t)(tmp_year-1), 400);
+		leap_days = (uint8_t )(year_4s - year_100s) + year_400s;
+	}
 	if ((tmp_year != 0) && (IS_LEAP_YEAR(0))) {
 		++leap_days;
 	}
 	// FIXME: Handle leap_days > 365?
 	if (leap_days > tmp_day) {
-		// FIXME: Handle tmp_year == 0
+		// FIXME: Handle tmp_year == 0? Don't know how we'd get that with so
+		// many leap days though
 		--tmp_year;
-		// Day 0 of one year is the same as day 366 of the previous year
-		tmp_day = 366 - (uint16_t )(leap_days - tmp_day);
+		// Day 1 of one year is the same as day 366 of the previous year
+		// We're still 0-indexed so we use 365 instead of 366
+		tmp_day = 365 - (uint16_t )(leap_days - tmp_day);
 	} else {
 		tmp_day -= leap_days;
 	}
@@ -158,7 +163,8 @@ void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restr
 			if (tmp_month == 2) {
 				tmp_day = 29;
 			} else {
-				tmp_day = days_per_month[tmp_month-1];
+				//tmp_day = days_per_month[tmp_month-1];
+				tmp_day = 31;
 			}
 		}
 	}
