@@ -49,13 +49,6 @@ void mem_init(void *mem, uint8_t value, uint32_t size);
 #endif
 
 //
-// Use these to show the value of a macro at compile-time
-// https://stackoverflow.com/questions/1562074/how-do-i-show-the-value-of-a-define-at-compile-time
-#define XTRINGIZE(x) STRINGIZE(x)
-#define STRINGIZE(x) #x
-//#pragma message "The value of ABC: " XTRINGIZE(ABC)
-
-//
 // Check if a value is between two others.
 #define IS_IN_RANGE_INCL(x, min, max) ((x >= (min)) && (x <= (max)))
 #define IS_IN_RANGE_EXCL(x, min, max) ((x >  (min)) && (x <  (max)))

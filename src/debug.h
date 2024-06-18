@@ -59,6 +59,26 @@ void _assert_failed(const char *file_path, uint32_t lineno, const char *func_nam
 
 #define PRINT_HERE() msg_debug("-HERE- %s() %s:%d", __func__, F1(__FILE__), __LINE__)
 
+//
+// Use these to show the value of a macro at compile-time
+// https://stackoverflow.com/questions/1562074/how-do-i-show-the-value-of-a-define-at-compile-time
+#define XTRINGIZE(_x_) STRINGIZE(_x_)
+#define STRINGIZE(_x_) #_x_
+#define DO_PRAGMA(_x_) _Pragma(#_x_)
+
+#if !defined(DEBUG_CPP_MESSAGES) && DEBUG
+# define DEBUG_CPP_MESSAGES 1
+#endif
+#if DEBUG_CPP_MESSAGES
+// Display the value of a defined macro
+# define DEBUG_CPP_MACRO(_x_) DO_PRAGMA(message #_x_ " == " XTRINGIZE(_x_))
+// Display a textual message
+# define DEBUG_CPP_MSG(_msg_) DO_PRAGMA(message _msg_)
+#else
+# define DEBUG_CPP_MACRO(_x_)
+# define DEBUG_CPP_MSG(_msg_)
+#endif
+
 #endif // _ULIB_DEBUG_H
 #ifdef __cplusplus
  }

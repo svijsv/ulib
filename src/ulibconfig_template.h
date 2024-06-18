@@ -142,6 +142,8 @@
 // If this is enabled and NDEBUG is undefined, the function _assert_failed()
 // must be defined somewhere. See debug.h for the prototype.
 #define USE_ULIB_ASSERT 1
+// Enable preprocessor messages issued with DEBUG_CPP_MACRO() and DEBUG_CPP_MSG()
+#define DEBUG_CPP_MESSAGES DEBUG
 
 
 /*
