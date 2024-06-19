@@ -28,7 +28,7 @@
 #ifndef _ULIB_PRINTF_H
 #define _ULIB_PRINTF_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_PRINTF
 
 #include "types.h"

@@ -33,7 +33,7 @@
 #ifndef _ULIB_ARRAY_H
 #define _ULIB_ARRAY_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_ARRAYS
 
 #include "types.h"

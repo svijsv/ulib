@@ -28,7 +28,7 @@
 #ifndef _ULIB_CSTRINGS_H
 #define _ULIB_CSTRINGS_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_CSTRINGS
 
 #include "types.h"

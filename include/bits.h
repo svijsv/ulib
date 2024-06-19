@@ -42,7 +42,7 @@
 #ifndef _ULIB_BITS_H
 #define _ULIB_BITS_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_BITOPS
 
 #include "types.h"

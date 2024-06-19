@@ -33,7 +33,7 @@
 #ifndef _ULIB_LIST_H
 #define _ULIB_LIST_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_LISTS
 
 #include "types.h"

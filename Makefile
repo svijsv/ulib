@@ -17,7 +17,7 @@ SPLINT_FLAGS := \
 _CFLAGS        := -std=c99 -fstrict-aliasing -fno-common -fshort-enums \
                   -ffunction-sections -fdata-sections \
                   -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500 \
-                  -I.
+                  -I. -iquote include
 _DEBUG_CFLAGS  := -Werror -Wall -Wextra -pedantic \
                   -Wstrict-prototypes -Wconversion -Winit-self -Wunreachable-code \
                   -Wdouble-promotion -Wformat-security \

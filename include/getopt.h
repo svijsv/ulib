@@ -29,7 +29,7 @@
 #ifndef _ULIB_GETOPT_H
 #define _ULIB_GETOPT_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_GETOPT
 
 #include "types.h"

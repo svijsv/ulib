@@ -28,7 +28,7 @@
 #ifndef _ULIB_UTIL_H
 #define _ULIB_UTIL_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_UTIL
 
 #include "types.h"

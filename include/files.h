@@ -45,7 +45,7 @@
 #ifndef _ULIB_FILES_H
 #define _ULIB_FILES_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_FILES
 
 #include "strings.h"

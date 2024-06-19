@@ -28,7 +28,7 @@
 #ifndef _ULIB_MATH_H
 #define _ULIB_MATH_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_MATH
 
 #include "types.h"

@@ -28,7 +28,7 @@
 #ifndef _ULIB_DEBUG_H
 #define _ULIB_DEBUG_H
 
-#include "configify.h"
+#include "src/configify.h"
 #include "fmem.h"
 #include "msg.h"
 #include "types.h"

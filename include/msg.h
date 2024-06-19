@@ -37,7 +37,7 @@
 #ifndef _ULIB_MSG_H
 #define _ULIB_MSG_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_MSG
 
 #include "types.h"

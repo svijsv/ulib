@@ -27,7 +27,7 @@
 #ifndef _ULIB_TIME_H
 #define _ULIB_TIME_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_TIME
 
 #include "fmem.h"

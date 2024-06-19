@@ -53,7 +53,7 @@
 #ifndef _ULIB_FMEM_H
 #define _ULIB_FMEM_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_FMEM
 
 #include "types.h"

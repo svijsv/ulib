@@ -43,7 +43,7 @@
 #ifndef _ULIB_STRINGS_H
 #define _ULIB_STRINGS_H
 
-#include "configify.h"
+#include "src/configify.h"
 #if ULIB_ENABLE_STRINGS
 
 #include "types.h"
