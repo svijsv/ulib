@@ -89,6 +89,9 @@
 */
 // Enable this module
 #define ULIB_ENABLE_BITOPS ULIB_ENABLE_DEFAULT
+// If non-zero, enable the type-checked inlined function versions of the
+// bitwise operations. See bits.h for details.
+#define ULIB_BITOP_ENABLE_INLINED_FUNCTIONS 1
 
 
 /*
