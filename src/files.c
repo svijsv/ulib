@@ -113,8 +113,8 @@ INLINE int _SET_ERRNO_RET(int _ret, int _val) {
 //
 static int v_unlinkat(int atfd, const char *path, int flags) {
 #if DO_FILE_EXTRA_SAFETY_CHECKS
-	assert(FD_IS_VALID(atfd));
-	assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(PATH_IS_VALID(path));
 
 	if (!FD_IS_VALID(atfd)) {
 		errno = EBADF;
@@ -144,8 +144,8 @@ static ssize_t v_write(int fd, const void *buf, size_t count) {
 	const uint8_t *cbuf = buf;
 
 #if DO_FILE_EXTRA_SAFETY_CHECKS
-	assert(FD_IS_VALID(fd));
-	assert(POINTER_IS_VALID(buf));
+	ulib_assert(FD_IS_VALID(fd));
+	ulib_assert(POINTER_IS_VALID(buf));
 
 	if (!FD_IS_VALID(fd)) {
 		errno = EBADF;
@@ -176,8 +176,8 @@ static ssize_t v_read(int fd, void *buf, size_t count) {
 	ssize_t bytes;
 
 #if DO_FILE_EXTRA_SAFETY_CHECKS
-	assert(FD_IS_VALID(fd));
-	assert(POINTER_IS_VALID(buf));
+	ulib_assert(FD_IS_VALID(fd));
+	ulib_assert(POINTER_IS_VALID(buf));
 
 	if (!FD_IS_VALID(fd)) {
 		errno = EBADF;
@@ -216,9 +216,9 @@ static int v_openat(int atfd, const char *path, int flags, mode_t mode) {
 	int ret = 0;
 
 #if DO_FILE_EXTRA_SAFETY_CHECKS
-	assert(FD_IS_VALID(atfd));
-	assert(PATH_IS_VALID(path));
-	assert(MODE_IS_VALID(mode));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(MODE_IS_VALID(mode));
 
 	if (!FD_IS_VALID(atfd)) {
 		errno = EBADF;
@@ -241,9 +241,9 @@ static int v_mkdirat(int atfd, const char *path, mode_t mode) {
 	int ret = 0;
 
 #if DO_FILE_EXTRA_SAFETY_CHECKS
-	assert(FD_IS_VALID(atfd));
-	assert(PATH_IS_VALID(path));
-	assert(MODE_IS_VALID(mode));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(MODE_IS_VALID(mode));
 
 	if (!FD_IS_VALID(atfd)) {
 		errno = EBADF;
@@ -269,7 +269,7 @@ static int v_fdatasync(int fd) {
 	int ret = 0;
 
 #if DO_FILE_EXTRA_SAFETY_CHECKS
-	assert(FD_IS_VALID(fd));
+	ulib_assert(FD_IS_VALID(fd));
 
 	if (!FD_IS_VALID(fd)) {
 		errno = EBADF;
@@ -285,7 +285,7 @@ static int v_fdatasync(int fd) {
 }
 static bool is_self_link(const char *name) {
 #if DO_FILE_EXTRA_SAFETY_CHECKS
-	assert(POINTER_IS_VALID(name));
+	ulib_assert(POINTER_IS_VALID(name));
 
 	if (!POINTER_IS_VALID(name)) {
 		return false;
@@ -326,8 +326,8 @@ static int try_unlink(const char *path, int atfd, file_flag_t flags) {
 // Exported functions
 //
 bool file_same_stat(struct stat *a, struct stat *b, file_flag_t flags) {
-	assert(STAT_IS_VALID(a));
-	assert(STAT_IS_VALID(b));
+	ulib_assert(STAT_IS_VALID(a));
+	ulib_assert(STAT_IS_VALID(b));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!STAT_IS_VALID(a) || !STAT_IS_VALID(b)) {
@@ -343,10 +343,10 @@ bool file_same_pathat(const char *a, int a_atfd, const char *b, int b_atfd, file
 	int sflags;
 	struct stat ast, bst;
 
-	assert(PATH_IS_VALID(a));
-	assert(FD_IS_VALID(a_atfd));
-	assert(PATH_IS_VALID(b));
-	assert(FD_IS_VALID(b_atfd));
+	ulib_assert(PATH_IS_VALID(a));
+	ulib_assert(FD_IS_VALID(a_atfd));
+	ulib_assert(PATH_IS_VALID(b));
+	ulib_assert(FD_IS_VALID(b_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(a) || !PATH_IS_VALID(b) || !FD_IS_VALID(a_atfd) || !FD_IS_VALID(b_atfd)) {
@@ -368,7 +368,7 @@ bool file_same_path(const char *a, const char *b, file_flag_t flags) {
 }
 
 file_type_t file_get_type_stat(const struct stat* st, file_flag_t flags) {
-	assert(STAT_IS_VALID(st));
+	ulib_assert(STAT_IS_VALID(st));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!STAT_IS_VALID(st)) {
@@ -410,8 +410,8 @@ file_type_t file_get_type_pathat(const char *path, int atfd, file_flag_t flags) 
 	int sflags;
 	struct stat st;
 
-	assert(PATH_IS_VALID(path));
-	assert(FD_IS_VALID(atfd));
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(path)) {
@@ -437,9 +437,9 @@ file_type_t file_get_type_path(const char *path, file_flag_t flags) {
 }
 
 int file_create_dir_at(const char *path, int atfd, mode_t mode, file_flag_t flags) {
-	assert(PATH_IS_VALID(path));
-	assert(FD_IS_VALID(atfd));
-	assert(MODE_IS_VALID(mode));
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(MODE_IS_VALID(mode));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(path) || !MODE_IS_VALID(mode)) {
@@ -469,9 +469,9 @@ int file_create_parent_dir_at(char *path, int atfd, const mode_t mode, file_flag
 	size_t len, i;
 	size_t name_i;
 
-	assert(PATH_IS_VALID(path));
-	assert(FD_IS_VALID(atfd));
-	assert(MODE_IS_VALID(mode));
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(MODE_IS_VALID(mode));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(path) || !MODE_IS_VALID(mode)) {
@@ -523,9 +523,9 @@ static int file_remove_dir_contents_pathat(const char *path, int atfd, uint16_t 
 	DIR *dirp = NULL;
 	struct dirent *dire;
 
-	assert(PATH_IS_VALID(path));
-	assert(FD_IS_VALID(atfd));
-	assert(depth >= 1);
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(depth >= 1);
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(path)) {
@@ -616,11 +616,11 @@ int file_remove_pathat(const char *path, int atfd, file_flag_t flags) {
 	int ret = 0;
 	struct stat st;
 
-	assert(PATH_IS_VALID(path));
-	assert(FD_IS_VALID(atfd));
-	assert(!BIT_IS_SET(flags, FILE_DEREF));
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(!BIT_IS_SET(flags, FILE_DEREF));
 	// Don't want to remove the root directory now do we?
-	assert(!PATH_IS_ROOT(path));
+	ulib_assert(!PATH_IS_ROOT(path));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(path)) {
@@ -660,8 +660,8 @@ int file_copy_stat_to_fd(const struct stat* st, int dest_fd, file_flag_t flags) 
 	int ret = 0;
 	struct timespec tv[2];
 
-	assert(STAT_IS_VALID(st));
-	assert(FD_IS_VALID(dest_fd));
+	ulib_assert(STAT_IS_VALID(st));
+	ulib_assert(FD_IS_VALID(dest_fd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!STAT_IS_VALID(st)) {
@@ -696,9 +696,9 @@ int file_copy_stat_to_pathat(const struct stat* st, const char *path, int atfd, 
 	int fflags = 0;
 	struct timespec tv[2];
 
-	assert(STAT_IS_VALID(st));
-	assert(PATH_IS_VALID(path));
-	assert(FD_IS_VALID(atfd));
+	ulib_assert(STAT_IS_VALID(st));
+	ulib_assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!STAT_IS_VALID(st) || !PATH_IS_VALID(path)) {
@@ -743,17 +743,17 @@ int file_copy_bytes_fd_to_fd(int src_fd, int dest_fd, size_t max_bytes, size_t *
 	size_t bwrote = 0, bread = 0;
 	size_t todo;
 
-	assert(FD_IS_VALID(src_fd));
-	assert(FD_IS_VALID(dest_fd));
-	assert(COPY_CALLBACK_IS_VALID(copy_callback));
+	ulib_assert(FD_IS_VALID(src_fd));
+	ulib_assert(FD_IS_VALID(dest_fd));
+	ulib_assert(COPY_CALLBACK_IS_VALID(copy_callback));
 #ifdef FILE_PROVIDED_BUF
 	if (buf == NULL) {
 		buf = FILE_PROVIDED_BUF;
 		bufsize = FILE_PROVIDED_BUF_SIZE;
 	}
 #endif
-	assert(POINTER_IS_VALID(buf));
-	assert(bufsize > 0);
+	ulib_assert(POINTER_IS_VALID(buf));
+	ulib_assert(bufsize > 0);
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(buf) || (bufsize <= 0)) {
@@ -834,8 +834,8 @@ int file_copy_file_fd_to_fd(int src_fd, int dest_fd, uint8_t *restrict buf, size
 	int ret = 0, tmp;
 	struct stat st;
 
-	assert(FD_IS_VALID(src_fd));
-	assert(FD_IS_VALID(dest_fd));
+	ulib_assert(FD_IS_VALID(src_fd));
+	ulib_assert(FD_IS_VALID(dest_fd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!FD_IS_VALID(src_fd) || !FD_IS_VALID(dest_fd)) {
@@ -873,10 +873,10 @@ int file_copy_file_pathat_to_pathat(const char *src, int src_atfd, const char *d
 	int read_flags = O_READ_FLAGS;
 	int write_flags = O_WRITE_FLAGS;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest)) {
@@ -916,10 +916,10 @@ int file_copy_special_pathat_to_pathat(const char *src, int src_atfd, const char
 	struct stat st;
 	int sflags;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest)) {
@@ -967,18 +967,18 @@ int file_copy_symlink_pathat_to_pathat(const char *src, int src_atfd, const char
 	ssize_t ls = 0;
 	struct stat st;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
 #ifdef FILE_PROVIDED_BUF
 	if (buf == NULL) {
 		buf = FILE_PROVIDED_BUF;
 		bufsize = FILE_PROVIDED_BUF_SIZE;
 	}
 #endif
-	assert(POINTER_IS_VALID(buf));
-	assert(bufsize > 0);
+	ulib_assert(POINTER_IS_VALID(buf));
+	ulib_assert(bufsize > 0);
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest) || !POINTER_IS_VALID(buf) || (bufsize <= 0)) {
@@ -1028,11 +1028,11 @@ static int file_copy_bare_dir(const char *src, int src_atfd, struct stat *src_st
 	int ret = 0;
 	int tmp;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
-	assert(STAT_IS_VALID(src_st));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(STAT_IS_VALID(src_st));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest) || !STAT_IS_VALID(src_st)) {
@@ -1069,10 +1069,10 @@ static int file_copy_dir_recursive(const char *src, int src_atfd, struct stat *s
 	struct dirent* ent = NULL;
 	file_flag_t cflags;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest)) {
@@ -1179,8 +1179,8 @@ int file_copy_dir_pathat_to_pathat(const char *src, int src_atfd, const char *de
 	int sflags = 0;
 	struct stat src_st;
 
-	assert(PATH_IS_VALID(src));
-	assert(FD_IS_VALID(src_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(FD_IS_VALID(src_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src)) {
@@ -1212,10 +1212,10 @@ int file_copy_pathat_to_pathat(const char *src, int src_atfd, const char *dest, 
 	int sflags = 0;
 	struct stat sst, dst;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest)) {
@@ -1283,10 +1283,10 @@ int file_copy_path_to_path(const char *src, const char *dest, uint8_t *restrict 
 int file_move_pathat_to_pathat(const char *src, int src_atfd, const char *dest, int dest_atfd, uint8_t *restrict buf, size_t bufsize, file_copy_callback_t *copy_callback, file_flag_t flags) {
 	int ret = 0, tmp;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest)) {
@@ -1325,10 +1325,10 @@ int file_hlink_pathat_to_pathat(const char *src, int src_atfd, const char *dest,
 	int ret = 0;
 	int sflags = 0;
 
-	assert(PATH_IS_VALID(src));
-	assert(PATH_IS_VALID(dest));
-	assert(FD_IS_VALID(src_atfd));
-	assert(FD_IS_VALID(dest_atfd));
+	ulib_assert(PATH_IS_VALID(src));
+	ulib_assert(PATH_IS_VALID(dest));
+	ulib_assert(FD_IS_VALID(src_atfd));
+	ulib_assert(FD_IS_VALID(dest_atfd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(src) || !PATH_IS_VALID(dest)) {
@@ -1366,7 +1366,7 @@ int file_hlink_path_to_path(const char *src, const char *dest, uint8_t *restrict
 int file_fsync_fd(int fd, file_flag_t flags) {
 	int ret = 0;
 
-	assert(FD_IS_VALID(fd));
+	ulib_assert(FD_IS_VALID(fd));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!FD_IS_VALID(fd)) {
@@ -1387,8 +1387,8 @@ int file_fsync_pathat(const char *path, int atfd, file_flag_t flags) {
 	int ret = 0;
 	int oflags = O_SYNCFD_FLAGS;
 
-	assert(FD_IS_VALID(atfd));
-	assert(PATH_IS_VALID(path));
+	ulib_assert(FD_IS_VALID(atfd));
+	ulib_assert(PATH_IS_VALID(path));
 
 #if DO_FILE_SAFETY_CHECKS
 	if (!PATH_IS_VALID(path)) {

@@ -40,8 +40,8 @@ static const char base16_table[] = {
 };
 
 bool cstring_eq(const char *s1, const char *s2) {
-	assert(s1 != NULL);
-	assert(s2 != NULL);
+	ulib_assert(s1 != NULL);
+	ulib_assert(s2 != NULL);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if ((s1 == NULL) || (s2 == NULL)) {
@@ -51,8 +51,8 @@ bool cstring_eq(const char *s1, const char *s2) {
 	return (strcmp(s1, s2) == 0);
 }
 bool cstring_eqn(const char *s1, const char *s2, uint_t n) {
-	assert(s1 != NULL);
-	assert(s2 != NULL);
+	ulib_assert(s1 != NULL);
+	ulib_assert(s2 != NULL);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if ((s1 == NULL) || (s2 == NULL)) {
@@ -62,8 +62,8 @@ bool cstring_eqn(const char *s1, const char *s2, uint_t n) {
 	return (strncmp(s1, s2, n) == 0);
 }
 bool cstring_eqz(const char *s1, const char *s2) {
-	assert(s1 != NULL);
-	assert(s2 != NULL);
+	ulib_assert(s1 != NULL);
+	ulib_assert(s2 != NULL);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if ((s1 == NULL) || (s2 == NULL)) {
@@ -83,7 +83,7 @@ bool cstring_eqz(const char *s1, const char *s2) {
 	return (*a == 0);
 }
 const char* cstring_eat_whitespace(const char *s) {
-	assert(s != NULL);
+	ulib_assert(s != NULL);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if (s == NULL) {
@@ -107,8 +107,8 @@ const char* cstring_eat_whitespace(const char *s) {
 	return (char *)s;
 }
 const char* cstring_next_token(const char *cs, char sep) {
-	assert(cs != NULL);
-	assert(sep != 0);
+	ulib_assert(cs != NULL);
+	ulib_assert(sep != 0);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if (sep == 0) {
@@ -137,8 +137,8 @@ char *cstring_pop_token(char *input, char sep, uint_t *len) {
 	uint_t l = 0;
 	char *cs = input;
 
-	assert(input != NULL);
-	assert(sep != 0);
+	ulib_assert(input != NULL);
+	ulib_assert(sep != 0);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if (sep == 0) {
@@ -177,7 +177,7 @@ const char* cstring_basename(const char *s) {
 
 	// basename() accepts null pointers, and we're trying to be like basename().
 	/*
-	assert(s != NULL);
+	ulib_assert(s != NULL);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if (s == NULL) {
@@ -205,7 +205,7 @@ const char* cstring_basename(const char *s) {
 char *cstring_to_upper(char *s) {
 	char *c;
 
-	assert(s != NULL);
+	ulib_assert(s != NULL);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if (s == NULL) {
@@ -222,8 +222,8 @@ char *cstring_to_upper(char *s) {
 	return s;
 }
 char *cstring_tr(char *s, char old, char new) {
-	assert(s != NULL);
-	assert(new != 0);
+	ulib_assert(s != NULL);
+	ulib_assert(new != 0);
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if ((s == NULL) || (new == 0)) {
@@ -238,9 +238,9 @@ char *cstring_tr(char *s, char old, char new) {
 uint_t cstring_from_uint(char *dest, uint_t size, uint_t src, uint_t base) {
 	uint_t i = 0, w = 0;
 
-	assert(dest != NULL);
-	assert(size > 0);
-	assert((base > 1) && (base <= 16));
+	ulib_assert(dest != NULL);
+	ulib_assert(size > 0);
+	ulib_assert((base > 1) && (base <= 16));
 
 #if DO_CSTRING_SAFETY_CHECKS
 	if ((dest == NULL) || (size == 0) || (base <= 1) || (base > 16)) {

@@ -46,14 +46,14 @@
 # define IS_LIST_ID(s) (true)
 #endif
 
-#define ASSERT_LIST(l) assert( \
+#define ASSERT_LIST(l) ulib_assert( \
 		(POINTER_IS_VALID(l)) && \
 		(IS_LIST_ID(l)) && \
 		((l)->size <= LIST_MAX_OBJECTS) \
 		)
 
 list_t* list_init(list_t *l, const list_init_t *init) {
-	assert(POINTER_IS_VALID(l));
+	ulib_assert(POINTER_IS_VALID(l));
 
 #if DO_LIST_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(l)) {
@@ -144,7 +144,7 @@ list_t* _list_append(list_t *l, void *object, list_entry_t *emem) {
 	UNUSED(emem);
 	e = malloc(sizeof(*e));
 #else
-	assert(POINTER_IS_VALID(emem));
+	ulib_assert(POINTER_IS_VALID(emem));
 	e = emem;
 #endif
 

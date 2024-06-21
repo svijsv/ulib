@@ -64,7 +64,7 @@
 int64_t div_s64_s64(int64_t n, int64_t d) {
 	int64_t res, t;
 
-	assert(d != 0);
+	ulib_assert(d != 0);
 
 #if DO_MATH_SAFETY_CHECKS
 	if (d == 0) {
@@ -100,7 +100,7 @@ uint64_t div_u64_u16(uint64_t n, uint16_t d) {
 		} p;
 	} nparts, rparts;
 
-	assert(d != 0);
+	ulib_assert(d != 0);
 
 #if DO_MATH_SAFETY_CHECKS
 	if (d == 0) {
@@ -137,7 +137,7 @@ uint64_t div_u64_u32(uint64_t n, uint32_t d) {
 	uint64_t rem, d64, c, res;
 	uint32_t high;
 
-	assert(d != 0);
+	ulib_assert(d != 0);
 
 #if DO_MATH_SAFETY_CHECKS
 	if (d == 0) {
@@ -184,7 +184,7 @@ uint64_t div_u64_u64(uint64_t n, uint64_t d) {
 	uint64_t high, res, rem;
 	high = n >> 32;
 
-	assert(d != 0);
+	ulib_assert(d != 0);
 
 #if DO_MATH_SAFETY_CHECKS
 	if (d == 0) {
@@ -242,7 +242,7 @@ uint64_t div_u64_u64(uint64_t n, uint64_t d) {
 */
 
 fixed_pnt_t log10_fixed_pnt(fixed_pnt_t x) {
-	assert(x != 0);
+	ulib_assert(x != 0);
 
 #if DO_MATH_SAFETY_CHECKS
 	if (x == 0) {
@@ -253,7 +253,7 @@ fixed_pnt_t log10_fixed_pnt(fixed_pnt_t x) {
 	return FIXED_PNT_MUL(log2_fixed_pnt(x), FIXED_PNT_LOG10_2);
 }
 fixed_pnt_t log_fixed_pnt(fixed_pnt_t x) {
-	assert(x != 0);
+	ulib_assert(x != 0);
 
 #if DO_MATH_SAFETY_CHECKS
 	if (x == 0) {
@@ -268,7 +268,7 @@ fixed_pnt_t log2_fixed_pnt(fixed_pnt_t x) {
 	fixed_pnt_t log2_x, b;
 	fixed_pnt_math_t z;
 
-	assert(x > 0);
+	ulib_assert(x > 0);
 
 #if DO_MATH_SAFETY_CHECKS
 	if (x == 0) {

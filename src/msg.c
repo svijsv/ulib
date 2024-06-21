@@ -99,7 +99,7 @@ int msg_puts(const char *s) {
 	size_t len;
 	ssize_t writ = 0;
 
-	assert(s != NULL);
+	ulib_assert(s != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (s == NULL) {
 		return -EINVAL;
@@ -124,8 +124,8 @@ int msg_gets(char *restrict s, int size) {
 	ssize_t r;
 	int have;
 
-	assert(s != NULL);
-	assert(size > 0);
+	ulib_assert(s != NULL);
+	ulib_assert(size > 0);
 #if DO_MSG_SAFETY_CHECKS
 	if (s == NULL) {
 		return -EINVAL;
@@ -174,7 +174,7 @@ static char* set_config_string(char *now, const char *new, const char *def) {
 #else
 // FIXME: Can't set any of these to an empty string...
 static void set_config_string(char now[MSG_STR_BYTES], char new[MSG_STR_BYTES]) {
-	//assert(new != NULL);
+	//ulib_assert(new != NULL);
 
 	if (new[0] == 0) {
 		return;
@@ -185,7 +185,7 @@ static void set_config_string(char now[MSG_STR_BYTES], char new[MSG_STR_BYTES]) 
 }
 #endif
 int msg_init(msg_init_t *init) {
-	assert(init != NULL);
+	ulib_assert(init != NULL);
 
 #if DO_MSG_SAFETY_CHECKS
 	if (init == NULL) {
@@ -226,7 +226,7 @@ int msg_init(msg_init_t *init) {
 int msg_open_log(const char* path) {
 	int o_flags = O_WRONLY|O_APPEND|O_CREAT|O_CLOEXEC;
 
-	assert(path != NULL);
+	ulib_assert(path != NULL);
 
 #if DO_MSG_SAFETY_CHECKS
 	if (path == NULL) {
@@ -274,7 +274,7 @@ bool msg_ask(bool ans_default, bool ans_forced, const char *restrict fmt, ...) {
 	char answer[8] = { 0 };
 	bool ans;
 
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 
 	if (BIT_IS_SET(config.flags, MSG_FORCE)) {
 		ans = ans_forced;
@@ -355,7 +355,7 @@ END:
 }
 
 void msg_log(const char *restrict fmt, ...) {
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
 		return;
@@ -382,7 +382,7 @@ void msg_log(const char *restrict fmt, ...) {
 void msg_error(const char *restrict fmt, ...) {
 	va_list args;
 
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
 		return;
@@ -406,7 +406,7 @@ void msg_error(const char *restrict fmt, ...) {
 }
 
 static void _msg_errno(int errnum, const char *restrict fmt, va_list args) {
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
 		return;
@@ -449,7 +449,7 @@ void msg_liberrno(int errnum, const char *restrict fmt, ...) {
 void msg_warnno(int errnum, const char *restrict fmt, ...) {
 	va_list args;
 
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
 		return;
@@ -473,7 +473,7 @@ void msg_warnno(int errnum, const char *restrict fmt, ...) {
 void msg_warn(const char *restrict fmt, ...) {
 	va_list args;
 
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
 		return;
@@ -497,7 +497,7 @@ void msg_warn(const char *restrict fmt, ...) {
 }
 
 void msg_print(int8_t priority, const char *restrict fmt, ...) {
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
 		return;
@@ -524,7 +524,7 @@ void msg_debug(const char *restrict fmt, ...) {
 #if DEBUG
 	va_list args;
 
-	assert(fmt != NULL);
+	ulib_assert(fmt != NULL);
 #if DO_MSG_SAFETY_CHECKS
 	if (fmt == NULL) {
 		return;

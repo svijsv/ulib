@@ -140,11 +140,13 @@
 /*
 * Debugging module configuration
 */
-// Use the assert() function defined in debug.h instead of pulling in assert.h
-// when NDEBUG is undefined.
-// If this is enabled and NDEBUG is undefined, the function _assert_failed()
-// must be defined somewhere. See debug.h for the prototype.
+// Use assertions in ulib code
 #define USE_ULIB_ASSERT 1
+// Use the ulib_assert() function defined in debug.h instead of pulling in
+// assert.h when NDEBUG is undefined.
+// If this is enabled and NDEBUG is undefined, the function ulib_assert_failed()
+// must be defined somewhere. See debug.h for the prototype.
+#define USE_ULIB_LOCAL_ASSERT 0
 // Enable preprocessor messages issued with DEBUG_CPP_MACRO() and DEBUG_CPP_MSG()
 #define DEBUG_CPP_MESSAGES DEBUG
 

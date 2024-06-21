@@ -45,9 +45,9 @@ static int _opt_find_flag(opt_ctx_t *ctx) {
 	opt_iter_t i;
 	int c;
 
-	assert(POINTER_IS_VALID(ctx));
-	assert(POINTER_IS_VALID(ctx->argv));
-	assert(POINTER_IS_VALID(ctx->opts));
+	ulib_assert(POINTER_IS_VALID(ctx));
+	ulib_assert(POINTER_IS_VALID(ctx->argv));
+	ulib_assert(POINTER_IS_VALID(ctx->opts));
 
 #if DO_OPT_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(ctx)) {
@@ -106,9 +106,9 @@ static int _opt_find_word(opt_ctx_t *ctx) {
 	opt_iter_t i, len;
 	const char* word;
 
-	assert(POINTER_IS_VALID(ctx));
-	assert(POINTER_IS_VALID(ctx->argv));
-	assert(POINTER_IS_VALID(ctx->opts));
+	ulib_assert(POINTER_IS_VALID(ctx));
+	ulib_assert(POINTER_IS_VALID(ctx->argv));
+	ulib_assert(POINTER_IS_VALID(ctx->opts));
 
 #if DO_OPT_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(ctx)) {
@@ -163,9 +163,9 @@ static int _opt_find_word(opt_ctx_t *ctx) {
 }
 
 int opt_getopt(opt_ctx_t *ctx) {
-	assert(POINTER_IS_VALID(ctx));
-	assert(POINTER_IS_VALID(ctx->argv));
-	assert(POINTER_IS_VALID(ctx->opts));
+	ulib_assert(POINTER_IS_VALID(ctx));
+	ulib_assert(POINTER_IS_VALID(ctx->argv));
+	ulib_assert(POINTER_IS_VALID(ctx->opts));
 
 #if DO_OPT_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(ctx)) {
@@ -246,9 +246,9 @@ void opt_print_help(const char *prefix, const char *postfix, const opt_option_t 
 	uint16_t i;
 	const char *char_lead, *word_lead, *char_arg, *long_name_arg;
 
-	assert(POINTER_IS_VALID(prefix));
-	assert(POINTER_IS_VALID(postfix));
-	assert(POINTER_IS_VALID(opts));
+	ulib_assert(POINTER_IS_VALID(prefix));
+	ulib_assert(POINTER_IS_VALID(postfix));
+	ulib_assert(POINTER_IS_VALID(opts));
 
 #if DO_OPT_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(prefix)) {

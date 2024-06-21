@@ -57,7 +57,7 @@
 # define IS_ARRAY_ID(s) (true)
 #endif
 #if ARRAYS_USE_MALLOC
-# define ASSERT_ARRAY(a) assert( \
+# define ASSERT_ARRAY(a) ulib_assert( \
 		(POINTER_IS_VALID(a)) && \
 		(IS_ARRAY_ID(a)) && \
 		((a)->used <= ARRAY_MAX_OBJECTS) && \
@@ -65,7 +65,7 @@
 		((a)->bank != NULL) \
 		)
 #else
-# define ASSERT_ARRAY(a) assert( \
+# define ASSERT_ARRAY(a) ulib_assert( \
 		(POINTER_IS_VALID(a)) && \
 		(IS_ARRAY_ID(a)) && \
 		((a)->used <= ARRAY_MAX_OBJECTS) \
@@ -73,7 +73,7 @@
 #endif
 
 array_t* array_init(array_t *a, const array_init_t *init) {
-	assert(POINTER_IS_VALID(a));
+	ulib_assert(POINTER_IS_VALID(a));
 
 #if DO_ARRAY_SAFETY_CHECKS
 	if (!POINTER_IS_VALID(a)) {

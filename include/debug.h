@@ -39,22 +39,27 @@
 #endif
 
 #if USE_ULIB_ASSERT
-# ifndef NDEBUG
+# if USE_ULIB_LOCAL_ASSERT
+#  ifndef NDEBUG
 // Function called when an assertion fails
-// _assert_failed() is project-specific and must be defined somewhere if
+// ulib_assert_failed() is project-specific and must be defined somewhere if
 // NDEBUG is undefined and USE_ULIB_ASSERT is set.
-void _assert_failed(const char *file_path, uint32_t lineno, const char *func_name, const char *expr);
+void ulib_assert_failed(const char *file_path, uint32_t lineno, const char *func_name, const char *expr);
 
-//# define assert(exp) ((exp) ? (void)0 : _assert_failed(__FILE__, __LINE__, __func__, #exp))
-// Using F() with only #exp saves more RAM and uses less flash than using it
+//# define ulib_assert(_exp_) ((_exp_) ? (void)0 : ulib_assert_failed(__FILE__, __LINE__, __func__, #_exp_))
+// Using F() with only #_exp_ saves more RAM and uses less flash than using it
 // only with __FILE__, presumably because the multiple uses of each file name
 // are deduplicated in RAM but not flash
-#  define assert(exp) ((exp) ? (void)0 : _assert_failed(F1(__FILE__), __LINE__, __func__, F(#exp)))
-# else
-#  define assert(exp) ((void)0)
-# endif
-#else
-# include <assert.h>
+#   define ulib_assert(_exp_) ((_exp_) ? (void )0 : ulib_assert_failed(F1(__FILE__), __LINE__, __func__, F(#_exp_)))
+#  else // NDEBUG
+#   define ulib_assert(_exp_) ((void )0)
+#  endif // NDEBUG
+# else // USE_ULIB_LOCAL_ASSERT
+#  include <assert.h>
+#  define ulib_assert(_exp_) assert(_exp_)
+# endif // USE_ULIB_LOCAL_ASSERT
+#else // USE_ULIB_ASSERT
+# define ulib_assert(_exp_) ((void )0)
 #endif
 
 #define PRINT_HERE() msg_debug("-HERE- %s() %s:%d", __func__, F1(__FILE__), __LINE__)

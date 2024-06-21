@@ -39,8 +39,8 @@
 #if HAVE_FMEM_NAMESPACE
 
 #define FS_NULL (FMEM_STR_T *)0U
-#define ASSERT_FS(fs) assert((fs) != FS_NULL)
-#define ASSERT_BUF(b) assert((b) != NULL)
+#define ASSERT_FS(fs) ulib_assert((fs) != FS_NULL)
+#define ASSERT_BUF(b) ulib_assert((b) != NULL)
 
 # if FMEM_STR_BYTES <= 0xFFU
 typedef uint8_t fsi_t;

@@ -62,10 +62,10 @@ utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
 
 	// This is always true because year is only 8 bits
 	/*
-	assert(year <= MAX_YEARS);
+	ulib_assert(year <= MAX_YEARS);
 	*/
-	assert(IS_IN_RANGE_INCL(month, 1, 12));
-	assert(IS_IN_RANGE_INCL(day, 1, 31));
+	ulib_assert(IS_IN_RANGE_INCL(month, 1, 12));
+	ulib_assert(IS_IN_RANGE_INCL(day, 1, 31));
 
 #if DO_TIME_SAFETY_CHECKS
 	// This is always false because year is only 8 bits
@@ -112,9 +112,9 @@ void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restr
 	uint8_t tmp_month;
 	uint16_t tmp_year, tmp_day, leap_days = 0;
 
-	assert(ret_year != NULL);
-	assert(ret_month != NULL);
-	assert(ret_day != NULL);
+	ulib_assert(ret_year != NULL);
+	ulib_assert(ret_month != NULL);
+	ulib_assert(ret_day != NULL);
 
 	tmp_year = (uint16_t )(seconds / SECONDS_PER_YEAR);
 	tmp_day = (uint16_t )((seconds % SECONDS_PER_YEAR) / SECONDS_PER_DAY);
@@ -189,9 +189,9 @@ void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restr
 }
 
 void seconds_to_time(utime_t seconds, uint8_t *restrict ret_hour, uint8_t *restrict ret_minute, uint8_t *restrict ret_second) {
-	assert(ret_hour != NULL);
-	assert(ret_minute != NULL);
-	assert(ret_second != NULL);
+	ulib_assert(ret_hour != NULL);
+	ulib_assert(ret_minute != NULL);
+	ulib_assert(ret_second != NULL);
 
 #if DO_TIME_SAFETY_CHECKS
 	if (ret_hour != NULL) {
@@ -212,9 +212,9 @@ void seconds_to_time(utime_t seconds, uint8_t *restrict ret_hour, uint8_t *restr
 	return;
 }
 utime_t time_to_seconds(uint8_t hour, uint8_t minute, uint8_t second) {
-	assert(hour < 24);
-	assert(minute < 60);
-	assert(second < 60);
+	ulib_assert(hour < 24);
+	ulib_assert(minute < 60);
+	ulib_assert(second < 60);
 
 #if DO_TIME_SAFETY_CHECKS
 	if (hour >= 24) {

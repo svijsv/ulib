@@ -61,7 +61,7 @@ INLINE strlen_t COMBINED_LENGTH(strlen_t a, strlen_t b) {
 # define IS_STRING_ID(s) (true)
 #endif
 #if STRINGS_USE_MALLOC
-# define ASSERT_STRING(s) assert( \
+# define ASSERT_STRING(s) ulib_assert( \
 		((s) != NULL) && \
 		(IS_STRING_ID(s)) && \
 		((s)->length <= STRING_MAX_BYTES) && \
@@ -70,20 +70,20 @@ INLINE strlen_t COMBINED_LENGTH(strlen_t a, strlen_t b) {
 		((s)->cstring[(s)->length] == 0) \
 		)
 #else
-# define ASSERT_STRING(s) assert( \
+# define ASSERT_STRING(s) ulib_assert( \
 		((s) != NULL) && \
 		(IS_STRING_ID(s)) && \
 		((s)->length <= STRING_MAX_BYTES) && \
 		((s)->cstring[(s)->length] == 0) \
 		)
 #endif
-#define ASSERT_CSTRING(cs) assert(POINTER_IS_VALID(cs))
-#define ASSERT_CHAR(c) assert((c) != 0)
+#define ASSERT_CSTRING(cs) ulib_assert(POINTER_IS_VALID(cs))
+#define ASSERT_CHAR(c) ulib_assert((c) != 0)
 // strlen_t is set to unsigned always, so it's guaranteed to be >= 0.
-//#define ASSERT_LENGTH(l) assert((l) >= 0)
-#define ASSERT_LENGTH(l) assert(true)
+//#define ASSERT_LENGTH(l) ulib_assert((l) >= 0)
+#define ASSERT_LENGTH(l) ulib_assert(true)
 // arp may be a pointer or array, so we can't check it like this
-//#define ASSERT_ARP(a) assert(POINTER_IS_VALID(a))
+//#define ASSERT_ARP(a) ulib_assert(POINTER_IS_VALID(a))
 #define ASSERT_ARP(a) ((void )0U)
 
 // A pointer set by string_appendf_va and used by the non-reentrant string_putc()
@@ -103,7 +103,7 @@ INLINE strlen_t strlen_checked(const char *c) {
 * Initialization functions
 */
 string_t* string_init(string_t *s) {
-	assert(s != NULL);
+	ulib_assert(s != NULL);
 
 #if DO_STRING_SAFETY_CHECKS
 	if (s == NULL) {
@@ -281,7 +281,7 @@ string_t* string_printf(string_t *restrict s, const char *restrict format, ...) 
 // Helper function to grow a string correctly.
 static void grow_allocated(string_t *s, strlen_t n) {
 	//ASSERT_STRING(s);
-	//assert(n > 0);
+	//ulib_assert(n > 0);
 
 	UNUSED(s);
 	UNUSED(n);
@@ -391,7 +391,7 @@ string_t* string_appendf(string_t *restrict s, const char *restrict format, ...)
 }
 #if HAVE_PRINTF_VA
 static void string_putc(int c) {
-	//assert(S_printf_string != NULL);
+	//ulib_assert(S_printf_string != NULL);
 
 	string_append_from_char(S_printf_string, (char )c);
 
@@ -464,7 +464,7 @@ string_t* string_appendf_va(string_t *restrict s, const char *restrict format, v
 string_t* string_append_from_int(string_t *s, int n, uint8_t width, char pad) {
 	int m, r;
 
-	assert((pad != 0) || (width == 0));
+	ulib_assert((pad != 0) || (width == 0));
 	ASSERT_STRING(s);
 
 #if DO_STRING_SAFETY_CHECKS
@@ -508,7 +508,7 @@ string_t* string_append_from_int(string_t *s, int n, uint8_t width, char pad) {
 }
 string_t* string_append_from_int_div(string_t *s, int n, int d) {
 	ASSERT_STRING(s);
-	assert(d != 0);
+	ulib_assert(d != 0);
 
 #if DO_STRING_SAFETY_CHECKS
 	if (s == NULL) {

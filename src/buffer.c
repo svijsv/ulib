@@ -56,7 +56,7 @@
 # define IS_BUFFER_ID(s) (true)
 #endif
 #if BUFFERS_USE_MALLOC
-# define ASSERT_BUFFER(b) assert( \
+# define ASSERT_BUFFER(b) ulib_assert( \
 		((b) != NULL) && \
 		(IS_BUFFER_ID(b)) && \
 		((b)->max_size <= BUFFER_MAX_BYTES) && \
@@ -64,7 +64,7 @@
 		((b)->bank != NULL) \
 		)
 #else
-# define ASSERT_BUFFER(b) assert( \
+# define ASSERT_BUFFER(b) ulib_assert( \
 		((b) != NULL) && \
 		(IS_BUFFER_ID(b)) && \
 		((b)->allocated <= BUFFER_MAX_BYTES) \
@@ -72,7 +72,7 @@
 #endif
 
 buffer_t* buffer_init(buffer_t *b, const buffer_init_t *init) {
-	assert(POINTER_IS_VALID(b));
+	ulib_assert(POINTER_IS_VALID(b));
 
 #if DO_BUFFER_SAFETY_CHECKS
 	if (b == NULL) {
