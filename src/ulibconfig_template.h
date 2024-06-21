@@ -89,9 +89,14 @@
 */
 // Enable this module
 #define ULIB_ENABLE_BITOPS ULIB_ENABLE_DEFAULT
-// If non-zero, enable the type-checked inlined function versions of the
-// bitwise operations. See bits.h for details.
+//
+// Enable the type-checked inlined function versions of the bitwise operations.
+// See bits.h for details.
 #define ULIB_BITOP_ENABLE_INLINED_FUNCTIONS 1
+//
+// Enable the 64-bit versions of the above functions. Not all platforms support
+// this natively.
+#define ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS 1
 
 
 /*
@@ -103,13 +108,12 @@
 // The size of buflen_t is based on the size of BUFFER_MAX_BYTES+1, so using
 // one less than the max of an unsigned int type will result in less used
 // space than using the max value itself.
-//
 #define BUFFER_MAX_BYTES (0xFFFFU - 1U)
 //
 // Size of a buffer when first created.
 #define BUFFER_INITIAL_SIZE 32U
 //
-// Factor by which to grow the buffer by when it would otherwise overflow.
+// Factor by which to grow the buffer when it would otherwise overflow.
 #define BUFFER_GROW_FACTOR 2U
 //
 // Method of buffer growth. See the description for ARRAY_GROW_METHOD for
@@ -130,7 +134,6 @@
 */
 // Enable this module
 #define ULIB_ENABLE_CSTRINGS ULIB_ENABLE_DEFAULT
-//
 //
 // If non-zero, perform additional checks to handle common problems like being
 // passed NULL inputs.

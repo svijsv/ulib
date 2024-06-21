@@ -87,7 +87,13 @@ gen_head
 for p in "${protos[@]}"; do
 	printf "%s {\n}\n" "${p}" | sed -e "s|intNN_t|int|g" -e "s|_uNN||g"
 	for s in "${sizes[@]}"; do
-		printf "%s {\n}\n" "${p}" | sed -e "s|NN|${s}|g"
+		if [ ${s} -gt 32 ]; then
+			echo "#if ULIB_BITOP_ENABLE_INLINED_${s}BIT_FUNCTIONS"
+			printf "%s {\n}\n" "${p}" | sed -e "s|NN|${s}|g"
+			echo "#endif"
+		else
+			printf "%s {\n}\n" "${p}" | sed -e "s|NN|${s}|g"
+		fi
 	done
 	echo
 done

@@ -59,9 +59,11 @@ BITOP_FUNC_INLINE uint16_t set_bit_u16(uint16_t field, uint16_t bits) {
 BITOP_FUNC_INLINE uint32_t set_bit_u32(uint32_t field, uint32_t bits) {
 	return SET_BIT(field, bits);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t set_bit_u64(uint64_t field, uint64_t bits) {
 	return SET_BIT(field, bits);
 }
+#endif
 
 BITOP_FUNC_INLINE uint clear_bit(uint field, uint bits) {
 	return CLEAR_BIT(field, bits);
@@ -75,9 +77,11 @@ BITOP_FUNC_INLINE uint16_t clear_bit_u16(uint16_t field, uint16_t bits) {
 BITOP_FUNC_INLINE uint32_t clear_bit_u32(uint32_t field, uint32_t bits) {
 	return CLEAR_BIT(field, bits);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t clear_bit_u64(uint64_t field, uint64_t bits) {
 	return CLEAR_BIT(field, bits);
 }
+#endif
 
 BITOP_FUNC_INLINE uint toggle_bit(uint field, uint bits) {
 	return TOGGLE_BIT(field, bits);
@@ -91,9 +95,11 @@ BITOP_FUNC_INLINE uint16_t toggle_bit_u16(uint16_t field, uint16_t bits) {
 BITOP_FUNC_INLINE uint32_t toggle_bit_u32(uint32_t field, uint32_t bits) {
 	return TOGGLE_BIT(field, bits);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t toggle_bit_u64(uint64_t field, uint64_t bits) {
 	return TOGGLE_BIT(field, bits);
 }
+#endif
 
 BITOP_FUNC_INLINE uint modify_bits(uint field, uint mask, uint bits) {
 	return MODIFY_BITS(field, mask, bits);
@@ -107,9 +113,11 @@ BITOP_FUNC_INLINE uint16_t modify_bits_u16(uint16_t field, uint16_t mask, uint16
 BITOP_FUNC_INLINE uint32_t modify_bits_u32(uint32_t field, uint32_t mask, uint32_t bits) {
 	return MODIFY_BITS(field, mask, bits);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t modify_bits_u64(uint64_t field, uint64_t mask, uint64_t bits) {
 	return MODIFY_BITS(field, mask, bits);
 }
+#endif
 
 BITOP_FUNC_INLINE uint select_bits(uint field, uint mask) {
 	return SELECT_BITS(field, mask);
@@ -123,9 +131,11 @@ BITOP_FUNC_INLINE uint16_t select_bits_u16(uint16_t field, uint16_t mask) {
 BITOP_FUNC_INLINE uint32_t select_bits_u32(uint32_t field, uint32_t mask) {
 	return SELECT_BITS(field, mask);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t select_bits_u64(uint64_t field, uint64_t mask) {
 	return SELECT_BITS(field, mask);
 }
+#endif
 
 BITOP_FUNC_INLINE uint mask_bits(uint field, uint mask) {
 	return MASK_BITS(field, mask);
@@ -139,9 +149,11 @@ BITOP_FUNC_INLINE uint16_t mask_bits_u16(uint16_t field, uint16_t mask) {
 BITOP_FUNC_INLINE uint32_t mask_bits_u32(uint32_t field, uint32_t mask) {
 	return MASK_BITS(field, mask);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t mask_bits_u64(uint64_t field, uint64_t mask) {
 	return MASK_BITS(field, mask);
 }
+#endif
 
 BITOP_FUNC_INLINE uint gather_bits(uint field, uint mask, uint_fast8_t offset) {
 	return GATHER_BITS(field, mask, offset);
@@ -155,9 +167,11 @@ BITOP_FUNC_INLINE uint16_t gather_bits_u16(uint16_t field, uint16_t mask, uint_f
 BITOP_FUNC_INLINE uint32_t gather_bits_u32(uint32_t field, uint32_t mask, uint_fast8_t offset) {
 	return GATHER_BITS(field, mask, offset);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t gather_bits_u64(uint64_t field, uint64_t mask, uint_fast8_t offset) {
 	return GATHER_BITS(field, mask, offset);
 }
+#endif
 
 BITOP_FUNC_INLINE bool bit_is_set(uint field, uint mask) {
 	return BIT_IS_SET(field, mask);
@@ -171,9 +185,11 @@ BITOP_FUNC_INLINE bool bit_is_set_u16(uint16_t field, uint16_t mask) {
 BITOP_FUNC_INLINE bool bit_is_set_u32(uint32_t field, uint32_t mask) {
 	return BIT_IS_SET(field, mask);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE bool bit_is_set_u64(uint64_t field, uint64_t mask) {
 	return BIT_IS_SET(field, mask);
 }
+#endif
 
 BITOP_FUNC_INLINE bool bits_are_set(uint field, uint mask) {
 	return BITS_ARE_SET(field, mask);
@@ -187,9 +203,11 @@ BITOP_FUNC_INLINE bool bits_are_set_u16(uint16_t field, uint16_t mask) {
 BITOP_FUNC_INLINE bool bits_are_set_u32(uint32_t field, uint32_t mask) {
 	return BITS_ARE_SET(field, mask);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE bool bits_are_set_u64(uint64_t field, uint64_t mask) {
 	return BITS_ARE_SET(field, mask);
 }
+#endif
 
 BITOP_FUNC_INLINE uint as_bit(uint_fast8_t n) {
 	return (uint )1U << n;
@@ -203,9 +221,11 @@ BITOP_FUNC_INLINE uint16_t as_bit_u16(uint_fast8_t n) {
 BITOP_FUNC_INLINE uint32_t as_bit_u32(uint_fast8_t n) {
 	return (uint32_t )1U << n;
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t as_bit_u64(uint_fast8_t n) {
 	return (uint64_t )1U << n;
 }
+#endif
 
 BITOP_FUNC_INLINE uint lowest_bit(uint field) {
 	return LOWEST_BIT(field);
@@ -219,9 +239,11 @@ BITOP_FUNC_INLINE uint16_t lowest_bit_u16(uint16_t field) {
 BITOP_FUNC_INLINE uint32_t lowest_bit_u32(uint32_t field) {
 	return LOWEST_BIT(field);
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t lowest_bit_u64(uint64_t field) {
 	return LOWEST_BIT(field);
 }
+#endif
 
 BITOP_FUNC_INLINE uint shift_lowest_bit(uint field) {
 	return (field / (field & (uint )-field));
@@ -235,9 +257,11 @@ BITOP_FUNC_INLINE uint16_t shift_lowest_bit_u16(uint16_t field) {
 BITOP_FUNC_INLINE uint32_t shift_lowest_bit_u32(uint32_t field) {
 	return (field / (field & (uint32_t )-field));
 }
+#if ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
 BITOP_FUNC_INLINE uint64_t shift_lowest_bit_u64(uint64_t field) {
 	return (field / (field & (uint64_t )-field));
 }
+#endif
 
 
 #endif // ULIB_ENABLE_BITOPS
