@@ -140,13 +140,26 @@
 /*
 * Debugging module configuration
 */
-// Use assertions in ulib code
+// Enable ulib_assert(), which is used in ulib but can also be used elsewhere
 #define USE_ULIB_ASSERT 1
+//
 // Use the ulib_assert() function defined in debug.h instead of pulling in
 // assert.h when NDEBUG is undefined.
 // If this is enabled and NDEBUG is undefined, the function ulib_assert_failed()
 // must be defined somewhere. See debug.h for the prototype.
 #define USE_ULIB_LOCAL_ASSERT 0
+//
+// Enable ulib_panic(), which may be used in ulib but can also be used elsewhere
+// Note that unlike assert(), there's no flag for disabling panic() in release
+// builds - if enabled, theyre always enabled.
+#define USE_ULIB_PANIC 1
+//
+// Use the ulib_panic() function defined in debug.h instead of pulling in
+// stdlib.h and using abort().
+// If this is enabled, the function ulib_panic_abort() must be defined somewhere.
+// See debug.h for the prototype.
+#define USE_ULIB_LOCAL_PANIC 0
+//
 // Enable preprocessor messages issued with DEBUG_CPP_MACRO() and DEBUG_CPP_MSG()
 #define DEBUG_CPP_MESSAGES DEBUG
 

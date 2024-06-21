@@ -62,6 +62,28 @@ void ulib_assert_failed(const char *file_path, uint32_t lineno, const char *func
 # define ulib_assert(_exp_) ((void )0)
 #endif
 
+#if USE_ULIB_PANIC
+# if USE_ULIB_LOCAL_PANIC
+// Function called when an assertion fails
+// ulib_panic_abort() is project-specific and must be defined somewhere if
+// USE_ULIB_PANIC is set.
+void ulib_panic_abort(const char *file_path, uint32_t lineno, const char *func_name, const char *msg);
+// Using F() with only #_exp_ saves more RAM and uses less flash than using it
+// only with __FILE__, presumably because the multiple uses of each file name
+// are deduplicated in RAM but not flash
+// Edit: That's true for assert(), but maybe messages will be repeated more
+// often than expressions are? TODO: test this theory.
+//#  define ulib_panic(_msg_) ulib_assert_failed(F1(__FILE__), __LINE__, __func__, F(_msg_))
+#  define ulib_panic(_msg_) ulib_assert_failed(F1(__FILE__), __LINE__, __func__, _msg_)
+# else // USE_ULIB_LOCAL_PANIC
+#  include <stdlib.h>
+// The message passed to ulib_panic is ignored here, but such is life.
+#  define ulib_panic(_msg_) abort()
+# endif // USE_ULIB_LOCAL_PANIC
+#else // USE_ULIB_PANIC
+# define ulib_panic(_msg_) ((void )0)
+#endif
+
 #define PRINT_HERE() msg_debug("-HERE- %s() %s:%d", __func__, F1(__FILE__), __LINE__)
 
 //
