@@ -281,6 +281,23 @@
 
 
 /*
+* Byte FIFO buffer module configuration
+*/
+// Enable this module
+#define ULIB_ENABLE_FIFO_UINT8 ULIB_ENABLE_DEFAULT
+//
+// The size of fifo_uint8_len_t is based on the size of FIFO_UINT8_MAX_SIZE+1, so using
+// one less than the max of an unsigned int type will result in less used
+// space than using the max value itself.
+#define FIFO_UINT8_MAX_SIZE (0xFFFFU - 1U)
+//
+// If non-zero, perform additional checks to handle common problems like being
+// passed NULL inputs.
+#define DO_FIFO_UINT8_SAFETY_CHECKS ULIB_DO_SAFETY_CHECKS
+
+
+
+/*
 * String module configuration
 */
 // Enable this module

@@ -2,7 +2,7 @@
 /***********************************************************************
 *                                                                      *
 *                                                                      *
-* Copyright 2021, 2023 svijsv                                          *
+* Copyright 2024 svijsv                                                *
 * This program is free software: you can redistribute it and/or modify *
 * it under the terms of the GNU General Public License as published by *
 * the Free Software Foundation, version 3.                             *
@@ -17,54 +17,26 @@
 *                                                                      *
 *                                                                      *
 ***********************************************************************/
-// types.h
-// Common type definitions
+// fifo_uint8.c
+// Manage a FIFO uffer of unsigned bytes
 // NOTES:
-//    Macros are used in place of enums in some cases because enums are
-//    int-sized and the macros may be smaller on some systems.
 //
 //
 #ifdef __cplusplus
  extern "C" {
 #endif
-#ifndef _ULIB_TYPES_H
-#define _ULIB_TYPES_H
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <sys/types.h>
+#define HAVE_FIFO_UINT8_C 1
+#include "fifo_uint8.h"
 
-typedef signed   int  int_t;
-typedef unsigned int uint_t;
-typedef uint_t       uint;
+#if ULIB_ENABLE_FIFO_UINT8
 
-#if ! __bool_true_false_are_defined
-typedef uint_fast8_t bool;
-# define true  1
-# define false 0
-#endif
+#include "templates/fifo_buffer.c"
 
-// This needs to be a struct rather than a plain int to avoid breaking strict
-// aliasing: https://blog.regehr.org/archives/1307
-typedef enum {
-	ID_ARRAY  = 1,
-	ID_BUFFER = 2,
-	ID_STRING = 3,
-	ID_LIST   = 4,
-	ID_FIFO_UINT8 = 5,
-	ID_UNKNOWN = 127,
-} struct_id_value_t;
-typedef struct {
-	struct_id_value_t value;
-} struct_id_t;
-
-// Types used for generic iterators
-typedef int_fast8_t   iter_t;
-typedef uint_fast8_t uiter_t;
-
-
-#endif // _LIB_TYPES_H
+#else
+	// ISO C forbids empty translation units, this makes it happy.
+	typedef int make_iso_compilers_happy;
+#endif // ULIB_ENABLE_FIFO_UINT8
 #ifdef __cplusplus
  }
 #endif
