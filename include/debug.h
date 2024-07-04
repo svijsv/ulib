@@ -54,6 +54,9 @@ void ulib_assert_failed(const char *file_path, uint32_t lineno, const char *func
 #  else // NDEBUG
 #   define ulib_assert(_exp_) ((void )0)
 #  endif // NDEBUG
+#  if USE_ULIB_ASSERT_OVERRIDE
+#   define assert(_exp_) ulib_assert(_exp_)
+#  endif
 # else // USE_ULIB_LOCAL_ASSERT
 #  include <assert.h>
 #  define ulib_assert(_exp_) assert(_exp_)

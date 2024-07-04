@@ -152,6 +152,9 @@
 // must be defined somewhere. See debug.h for the prototype.
 #define USE_ULIB_LOCAL_ASSERT 0
 //
+// Override assert() with ulib_assert() when USE_ULIB_LOCAL_ASSERT is also set
+#define USE_ULIB_ASSERT_OVERRIDE 0
+//
 // Enable ulib_panic(), which may be used in ulib but can also be used elsewhere
 // Note that unlike assert(), there's no flag for disabling panic() in release
 // builds - if enabled, theyre always enabled.
