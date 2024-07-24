@@ -29,6 +29,7 @@
 #include "getopt.h"
 #if ULIB_ENABLE_GETOPT
 
+#include "ascii.h"
 #include "bits.h"
 #include "cstrings.h"
 #include "debug.h"
@@ -38,7 +39,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 
 static int _opt_find_flag(opt_ctx_t *ctx) {
@@ -289,9 +289,9 @@ void opt_print_help(const char *prefix, const char *postfix, const opt_option_t 
 			long_name_arg = "";
 		}
 
-		if (isprint(opts[i].oflag) && ((opts[i].long_name != NULL) && (opts[i].long_name[0] != 0))) {
+		if (ascii_is_print((uint8_t )opts[i].oflag) && ((opts[i].long_name != NULL) && (opts[i].long_name[0] != 0))) {
 			msg_print(-100, "%s%s%c%s, %s%s%s", prefix, char_lead, opts[i].oflag, char_arg, word_lead, opts[i].long_name, long_name_arg);
-		} else if (isprint(opts[i].oflag)) {
+		} else if (ascii_is_print((uint8_t )opts[i].oflag)) {
 			msg_print(-100, "%s%s%c%s", prefix, char_lead, opts[i].oflag, char_arg);
 		} else if ((opts[i].long_name != NULL) && (opts[i].long_name[0] != 0)) {
 			msg_print(-100, "%s%s%s%s", prefix, word_lead, opts[i].long_name, long_name_arg);

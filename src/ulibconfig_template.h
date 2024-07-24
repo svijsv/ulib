@@ -85,6 +85,26 @@
 
 
 /*
+* ASCII character module configuration
+*/
+// Enable this module
+#define ULIB_ENABLE_ASCII ULIB_ENABLE_DEFAULT
+//
+// If non-zero, replace the ASCII module functions with their ctype.h equivalent
+// Not all functions are supported
+#define ASCII_SUBSTITUTE_WITH_CTYPE 0
+//
+// If non-zero, replace the ctype.h functions with their ASCII module equivalent
+// Some functions may not supported
+#define ASCII_SUBSTITUTE_FOR_CTYPE 0
+//
+// If non-zero, perform additional checks to handle common problems like being
+// passed NULL inputs.
+#define DO_ASCII_SAFETY_CHECKS ULIB_DO_SAFETY_CHECKS
+
+
+
+/*
 * Bitwise operation module configuration
 */
 // Enable this module
