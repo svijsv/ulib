@@ -9,6 +9,8 @@ STATIC_TMP := $(TMP_BASE)/static
 SHARED_TMP := $(TMP_BASE)/shared
 
 CC ?= cc
+AR ?= ar
+SIZE ?= size
 
 SPLINT_FLAGS := \
 	+limit 5 +posixlib -nullret \
@@ -31,7 +33,7 @@ _DEBUG_CFLAGS += -Wformat-overflow -Wformat-truncation -Wformat-signedness -Wstr
 # often.
 # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
 #_DEBUG_CFLAGS += -fsanitize=undefined -fsanitize=address
-_RELEASE_CFLAGS := -UDEBUG -DNDEBUG=1
+_RELEASE_CFLAGS := -UDEBUG -DNDEBUG=1 -O2
 _SHARED_CFLAGS := -fPIC
 _STATIC_CFLAGS :=
 _LDFLAGS       := -Wl,-soname,lib$(NAME).so.$(VERSION_MAJOR)
@@ -53,6 +55,7 @@ CLEAN_SHARED_FILES := $(SHARED_O_FILES) $(SHARED_SU_FILES) $(SHARED_LIB)
 #
 all: clean static shared
 debug: clean static-debug shared-debug
+release: clean static-release shared-release
 
 $(STATIC_TMP):
 	mkdir -p $(STATIC_TMP)
@@ -70,7 +73,8 @@ clean: clean-static clean-shared
 #
 static: _CFLAGS += $(_STATIC_CFLAGS)
 static: $(STATIC_TMP) $(STATIC_O_FILES)
-	ar rcs $(STATIC_LIB) $(STATIC_O_FILES)
+	$(AR) rcs $(STATIC_LIB) $(STATIC_O_FILES)
+	$(SIZE) --format=gnu --totals $(STATIC_LIB)
 
 static-debug: _CFLAGS += $(_DEBUG_CFLAGS)
 static-debug: clean-static static
@@ -87,6 +91,7 @@ $(STATIC_O_FILES):
 shared: _CFLAGS += $(_SHARED_CFLAGS)
 shared: $(SHARED_TMP) $(SHARED_O_FILES)
 	$(CC) -shared $(SHARED_O_FILES) $(_LDFLAGS) $(LDFLAGS) -o $(SHARED_LIB)
+	$(SIZE) --format=gnu $(SHARED_LIB)
 
 shared-debug: _CFLAGS += $(_DEBUG_CFLAGS)
 shared-debug: clean-shared shared
