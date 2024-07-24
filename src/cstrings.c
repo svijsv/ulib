@@ -29,11 +29,10 @@
 #include "cstrings.h"
 #if ULIB_ENABLE_CSTRINGS
 
+#include "ascii.h"
 #include "debug.h"
 
 #include <string.h>
-
-static const char CAP_DIFF = 'a' - 'A';
 
 static const char base16_table[] = {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
@@ -203,7 +202,7 @@ const char* cstring_basename(const char *s) {
 	return bn;
 }
 char *cstring_to_upper(char *s) {
-	char *c;
+	uint8_t *c;
 
 	ulib_assert(s != NULL);
 
@@ -213,10 +212,25 @@ char *cstring_to_upper(char *s) {
 	}
 #endif
 
-	for (c = s; *c != 0; ++c) {
-		if (*c >= 'a' && *c <= 'z') {
-			*c -= CAP_DIFF;
-		}
+	for (c = (uint8_t *)s; *c != 0; ++c) {
+		*c = ASCII_TO_UPPER(*c);
+	}
+
+	return s;
+}
+char *cstring_to_lower(char *s) {
+	uint8_t *c;
+
+	ulib_assert(s != NULL);
+
+#if DO_CSTRING_SAFETY_CHECKS
+	if (s == NULL) {
+		return NULL;
+	}
+#endif
+
+	for (c = (uint8_t *)s; *c != 0; ++c) {
+		*c = ASCII_TO_LOWER(*c);
 	}
 
 	return s;

@@ -71,6 +71,9 @@ const char* cstring_basename(const char *s);
 // Convert all the lowercase letters in s to uppercase.
 char *cstring_to_upper(char *s);
 //
+// Convert all the uppercase letters in s to lowercase.
+char *cstring_to_lower(char *s);
+//
 // Convert all occurances of one character to another.
 char *cstring_tr(char *s, char old, char new);
 
