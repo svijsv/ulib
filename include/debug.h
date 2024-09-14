@@ -88,16 +88,21 @@ void ulib_panic_abort(const char *file_path, uint32_t lineno, const char *func_n
 #endif
 
 #define PRINT_HERE() msg_debug("-HERE- %s() %s:%d", __func__, F1(__FILE__), __LINE__)
+#define PRINT_VALUE(_val_) (msg_debug("%s: 0x%02X", #_val_, (uint_t )_val_))
 
 //
-// Use these to show the value of a macro at compile-time
+// Use these to show the value of a macro at compile-time (among other possible uses)
 // https://stackoverflow.com/questions/1562074/how-do-i-show-the-value-of-a-define-at-compile-time
 #define XTRINGIZE(_x_) STRINGIZE(_x_)
 #define STRINGIZE(_x_) #_x_
 #define DO_PRAGMA(_x_) _Pragma(#_x_)
 
-#if !defined(DEBUG_CPP_MESSAGES) && DEBUG
-# define DEBUG_CPP_MESSAGES 1
+#if !defined(DEBUG_CPP_MESSAGES)
+# if DEBUG
+#  define DEBUG_CPP_MESSAGES 1
+# else
+#  define DEBUG_CPP_MESSAGES 0
+# endif
 #endif
 #if DEBUG_CPP_MESSAGES
 // Display the value of a defined macro
