@@ -113,6 +113,8 @@ void ulib_panic_abort(const char *file_path, uint32_t lineno, const char *func_n
 # define DEBUG_CPP_MACRO(_x_)
 # define DEBUG_CPP_MSG(_msg_)
 #endif
+// Like the above, but display it always
+#define PRINT_CPP_MACRO(_x_) DO_PRAGMA(message #_x_ " == " XTRINGIZE(_x_))
 
 #endif // _ULIB_DEBUG_H
 #ifdef __cplusplus
