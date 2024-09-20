@@ -34,6 +34,14 @@
 #endif
 #include ULIB_CONFIG_HEADER
 
+#if ULIB_BITOP_ENABLE_GENERICS
+# if ! ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
+#  undef ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS
+#  define ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS 1
+#  pragma message "Enabling 64-bit bitwise operations for generic bitwise operations."
+# endif
+#endif
+
 #if ULIB_ENABLE_GETOPT
 # if !ULIB_ENABLE_CSTRINGS
 #  undef ULIB_ENABLE_CSTRINGS

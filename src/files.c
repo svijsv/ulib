@@ -230,7 +230,7 @@ static int v_openat(int atfd, const char *path, int flags, mode_t mode) {
 	}
 #endif
 
-	SET_BIT(flags, O_CLOEXEC);
+	_SET_BIT(flags, O_CLOEXEC);
 	do {
 		ret = openat(atfd, path, flags, mode);
 	} while ((ret < 0) && (errno == EINTR));
@@ -305,7 +305,7 @@ static int at_flags_from_file_flags(file_flag_t flags) {
 	int sflags = 0;
 
 	if (!BIT_IS_SET(flags, FILE_DEREF)) {
-		SET_BIT(sflags, AT_SYMLINK_NOFOLLOW);
+		_SET_BIT(sflags, AT_SYMLINK_NOFOLLOW);
 	}
 
 	return sflags;

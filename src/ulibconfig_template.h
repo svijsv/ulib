@@ -117,6 +117,12 @@
 // Enable the 64-bit versions of the above functions. Not all platforms support
 // this natively.
 #define ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS 1
+//
+// Enable versions of the bitwise macros and functions that use the _Generic()
+// operator. This is more type-safe and doesn't impact the size of optimized code
+// but requires a compatible compiler (typically anything that supports C11 or later).
+// This requires that ULIB_BITOP_ENABLE_INLINED_64BIT_FUNCTIONS be set.
+#define ULIB_BITOP_ENABLE_GENERICS 0
 
 
 /*

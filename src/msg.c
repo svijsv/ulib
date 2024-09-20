@@ -235,7 +235,7 @@ int msg_open_log(const char* path) {
 #endif
 
 	if (BIT_IS_SET(config.flags, MSG_LOG_DIRECT)) {
-		SET_BIT(o_flags, O_DIRECT);
+		_SET_BIT(o_flags, O_DIRECT);
 	}
 
 	if (msg_log_fd != -1) {
