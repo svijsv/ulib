@@ -197,117 +197,156 @@ BITOP_FUNC_INLINE uint64_t shift_lowest_bit_u64(uint64_t field);
 
 //
 // Generic function callers
-// I would prefer if there were no default, but some platforms consider uint
-// to be a separate type from the size-specified equivalent and others don't
-// and there doesn't seem to be a better workaround.
 //
 #if ULIB_BITOP_ENABLE_GENERICS
+//
+// I would much prefer being able to just use the standard types directly but
+// the way the compiler interprets these means that all of char, short, int, long,
+// and long long need to be handled and the typedefs aren't defined the same
+// for all platforms, so this really is the simplest method I"ve been able to
+// find.
+#include <limits.h>
+
+#if UCHAR_MAX == 0xFF
+# define _ULIB_BITS_DISPATCH_UC(_fni_) _fni_ ## _u8
+#else
+# error "Unable to determine size of unsigned char"
+#endif
+
+#if USHRT_MAX == 0xFFFF
+# define _ULIB_BITS_DISPATCH_US(_fni_) _fni_ ## _u16
+#else
+# error "Unable to determine size of unsigned short"
+#endif
+
+#if UINT_MAX == 0xFFFF
+# define _ULIB_BITS_DISPATCH_UI(_fni_) _fni_ ## _u16
+#elif UINT_MAX == 0xFFFFFFFF
+# define _ULIB_BITS_DISPATCH_UI(_fni_) _fni_ ## _u32
+#else
+# error "Unable to determine size of unsigned int"
+#endif
+
+#if ULONG_MAX == 0xFFFFFFFF
+# define _ULIB_BITS_DISPATCH_UL(_fni_) _fni_ ## _u32
+#elif ULONG_MAX == 0xFFFFFFFFFFFFFFFF
+# define _ULIB_BITS_DISPATCH_UL(_fni_) _fni_ ## _u64
+#else
+# error "Unable to determine size of unsigned long"
+#endif
+
+#if ULLONG_MAX == 0xFFFFFFFFFFFFFFFF
+# define _ULIB_BITS_DISPATCH_ULL(_fni_) _fni_ ## _u64
+#else
+# error "Unable to determine size of unsigned long long"
+#endif
+
 # define set_bit(_f_, _b_) _Generic((_f_), \
-		uint8_t : set_bit_u8,  \
-		uint16_t: set_bit_u16, \
-		uint32_t: set_bit_u32, \
-		uint64_t: set_bit_u64, \
-		default : set_bit_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(set_bit),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(set_bit), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(set_bit), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(set_bit), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(set_bit)  \
 	)((_f_), (_b_))
 # define SET_BIT(_f_, _b_) ((_f_) = (set_bit((_f_), (_b_))))
 
 # define clear_bit(_f_, _b_) _Generic((_f_), \
-		uint8_t : clear_bit_u8,  \
-		uint16_t: clear_bit_u16, \
-		uint32_t: clear_bit_u32, \
-		uint64_t: clear_bit_u64, \
-		default : clear_bit_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(clear_bit),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(clear_bit), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(clear_bit), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(clear_bit), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(clear_bit)  \
 	)((_f_), (_b_))
 # define CLEAR_BIT(_f_, _b_) ((_f_) = (clear_bit((_f_), (_b_))))
 
 # define toggle_bit(_f_, _b_) _Generic((_f_), \
-		uint8_t : toggle_bit_u8,  \
-		uint16_t: toggle_bit_u16, \
-		uint32_t: toggle_bit_u32, \
-		uint64_t: toggle_bit_u64, \
-		default : toggle_bit_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(toggle_bit),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(toggle_bit), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(toggle_bit), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(toggle_bit), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(toggle_bit)  \
 	)((_f_), (_b_))
 # define TOGGLE_BIT(_f_, _b_) ((_f_) = (toggle_bit((_f_), (_b_))))
 
 # define modify_bits(_f_, _m_, _b_) _Generic((_f_), \
-		uint8_t : modify_bits_u8,  \
-		uint16_t: modify_bits_u16, \
-		uint32_t: modify_bits_u32, \
-		uint64_t: modify_bits_u64, \
-		default : modify_bits_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(modify_bits),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(modify_bits), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(modify_bits), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(modify_bits), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(modify_bits)  \
 	)((_f_), (_m_), (_b_))
 # define MODIFY_BITS(_f_, _m_, _b_) ((_f_) = (modify_bits((_f_), (_m_), (_b_))))
 
 # define select_bits(_f_, _m_) _Generic((_f_), \
-		uint8_t : select_bits_u8,  \
-		uint16_t: select_bits_u16, \
-		uint32_t: select_bits_u32, \
-		uint64_t: select_bits_u64, \
-		default : select_bits_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(select_bits),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(select_bits), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(select_bits), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(select_bits), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(select_bits)  \
 	)((_f_), (_m_))
 
 # define mask_bits(_f_, _m_) _Generic((_f_), \
-		uint8_t : mask_bits_u8,  \
-		uint16_t: mask_bits_u16, \
-		uint32_t: mask_bits_u32, \
-		uint64_t: mask_bits_u64, \
-		default : mask_bits_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(mask_bits),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(mask_bits), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(mask_bits), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(mask_bits), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(mask_bits)  \
 	)((_f_), (_m_))
 
 # define gather_bits(_f_, _m_, _o_) _Generic((_f_), \
-		uint8_t : gather_bits_u8,  \
-		uint16_t: gather_bits_u16, \
-		uint32_t: gather_bits_u32, \
-		uint64_t: gather_bits_u64, \
-		default : gather_bits_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(gather_bits),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(gather_bits), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(gather_bits), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(gather_bits), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(gather_bits)  \
 	)((_f_), (_m_), (_o_))
 
 # define bit_is_set(_f_, _m_) _Generic((_f_), \
-		uint8_t : bit_is_set_u8,  \
-		uint16_t: bit_is_set_u16, \
-		uint32_t: bit_is_set_u32, \
-		uint64_t: bit_is_set_u64, \
-		default : bit_is_set_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(bit_is_set),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(bit_is_set), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(bit_is_set), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(bit_is_set), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(bit_is_set)  \
 	)((_f_), (_m_))
 
 # define bits_are_set(_f_, _m_) _Generic((_f_), \
-		uint8_t : bits_are_set_u8,  \
-		uint16_t: bits_are_set_u16, \
-		uint32_t: bits_are_set_u32, \
-		uint64_t: bits_are_set_u64, \
-		default : bits_are_set_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(bits_are_set),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(bits_are_set), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(bits_are_set), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(bits_are_set), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(bits_are_set)  \
 	)((_f_), (_m_))
 
 # define as_bit(_n_) _Generic((_n_), \
-		uint8_t : as_bit_u8,  \
-		uint16_t: as_bit_u16, \
-		uint32_t: as_bit_u32, \
-		uint64_t: as_bit_u64, \
-		default : as_bit_ui  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(as_bit),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(as_bit), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(as_bit), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(as_bit), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(as_bit)  \
 	)((_n_))
 
 # define lowest_bit(_f_) _Generic((_f_), \
-		uint8_t : LSB,  \
-		uint16_t: LSB, \
-		uint32_t: LSBL, \
-		uint64_t: LSBLL, \
-		default : LSB  \
+		unsigned char : LSB,  \
+		unsigned short: LSB, \
+		unsigned long: LSBL, \
+		unsigned long long: LSBLL, \
+		unsigned int : LSB  \
 	)((_f_))
 
 # define shift_lowest_bit(_f_) _Generic((_f_), \
-		uint8_t : shift_lowest_bit_u8,  \
-		uint16_t: shift_lowest_bit_u16, \
-		uint32_t: shift_lowest_bit_u32, \
-		uint64_t: shift_lowest_bit_u64, \
-		default : shift_lowest_bit_ui,  \
+		unsigned char : _ULIB_BITS_DISPATCH_UC(shift_lowest_bit),  \
+		unsigned short: _ULIB_BITS_DISPATCH_US(shift_lowest_bit), \
+		unsigned long: _ULIB_BITS_DISPATCH_UL(shift_lowest_bit), \
+		unsigned long long: _ULIB_BITS_DISPATCH_ULL(shift_lowest_bit), \
+		unsigned int : _ULIB_BITS_DISPATCH_UI(shift_lowest_bit)  \
 	)((_f_))
 
 # define clz(_f_) _Generic((_f_), \
-		uint8_t : CLZ,  \
-		uint16_t: CLZ, \
-		uint32_t: CLZL, \
-		uint64_t: CLZLL, \
-		default : CLZ  \
+		unsigned char : CLZ,  \
+		unsigned short: CLZ, \
+		unsigned long: CLZL, \
+		unsigned long long: CLZLL, \
+		unsigned int : CLZ  \
 	)((_f_))
 
 #else // ULIB_BITOP_ENABLE_GENERICS
