@@ -81,11 +81,9 @@ bool ascii_is_upper(uint8_t c);
 //
 // Convert 'c' from  the range 'a'-'z' to 'A' - 'Z'
 uint8_t ascii_to_upper(uint8_t c);
-#define ASCII_TO_UPPER(_c_) ((_c_) ^ 0x20U)
 //
 // Convert 'c' from  the range 'A'-'Z' to 'a' - 'z'
 uint8_t ascii_to_lower(uint8_t c);
-#define ASCII_TO_LOWER(_c_) ((_c_) | 0x20U)
 //
 // Convert 'c' from the range '0'-'9' to 0-9
 uint8_t ascii_to_digit(uint8_t c);
@@ -139,6 +137,21 @@ uint8_t ascii_from_xdigit(uint8_t c);
 #define ascii_to_lower(_c_) tolower(_c_)
 #endif // ! ASCII_SUBSTITUTE_WITH_CTYPE
 
+#define ASCII_IS_VALID(_c_) ((_c_) < 0x80U)
+#define ASCII_IS_CNTRL(_c_) ((_c_) < 0x20U || (_c_) == 0x7FU)
+#define ASCII_IS_PRINT(_c_) ((_c_) >= 0x20U && (_c_) != 0x7FU)
+#define ASCII_IS_GRAPH(_c_) ((_c_) > 0x20U && (_c_) != 0x7FU)
+#define ASCII_IS_BLANK(_c_) ((_c_) == ' ' || (_c_) == '\t')
+#define ASCII_IS_DIGIT(_c_) ((_c_) >= '0' && (_c_) <= '9')
+#define ASCII_IS_LOWER(_c_) ((_c_) >= 'a' && (_c_) <= 'z')
+#define ASCII_IS_UPPER(_c_) ((_c_) >= 'A' && (_c_) <= 'Z')
+
+#define ASCII_TO_UPPER(_c_) ((_c_) ^ 0x20U)
+#define ASCII_TO_LOWER(_c_) ((_c_) | 0x20U)
+#define ASCII_TO_DIGIT(_c_)   ((_c_) ^ 0x30U)
+#define ASCII_FROM_DIGIT(_c_) ((_c_) | 0x30U)
+#define ASCII_TO_XDIGIT(_c_)   (((_c_) > 9) ? (0x0AU + (((_c_) | 0x20U) - 'a')) : ((_c_) ^ 0x30U))
+#define ASCII_FROM_XDIGIT(_c_) (((_c_) > 9) ? ('A' + ((_c_) - 0x0AU)) : ((_c_) | 0x30U))
 
 #endif // ULIB_ENABLE_ASCII
 #endif // _ULIB_ASCII_H
