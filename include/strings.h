@@ -33,7 +33,7 @@
 //   coding. It would probably work as signed most of the time, but there are
 //   no guarantees.
 //
-//   *_printf()/_appendf() functions aren't thread safe when HAVE_PRINTF_VA
+//   *_printf()/_appendf() functions aren't thread safe when STRINGS_USE_INTERNAL_PRINTF
 //   is set.
 //
 //

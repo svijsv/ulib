@@ -76,12 +76,6 @@
 # endif
 #endif
 
-#if HAVE_XPRINTF && ULIB_ENABLE_PRINTF
-# define HAVE_PRINTF_VA 1
-#else
-# define HAVE_PRINTF_VA 0
-#endif
-
 #endif // _ULIB_CONFIGIFY_H
 #ifdef __cplusplus
  }

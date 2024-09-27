@@ -43,7 +43,7 @@
 #include <string.h>
 
 
-#if ! HAVE_PRINTF_VA
+#if ! STRINGS_USE_INTERNAL_PRINTF
 # include <stdio.h>
 #endif
 
@@ -88,7 +88,7 @@ INLINE strlen_t COMBINED_LENGTH(strlen_t a, strlen_t b) {
 
 // A pointer set by string_appendf_va and used by the non-reentrant string_putc()
 // function so that it can have the same signature as putc().
-#if HAVE_PRINTF_VA
+#if STRINGS_USE_INTERNAL_PRINTF
 static string_t *S_printf_string;
 #endif
 
@@ -389,8 +389,8 @@ string_t* string_appendf(string_t *restrict s, const char *restrict format, ...)
 
 	return s;
 }
-#if HAVE_PRINTF_VA
-static void string_putc(int c) {
+#if STRINGS_USE_INTERNAL_PRINTF
+static void string_putc(uint_fast8_t c) {
 	//ulib_assert(S_printf_string != NULL);
 
 	string_append_from_char(S_printf_string, (char )c);
@@ -420,7 +420,7 @@ string_t* string_appendf_va(string_t *restrict s, const char *restrict format, v
 
 	return s;
 }
-#else // !HAVE_PRINTF_VA
+#else // !STRINGS_USE_INTERNAL_PRINTF
 string_t* string_appendf_va(string_t *restrict s, const char *restrict format, va_list arp) {
 	strlen_t len;
 	strlen_t free_space;
@@ -459,7 +459,7 @@ string_t* string_appendf_va(string_t *restrict s, const char *restrict format, v
 
 	return s;
 }
-#endif // HAVE_PRINTF_VA
+#endif // STRINGS_USE_INTERNAL_PRINTF
 
 string_t* string_append_from_int(string_t *s, int n, uint8_t width, char pad) {
 	int m, r;

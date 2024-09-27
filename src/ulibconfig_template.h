@@ -19,14 +19,6 @@
 //
 // If non-zero, default to doing additional safety checks in all modules.
 #define ULIB_DO_SAFETY_CHECKS 1
-//
-// If non-zero, use elm-chan's xprintf from http://elm-chan.org/fsw/strf/xprintf.html
-// to provide printf_va(). There's currently no backup provider.
-// The source isn't included in this library; it will have to be built separately
-// and linked into the program at the same time as ulib.
-// The declaration of xv[f]printf() in xprintf.c is normally static and needs
-// to be changed so that it's available here.
-#define HAVE_XPRINTF 1
 
 
 /*
@@ -303,6 +295,17 @@
 // Enable this module
 #define ULIB_ENABLE_PRINTF ULIB_ENABLE_DEFAULT
 //
+// Use a minimal version of the module which excludes uncommon features
+#define PRINTF_USE_MINIMAL_FEATURES 0
+//
+// The width in bytes of the largest integer supported in format strings
+#define PRINTF_MAX_INT_BYTES 4
+//
+// If non-zero, use '0o' as the alternate form for octal integers
+#define PRINTF_USE_o_FOR_OCTAL 0
+//
+// The character to use when grouping decimal integers by thousands
+#define PRINTF_INT_GROUPING_CHAR ','
 //
 // If non-zero, perform additional checks to handle common problems like being
 // passed NULL inputs.
@@ -325,7 +328,6 @@
 #define DO_FIFO_UINT8_SAFETY_CHECKS ULIB_DO_SAFETY_CHECKS
 
 
-
 /*
 * String module configuration
 */
@@ -343,6 +345,10 @@
 //
 // When STRINGS_USE_MALLOC is set, grow the string in blocks of this size.
 #define STRING_ALLOC_BLOCK_BYTES 16U
+//
+// If non-zero, use the internal printf() implementation for printing to strings.
+// This implementation isn't thread-safe and lacks some features but may be smaller.
+#define STRINGS_USE_INTERNAL_PRINTF 0
 //
 // If non-zero, perform additional checks to handle common problems like being
 // passed NULL inputs.
