@@ -16,7 +16,8 @@ SPLINT_FLAGS := \
 	+limit 5 +posixlib -nullret \
 	-DDEBUG=1 -UNDEBUG
 
-_CFLAGS        := -std=c99 -fstrict-aliasing -fno-common -fshort-enums \
+# -fshort-enums
+_CFLAGS        := -std=c99 -fstrict-aliasing -fno-common \
                   -ffunction-sections -fdata-sections \
                   -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500 \
                   -I. -iquote include
@@ -45,7 +46,7 @@ STATIC_SU_FILES := $(patsubst %.o, %.su, $(STATIC_O_FILES))
 SHARED_O_FILES := $(addprefix $(SHARED_TMP)/, $(O_FILES))
 SHARED_SU_FILES := $(patsubst %.o, %.su, $(SHARED_O_FILES))
 STATIC_LIB := $(STATIC_TMP)/lib$(NAME).a
-SHARED_LIB := $(SHARED_TMP)/lib$(NAME).so.$(VERSION)
+SHARED_LIB := $(SHARED_TMP)/lib$(NAME).so
 
 CLEAN_STATIC_FILES := $(STATIC_O_FILES) $(STATIC_SU_FILES) $(STATIC_LIB)
 CLEAN_SHARED_FILES := $(SHARED_O_FILES) $(SHARED_SU_FILES) $(SHARED_LIB)
