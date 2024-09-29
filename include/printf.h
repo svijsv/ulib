@@ -60,8 +60,8 @@
 //    j  : intmax_t
 //    z  : size_t
 //    t  : ptrdiff_t
-// The specific length modifiers handled properly will depend on the value of
-// PRINTF_MAX_INT_BYTES.
+// The specific length modifiers which can be handled properly will depend on
+// the value of PRINTF_MAX_INT_BYTES.
 //
 // Of the standard conversions, this implementation supports:
 //    d,i: Signed decimal int.

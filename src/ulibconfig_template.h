@@ -87,7 +87,7 @@
 #define ASCII_SUBSTITUTE_WITH_CTYPE 0
 //
 // If non-zero, replace the ctype.h functions with their ASCII module equivalent
-// Some functions may not supported
+// Some functions may not be supported
 #define ASCII_SUBSTITUTE_FOR_CTYPE 0
 //
 // If non-zero, perform additional checks to handle common problems like being
@@ -295,9 +295,6 @@
 // Enable this module
 #define ULIB_ENABLE_PRINTF ULIB_ENABLE_DEFAULT
 //
-// Use a minimal version of the module which excludes uncommon features
-#define PRINTF_USE_MINIMAL_FEATURES 0
-//
 // The width in bytes of the largest integer supported in format strings
 #define PRINTF_MAX_INT_BYTES 4
 //
@@ -310,6 +307,54 @@
 // If non-zero, perform additional checks to handle common problems like being
 // passed NULL inputs.
 #define DO_PRINTF_SAFETY_CHECKS ULIB_DO_SAFETY_CHECKS
+//
+// If set, use a reduced feature set to minimize size
+// The features can also be controlled individually below
+#define PRINTF_USE_MINIMAL_FEATURE_SET 0
+//
+// Try to read integers larger than the size set above
+// This will usually work if the value of the variable is less than the
+// maximum that can fit in PRINTF_MAX_INT_BYTES bytes
+#define PRINTF_TRY_LARGE_INTS (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow printing binary representations of integers
+#define PRINTF_ALLOW_BINARY (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow uncommon integer size specifiers; without this only 'l' and 'll'
+// are recognized (in addition to the default integer size)
+#define PRINTF_ALLOW_UNCOMMON_INTS  (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow using lower-case letters in hexadecimal output
+// Otherwise, only capital letters are used
+#define PRINTF_ALLOW_LOWERCASE_HEX (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow printing decimal integers with thousands groups separators
+#define PRINTF_ALLOW_1000s_GROUPING  (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow printing alternate forms of integers with the '#' flag
+#define PRINTF_ALLOW_ALT_FORMS (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow left-adjusting when padding a printed value to meet the minimum width
+#define PRINTF_ALLOW_LEFT_ADJUST (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow padding integers with leading 0s
+#define PRINTF_ALLOW_ZERO_PADDING (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Allow reading width and precision from the argument list with '*'
+#define PRINTF_ALLOW_VARIABLE_WIDTHS (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Respect width (minimal print size) and precision (maximum string length)
+// when printing strings
+#define PRINTF_ALLOW_STRING_WIDTH (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Respect width (minimal print size) when printing chars
+#define PRINTF_ALLOW_CHAR_WIDTH (!PRINTF_USE_MINIMAL_FEATURE_SET)
+//
+// Respect precision when printing integers and strings
+#define PRINTF_ALLOW_PRECISION 1
+//
+// Allow printing leading '+' or ' ' for positive values of signed integers
+#define PRINTF_ALLOW_POSITIVE_SIGNS (!PRINTF_USE_MINIMAL_FEATURE_SET)
 
 
 /*

@@ -36,18 +36,41 @@
 #include <limits.h>
 #include <string.h>
 
-#define PRINT_BINARY (!PRINTF_USE_MINIMAL_FEATURES)
-#define GROUP_1000s  (!PRINTF_USE_MINIMAL_FEATURES)
+
+#define TRY_LARGE_INTS (PRINTF_TRY_LARGE_INTS)
+#define PRINT_BINARY (PRINTF_ALLOW_BINARY)
+#define GROUP_1000s  (PRINTF_ALLOW_1000s_GROUPING)
 // This is called 'PAD_STRING' but it controls string max length (precision) too.
-// It also controls characters.
-#define PAD_STRINGS  (!PRINTF_USE_MINIMAL_FEATURES)
-#define ALLOW_LEFT_ADJUST (!PRINTF_USE_MINIMAL_FEATURES)
-#define USE_PRECISION (!PRINTF_USE_MINIMAL_FEATURES)
-#define TRY_LARGE_INTS (!PRINTF_USE_MINIMAL_FEATURES)
+#define PAD_STRINGS  (PRINTF_ALLOW_STRING_WIDTH)
+#define PAD_CHARS  (PRINTF_ALLOW_CHAR_WIDTH)
+#define ALLOW_LEFT_ADJUST (PRINTF_ALLOW_LEFT_ADJUST)
+#define ALLOW_ZERO_PADDING (PRINTF_ALLOW_ZERO_PADDING)
+#define ALLOW_LOWERCASE_HEX (PRINTF_ALLOW_LOWERCASE_HEX)
+#define USE_PRECISION (PRINTF_ALLOW_PRECISION)
+#define USE_ALT_FORM (PRINTF_ALLOW_ALT_FORMS)
+#define USE_POS_SIGN (PRINTF_ALLOW_POSITIVE_SIGNS)
+// This also controls variable precision
+#define ALLOW_VARIABLE_WIDTH (PRINTF_ALLOW_VARIABLE_WIDTHS)
+#define ALLOW_EXOTIC_TYPES (PRINTF_ALLOW_UNCOMMON_INTS)
 
 // Not parsing fields when they're ignored causes the arguments to become out
 // of sync with va_arg(), which can cause crashes or security problems.
 #define PARSE_IGNORED_FIELDS DO_PRINTF_SAFETY_CHECKS
+
+// I tried using bitfields for the options struct originally but the code
+// was much larger. The version when this is enabled just uses the fields for
+// the boolean values; it's ~90 bytes larger but probably saves 6 bytes
+// of RAM which may be a good tradeoff for very small systems.
+#define PACK_OPT_STRUCT 0
+
+// The largest buffer we need is for the printed binary ints, which require
+// one character per bit. If we're not printing binary though, we use one
+// character per three bits.
+#if PRINT_BINARY
+# define PRINTF_BUFFER_BYTES (PRINTF_MAX_INT_BYTES * 8)
+#else
+# define PRINTF_BUFFER_BYTES (PRINTF_MAX_INT_BYTES * 3)
+#endif
 
 
 void printf_vv(void (*pputc)(uint_fast8_t c), const char *restrict fmt, ...) {
@@ -60,29 +83,38 @@ void printf_vv(void (*pputc)(uint_fast8_t c), const char *restrict fmt, ...) {
 	return;
 }
 
+#if PACK_OPT_STRUCT
 typedef struct {
 	uint_fast8_t width;
 	uint_fast8_t precision;
-	bool pad_0       :1;
-	bool group_1000s :1;
-	bool left_adjust :1;
-	bool is_signed   :1;
-	bool is_negative :1;
-	bool lower_hex   :1;
-	bool alt_form    :1;
-	uint pos_sign    :2;
-	uint int_size    :4;
-	uint int_base    :5;
+	uint_fast8_t int_base ;
+	uint_fast8_t int_size ;
+	uint_fast8_t pos_sign ;
+	bool pad_0       :1 ;
+	bool group_1000s :1 ;
+	bool left_adjust :1 ;
+	bool is_signed   :1 ;
+	bool is_negative :1 ;
+	bool lower_hex   :1 ;
+	bool alt_form    :1 ;
 } printf_opts_t;
-
-//#define OPTS_DEFAULT { 0, 0, false, false, false, false, false, false, false, 0, 0, 0 }
+#else
+typedef struct {
+	uint_fast8_t width;
+	uint_fast8_t precision;
+	uint_fast8_t pos_sign ;
+	uint_fast8_t int_size ;
+	uint_fast8_t int_base ;
+	bool pad_0       ;
+	bool group_1000s ;
+	bool left_adjust ;
+	bool is_signed   ;
+	bool is_negative ;
+	bool lower_hex   ;
+	bool alt_form    ;
+} printf_opts_t;
+#endif
 #define OPTS_DEFAULT { 0 }
-/*
-static printf_opts_t int_opts_default(void) {
-	printf_opts_t def = OPTS_DEFAULT;
-	return def;
-}
-*/
 
 typedef enum {
 	POS_SIGN_NONE = 0,
@@ -134,26 +166,28 @@ typedef enum {
 		(_var_) = (printf_uint_t )((_type_ )tmp); \
 	} while (0)
 
-static void print_int(void(*pputc)(uint_fast8_t c), printf_uint_t n, const printf_opts_t opts) {
-	// The largest buffer we need is for the printed binary ints, which require
-	// one character per bit. If we're not printing binary though, we use one
-	// character per three bits.
-#if PRINT_BINARY
-	uint8_t print_buf[PRINTF_MAX_INT_BYTES * 8];
-#else
-	uint8_t print_buf[PRINTF_MAX_INT_BYTES * 3];
-#endif
-	uint_fast8_t c;
+static void print_int(void(*pputc)(uint_fast8_t c), printf_uint_t n, const printf_opts_t *opts) {
+	uint8_t print_buf[PRINTF_BUFFER_BYTES];
 	printf_int_len_t buf_i = 0;
-	uint_fast8_t base = opts.int_base;
-	uint_fast8_t padding = ' ';
+	uint_fast8_t base;
+	uint_fast8_t prefix;
+	printf_int_len_t pad_chars;
+	bool left_adjust;
 
-	// Avoid a buffer overflow if someone's converting an unsupported large int
-	// while also allowing anything small enough to be printed
+	// Avoid a buffer overflow if someone's converting an unsupported large
+	// int while also allowing anything small enough to be printed
 	n &= PRINTF_UINT_VALUE_MAX;
 
-	if (!PRINT_BINARY && base == 2) {
-		base = 8;
+	base = (PRINT_BINARY || base != 2) ? opts->int_base : 8;
+	left_adjust = (ALLOW_LEFT_ADJUST) ? opts->left_adjust : false;
+
+	prefix = (opts->is_signed && (opts->is_negative || opts->pos_sign != 0)) ? 1 : 0;
+	if (USE_ALT_FORM && opts->alt_form && base != 10) {
+		if (!PRINTF_USE_o_FOR_OCTAL && base == 8) {
+			prefix += 1;
+		} else {
+			prefix += 2;
+		}
 	}
 
 	if (n == 0) {
@@ -164,115 +198,97 @@ static void print_int(void(*pputc)(uint_fast8_t c), printf_uint_t n, const print
 			print_buf[buf_i] = ((n & 0x01U) == 0) ? '0' : '1';
 		}
 	} else {
-		uint_fast8_t xmod = 0;
+		uint_fast8_t c;
+		uint_fast8_t xmod = (ALLOW_LOWERCASE_HEX && opts->lower_hex) ? 'a' - 0x0AU : 'A' - 0x0AU;
 
-		if (opts.lower_hex) {
-			xmod = 0x20U;
-		}
 		for (; n != 0; ++buf_i) {
 			c = (uint_fast8_t )(n % base);
 			n /= base;
 
-			print_buf[buf_i] = ascii_from_xdigit(c) | xmod;
+			print_buf[buf_i] = (c > 9) ? c + xmod : c + '0';
 		}
 	}
 
-	// We need to know how many characters we are actually going to print in order
-	// to pad the output
-	// The final buf_i is the index after the last used index, or the total number
-	// of characters in the buffer.
-	printf_int_len_t print_chars = (printf_int_len_t )MAX(buf_i, opts.precision);
+	if (USE_PRECISION && opts->precision > 0) {
+		uint_fast8_t precision;
 
-	if (GROUP_1000s && base == 10 && opts.group_1000s && print_chars > 3) {
-		print_chars += print_chars / 3;
-	}
-	if (opts.is_signed && (opts.is_negative || opts.pos_sign != 0)) {
-		++print_chars;
-	}
-	if (opts.alt_form) {
-		if ((PRINT_BINARY && base == 2) || base == 16 || (PRINTF_USE_o_FOR_OCTAL && base == 8)) {
-			print_chars += 2;
-		} else if (base == 8) {
-			print_chars += 1;
+		precision = (opts->precision > PRINTF_BUFFER_BYTES) ? PRINTF_BUFFER_BYTES : opts->precision;
+
+		for (; buf_i < precision; ++buf_i) {
+			print_buf[buf_i] = '0';
+		}
+	} else if (ALLOW_ZERO_PADDING && !left_adjust && opts->pad_0) {
+		printf_int_len_t w = buf_i + prefix;
+
+		w = (opts->width > w) ? opts->width - w : 0;
+		for (; w > 0; ++buf_i, --w) {
+			print_buf[buf_i] = '0';
 		}
 	}
 
-	if ((!USE_PRECISION || opts.precision == 0) && opts.pad_0) {
-		padding = '0';
-	}
-	bool pad_late = (padding == '0') && ((base != 10 && opts.alt_form) || (base == 10 && opts.is_negative));
-	printf_int_len_t pad_chars = (opts.width > print_chars) ? opts.width - print_chars : 0;
-
-	if ((!ALLOW_LEFT_ADJUST || !opts.left_adjust) && !pad_late) {
-		for (; pad_chars > 0; --pad_chars) {
-			pputc(padding);
-		}
-	}
-
-	if (opts.is_signed) {
-		if (opts.is_negative) {
-			pputc('-');
-		} else if (opts.pos_sign == POS_SIGN_BLANK) {
+	pad_chars = buf_i + prefix;
+	pad_chars = (opts->width > pad_chars) ? opts->width - pad_chars : 0;
+	if (!left_adjust) {
+		for (; pad_chars != 0; --pad_chars) {
 			pputc(' ');
-		} else if (opts.pos_sign == POS_SIGN_PLUS) {
+		}
+	}
+
+	if (opts->is_signed) {
+		if (opts->is_negative) {
+			pputc('-');
+		} else if (opts->pos_sign == POS_SIGN_BLANK) {
+			pputc(' ');
+		} else if (opts->pos_sign == POS_SIGN_PLUS) {
 			pputc('+');
 		}
-	}
-
-	if (opts.alt_form && base != 10) {
+	} else if (USE_ALT_FORM && opts->alt_form && base != 10) {
 		pputc('0');
-		if (PRINT_BINARY && base == 2) {
-			pputc('b');
-		} else if (PRINTF_USE_o_FOR_OCTAL && base == 8) {
+		if (PRINTF_USE_o_FOR_OCTAL && base == 8) {
 			pputc('o');
+		} else if (PRINT_BINARY && base == 2) {
+			pputc('b');
 		} else if (base == 16) {
 			pputc('x');
 		}
 	}
 
-	if (!ALLOW_LEFT_ADJUST || !opts.left_adjust) {
-		for (; pad_chars > 0; --pad_chars) {
-			pputc(padding);
-		}
-	}
-
-	if (USE_PRECISION) {
-		for (uint_fast8_t p = opts.precision; p > buf_i; --p) {
-			pputc('0');
-		}
-	}
-
-	// The characters were placed in the buffer from low-digit to high but we want
-	// to print them from high-digit to low
-	if (GROUP_1000s && base == 10 && opts.group_1000s && buf_i > 3) {
+	if (GROUP_1000s && base == 10 && opts->group_1000s && buf_i > 3) {
 		uint_fast8_t places = (uint_fast8_t )(3 - (buf_i % 3));
 
-		for (; buf_i != 0; --buf_i, ++places) {
+		while (buf_i != 0) {
+			--buf_i;
+
 			if (places == 3) {
 				places = 0;
-				if (buf_i > 1) {
+				if (buf_i > 0) {
 					pputc(PRINTF_INT_GROUPING_CHAR);
 				}
 			}
-			pputc(print_buf[buf_i-1]);
+			if (ASCII_IS_DIGIT(print_buf[buf_i])) {
+				++places;
+			}
+
+			pputc(print_buf[buf_i]);
 		}
 	} else {
-		for (; buf_i != 0; --buf_i) {
-			pputc(print_buf[buf_i-1]);
+		while (buf_i != 0) {
+			--buf_i;
+			pputc(print_buf[buf_i]);
 		}
 	}
 
 	if (ALLOW_LEFT_ADJUST) {
-		for (; pad_chars > 0; --pad_chars) {
+		for (; pad_chars != 0; --pad_chars) {
 			pputc(' ');
 		}
 	}
 
-	//return MAX(print_chars, opts.width);
+	//return MAX(print_chars, opts->width);
 	return;
 }
 
-static void print_string(void(*pputc)(uint_fast8_t c), const char *s, const printf_opts_t opts) {
+static void print_string(void(*pputc)(uint_fast8_t c), const char *s, const printf_opts_t *opts) {
 	uint len = 0;
 
 	if (DO_PRINTF_SAFETY_CHECKS && s == NULL) {
@@ -281,12 +297,12 @@ static void print_string(void(*pputc)(uint_fast8_t c), const char *s, const prin
 
 	if (PAD_STRINGS) {
 		len = (uint )strlen(s);
-		if (opts.precision > 0) {
-			len = MIN(len, opts.precision);
+		if (USE_PRECISION && opts->precision > 0) {
+			len = MIN(len, opts->precision);
 		}
 
-		uint pad_chars = (opts.width > len) ? opts.width - len : 0;
-		if (!ALLOW_LEFT_ADJUST || !opts.left_adjust) {
+		uint pad_chars = (opts->width > len) ? opts->width - len : 0;
+		if (!ALLOW_LEFT_ADJUST || !opts->left_adjust) {
 			for (; pad_chars != 0; --pad_chars) {
 				pputc(' ');
 			}
@@ -308,20 +324,20 @@ static void print_string(void(*pputc)(uint_fast8_t c), const char *s, const prin
 		}
 	}
 
-	//return MAX(len, opts.width);
+	//return MAX(len, opts->width);
 	return;
 }
 
-static void print_char(void(*pputc)(uint_fast8_t c), char c, const printf_opts_t opts) {
+static void print_char(void(*pputc)(uint_fast8_t c), char c, const printf_opts_t *opts) {
 	if (DO_PRINTF_SAFETY_CHECKS && (c == 0)) {
 		c = '.';
 		//return;
 	}
 
-	if (PAD_STRINGS) {
-		uint pad_chars = (opts.width > 0) ? opts.width - 1 : 0;
+	if (PAD_CHARS) {
+		uint pad_chars = (opts->width > 0) ? opts->width - 1 : 0;
 
-		if (!ALLOW_LEFT_ADJUST || !opts.left_adjust) {
+		if (!ALLOW_LEFT_ADJUST || !opts->left_adjust) {
 			for (; pad_chars != 0; --pad_chars) {
 				pputc(' ');
 			}
@@ -338,7 +354,7 @@ static void print_char(void(*pputc)(uint_fast8_t c), char c, const printf_opts_t
 		pputc((uint_fast8_t )c);
 	}
 
-	//return MAX(1, opts.width);
+	//return MAX(1, opts->width);
 	return;
 }
 
@@ -378,24 +394,34 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 		bool done = false;
 		while (!done) {
 			switch (c) {
+#if ALLOW_ZERO_PADDING || PARSE_IGNORED_FIELDS
 			case '0':
 				opts.pad_0 = true;
 				break;
+#endif
+#if ALLOW_LEFT_ADJUST || PARSE_IGNORED_FIELDS
 			case '-':
 				opts.left_adjust = true;
 				break;
+#endif
+#if USE_POS_SIGN || PARSE_IGNORED_FIELDS
 			case ' ':
 				opts.pos_sign = POS_SIGN_BLANK;
 				break;
 			case '+':
 				opts.pos_sign = POS_SIGN_PLUS;
 				break;
+#endif
+#if GROUP_1000s || PARSE_IGNORED_FIELDS
 			case '\'':
 				opts.group_1000s = true;
 				break;
+#endif
+#if USE_ALT_FORM || PARSE_IGNORED_FIELDS
 			case '#':
 				opts.alt_form = true;
 				break;
+#endif
 			default:
 				done = true;
 				break;
@@ -408,16 +434,8 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 		//
 		// Check for width
 		//
-		if (c >= '0' && c <= '9') {
-			uint_fast8_t w = 0;
-
-			while (c >= '0' && c <= '9') {
-				w *= 10;
-				w += (uint_fast8_t )(c - '0');
-				c = *fmt++;
-			}
-			opts.width = w;
-		} else if (c == '*') {
+#if ALLOW_VARIABLE_WIDTH
+		if (c == '*') {
 			int w = va_arg(arp, int);
 
 			if (w < 0) {
@@ -426,6 +444,16 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 			}
 			opts.width = (uint_fast8_t )w;
 			c = *fmt++;
+		} else
+#endif
+		{
+			uint_fast8_t w = 0;
+
+			while (c >= '0' && c <= '9') {
+				w = (uint_fast8_t )(w * 10 + (c - '0'));
+				c = *fmt++;
+			}
+			opts.width = w;
 		}
 
 		//
@@ -435,24 +463,30 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 #if USE_PRECISION
 		if (c == '.') {
 			c = *fmt++;
-			if (c >= '0' && c <= '9') {
-				uint_fast8_t p = 0;
-
-				while (c >= '0' && c <= '9') {
-					p *= 10;
-					p += (uint_fast8_t )(c - '0');
-					c = *fmt++;
-				}
-				opts.precision = p;
-			} else if (c == '*') {
+# if ALLOW_VARIABLE_WIDTH
+			if (c == '*') {
 				int p = va_arg(arp, int);
 
 				if (p >= 0) {
 					opts.precision = (uint_fast8_t )p;
 				}
 				c = *fmt++;
-			} else {
-				opts.precision = 0;
+			} else
+# elif PARSE_IGNORED_FIELDS
+			if (c == '*') {
+				int p = va_arg(arp, int);
+				UNUSED(p);
+				c = *fmt++;
+			} else
+# endif
+			{
+				uint_fast8_t p = 0;
+
+				while (c >= '0' && c <= '9') {
+					p = (uint_fast8_t )(p * 10 + (c - '0'));
+					c = *fmt++;
+				}
+				opts.precision = p;
 			}
 		}
 #elif PARSE_IGNORED_FIELDS
@@ -474,6 +508,7 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 		// Check for length modifier
 		//
 		switch (c) {
+#if ALLOW_EXOTIC_TYPES || PARSE_IGNORED_FIELDS
 		case 'h':
 			if (*fmt == 'h') {
 				opts.int_size = sizeof(char);
@@ -482,6 +517,17 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 				opts.int_size = sizeof(short);
 			}
 			break;
+		case 'j':
+			opts.int_size = sizeof(intmax_t);
+			break;
+		case 'z':
+		//case 'Z':
+			opts.int_size = sizeof(size_t);
+			break;
+		case 't':
+			opts.int_size = sizeof(ptrdiff_t);
+			break;
+#endif
 		case 'l':
 			if (*fmt == 'l') {
 				opts.int_size = sizeof(long long);
@@ -490,20 +536,11 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 				opts.int_size = sizeof(long);
 			}
 			break;
-		case 'j':
-			opts.int_size = sizeof(intmax_t);
-			break;
-		case 'z':
-			opts.int_size = sizeof(size_t);
-			break;
-		case 't':
-			opts.int_size = sizeof(ptrdiff_t);
-			break;
-		/*
+#if PARSE_IGNORED_FIELDS
 		case 'L':
 			opts.int_size = sizeof(long double);
 			break;
-		*/
+#endif
 		}
 		if (opts.int_size == 0) {
 			opts.int_size = sizeof(int);
@@ -518,16 +555,32 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 		case 0:
 			break;
 
+		case '%':
+			pputc('%');
+			break;
+
+#if PRINT_BINARY || PARSE_IGNORED_FIELDS
+		case 'b':
+			opts.int_base = 2;
+			break;
+#endif
+		case 'c':
+			//pputc(va_arg(arp, unsigned char));
+			print_char(pputc, (char )va_arg(arp, int), &opts);
+			break;
 		case 'd':
 		case 'i':
 			opts.is_signed = true;
 			opts.int_base = 10;
 			break;
-		case 'b':
-			opts.int_base = 2;
-			break;
 		case 'o':
 			opts.int_base = 8;
+			break;
+		case 's':
+			print_string(pputc, va_arg(arp, const char *), &opts);
+			break;
+		case 'u':
+			opts.int_base = 10;
 			break;
 		case 'x':
 			opts.lower_hex = true;
@@ -535,22 +588,6 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 			break;
 		case 'X':
 			opts.int_base = 16;
-			break;
-		case 'u':
-			opts.int_base = 10;
-			break;
-
-		case 'c':
-			//pputc(va_arg(arp, unsigned char));
-			print_char(pputc, (char )va_arg(arp, int), opts);
-			break;
-
-		case 's':
-			print_string(pputc, va_arg(arp, const char *), opts);
-			break;
-
-		case '%':
-			pputc('%');
 			break;
 
 #if PARSE_IGNORED_FIELDS
@@ -589,15 +626,11 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 			if (opts.is_signed) {
 				switch (opts.int_size) {
 				case 1:
-					//GET_SIGNED_INT_ARG(n, int8_t);
-					GET_SIGNED_INT_ARG(n, int, UINT_MAX);
-					break;
 #if TRY_LARGE_INTS || PRINTF_MAX_INT_BYTES >= 2
 				case 2:
-					//GET_SIGNED_INT_ARG(n, int16_t);
+#endif
 					GET_SIGNED_INT_ARG(n, int, UINT_MAX);
 					break;
-#endif
 #if TRY_LARGE_INTS || PRINTF_MAX_INT_BYTES >= 4
 				case 4:
 					GET_SIGNED_INT_ARG(n, int32_t, UINT32_MAX);
@@ -612,15 +645,13 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 			} else {
 				switch (opts.int_size) {
 				case 1:
-					//GET_UNSIGNED_INT_ARG(n, uint8_t);
 					GET_UNSIGNED_INT_ARG(n, uint8_t, int);
 					break;
 #if TRY_LARGE_INTS || PRINTF_MAX_INT_BYTES >= 2
 				case 2:
-					//GET_UNSIGNED_INT_ARG(n, uint16_t);
+#endif
 					GET_UNSIGNED_INT_ARG(n, uint16_t, int);
 					break;
-#endif
 #if TRY_LARGE_INTS || PRINTF_MAX_INT_BYTES >= 4
 				case 4:
 					GET_UNSIGNED_INT_ARG(n, uint32_t, uint32_t);
@@ -635,7 +666,7 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 			}
 
 			//char_count += print_int(pputc, n, opts);
-			print_int(pputc, n, opts);
+			print_int(pputc, n, &opts);
 		}
 	}
 
