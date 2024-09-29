@@ -292,7 +292,7 @@ uint8_t ascii_from_xdigit(uint8_t c) {
 		return (c | 0x30U);
 	}
 
-	return 'A' + (c - 0x0AU);
+	return ('A' - 0x0AU) + c;
 }
 
 #else

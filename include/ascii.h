@@ -151,7 +151,7 @@ uint8_t ascii_from_xdigit(uint8_t c);
 #define ASCII_TO_DIGIT(_c_)   ((_c_) ^ 0x30U)
 #define ASCII_FROM_DIGIT(_c_) ((_c_) | 0x30U)
 #define ASCII_TO_XDIGIT(_c_)   (((_c_) > 9) ? (0x0AU + (((_c_) | 0x20U) - 'a')) : ((_c_) ^ 0x30U))
-#define ASCII_FROM_XDIGIT(_c_) (((_c_) > 9) ? ('A' + ((_c_) - 0x0AU)) : ((_c_) | 0x30U))
+#define ASCII_FROM_XDIGIT(_c_) (((_c_) > 9) ? (('A' - 0x0AU) + (_c_)) : ((_c_) | 0x30U))
 
 #endif // ULIB_ENABLE_ASCII
 #endif // _ULIB_ASCII_H
