@@ -372,13 +372,12 @@ void printf_va(void(*pputc)(uint_fast8_t c), const char *restrict fmt_s, va_list
 
 	const uint8_t *fmt = (uint8_t *)fmt_s;
 	while (true) {
-		uint_fast8_t c = *fmt++;
+		uint_fast8_t c;
+		for (c = *fmt++; c != '%' && c != 0; c = *fmt++) {
+			pputc(c);
+		}
 		if (c == 0) {
 			break;
-		}
-		if (c != '%') {
-			pputc(c);
-			continue;
 		}
 		c = *fmt++;
 
