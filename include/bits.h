@@ -375,7 +375,7 @@ BITOP_FUNC_INLINE uint64_t shift_lowest_bit_u64(uint64_t field);
 
 
 #if ULIB_BITOP_ENABLE_INLINED_FUNCTIONS
-# include "bits.c"
+# include "bits_inlined.h"
 #endif
 
 

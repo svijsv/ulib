@@ -40,11 +40,8 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-
-#if ULIB_ENABLE_BITOPS
-#ifndef _ULIB_BITS_H
-# include "bits.h"
-#endif
+#ifndef _ULIB_BITS_INLINED_H
+#define _ULIB_BITS_INLINED_H
 
 
 BITOP_FUNC_INLINE uint set_bit_ui(uint field, uint bits) {
@@ -264,7 +261,7 @@ BITOP_FUNC_INLINE uint64_t shift_lowest_bit_u64(uint64_t field) {
 #endif
 
 
-#endif // ULIB_ENABLE_BITOPS
+#endif // _ULIB_BITS_INLINED_H
 #ifdef __cplusplus
  }
 #endif
