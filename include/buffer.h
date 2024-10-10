@@ -24,9 +24,6 @@
 //    object passed to them.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_BUFFER_H
 #define _ULIB_BUFFER_H
 
@@ -111,6 +108,3 @@ buflen_t buffer_grow(buffer_t *b, buflen_t add);
 
 #endif // ULIB_ENABLE_BUFFERS
 #endif // _ULIB_BUFFER_H
-#ifdef __cplusplus
- }
-#endif

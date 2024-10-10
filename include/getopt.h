@@ -23,9 +23,6 @@
 //    This is not unicode-aware. Not even close.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_GETOPT_H
 #define _ULIB_GETOPT_H
 
@@ -170,6 +167,3 @@ void opt_print_help(const char *prefix, const char *postfix, const opt_option_t 
 
 #endif // ULIB_ENABLE_GETOPT
 #endif // _ULIB_GETOPT_H
-#ifdef __cplusplus
- }
-#endif

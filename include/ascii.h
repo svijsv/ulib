@@ -25,9 +25,6 @@
 //    and should conform to the expected behavor
 //
 //
-#ifdef __cplusplus
- extern "C";
-#endif
 #ifndef _ULIB_ASCII_H
 #define _ULIB_ASCII_H
 
@@ -155,6 +152,3 @@ uint8_t ascii_from_xdigit(uint8_t c);
 
 #endif // ULIB_ENABLE_ASCII
 #endif // _ULIB_ASCII_H
-#ifdef __cplusplus
- }
-#endif

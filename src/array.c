@@ -23,10 +23,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "array.h"
 #if ULIB_ENABLE_ARRAYS
 
@@ -254,6 +250,3 @@ void* array_find_object(const array_t *a, const void *object, int (*compare)(con
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_ARRAYS
-#ifdef __cplusplus
- }
-#endif

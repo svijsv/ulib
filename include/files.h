@@ -39,9 +39,6 @@
 //    Some functions require _XOPEN_SOURCE to be set to 500 or higher, these
 //    will compiled out if it's not.
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_FILES_H
 #define _ULIB_FILES_H
 
@@ -332,6 +329,3 @@ int file_fsync_path(const char *path, file_flag_t flags);
 
 #endif // ULIB_ENABLE_FILES
 #endif // _ULIB_FILES_H
-#ifdef __cplusplus
- }
-#endif

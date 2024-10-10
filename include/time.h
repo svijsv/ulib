@@ -21,9 +21,6 @@
 // Tools for dealing with time
 // NOTES:
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_TIME_H
 #define _ULIB_TIME_H
 
@@ -108,6 +105,3 @@ void seconds_to_time(utime_t seconds, uint8_t *restrict ret_hour, uint8_t *restr
 
 #endif // ULIB_ENABLE_TIME
 #endif // _ULIB_TIME_H
-#ifdef __cplusplus
- }
-#endif

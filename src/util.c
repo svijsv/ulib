@@ -22,10 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "util.h"
 #if ULIB_ENABLE_UTIL
 
@@ -49,6 +45,3 @@ void mem_init(void *mem, uint8_t value, uint32_t size) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_UTIL
-#ifdef __cplusplus
- }
-#endif

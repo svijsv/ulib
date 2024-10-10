@@ -24,9 +24,6 @@
 //    object passed to them.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_FIFO_UINT8_H
 #define _ULIB_FIFO_UINT8_H
 
@@ -105,6 +102,3 @@ typedef struct {
 
 #endif // ULIB_ENABLE_FIFO_UINT8
 #endif // _ULIB_FIFO_UINT8_H
-#ifdef __cplusplus
- }
-#endif

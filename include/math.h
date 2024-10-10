@@ -22,9 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_MATH_H
 #define _ULIB_MATH_H
 
@@ -204,6 +201,3 @@ fixed_pnt_t log2_fixed_pnt(fixed_pnt_t x);
 
 #endif // ULIB_ENABLE_MATH
 #endif // _ULIB_MATH_H
-#ifdef __cplusplus
- }
-#endif

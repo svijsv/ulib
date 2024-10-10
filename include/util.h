@@ -22,9 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_UTIL_H
 #define _ULIB_UTIL_H
 
@@ -167,6 +164,3 @@ void mem_init(void *mem, uint8_t value, uint32_t size);
 
 #endif // ULIB_ENABLE_UTIL
 #endif // _ULIB_UTIL_H
-#ifdef __cplusplus
- }
-#endif

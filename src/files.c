@@ -35,10 +35,6 @@
 //    To prevent the proliferation of duplicate checks only validate arguments
 //    which are used in a function, not those which are passed on unchanged.
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "files.h"
 #if ULIB_ENABLE_FILES
 
@@ -1418,6 +1414,3 @@ int file_fsync_path(const char *path, file_flag_t flags) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_FILES
-#ifdef __cplusplus
- }
-#endif

@@ -22,9 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_CSTRINGS_H
 #define _ULIB_CSTRINGS_H
 
@@ -115,6 +112,3 @@ uint_t cstring_from_uint(char *dest, uint_t size, uint_t src, uint_t base);
 
 #endif // ULIB_ENABLE_CSTRINGS
 #endif // _ULIB_CSTRINGS_H
-#ifdef __cplusplus
- }
-#endif

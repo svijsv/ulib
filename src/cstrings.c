@@ -22,10 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "cstrings.h"
 #if ULIB_ENABLE_CSTRINGS
 
@@ -289,6 +285,3 @@ uint_t cstring_from_uint(char *dest, uint_t size, uint_t src, uint_t base) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_CSTRINGS
-#ifdef __cplusplus
- }
-#endif

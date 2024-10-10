@@ -27,10 +27,6 @@
 //    variants
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "fmem.h"
 #if ULIB_ENABLE_FMEM
 
@@ -135,6 +131,3 @@ char* FROM_FSTR3(FMEM_STR_T *fs) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy2;
 #endif // ULIB_ENABLE_FMEM
-#ifdef __cplusplus
- }
-#endif

@@ -22,10 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #define HAVE_FIFO_UINT8_C 1
 #include "fifo_uint8.h"
 
@@ -37,6 +33,3 @@
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_FIFO_UINT8
-#ifdef __cplusplus
- }
-#endif

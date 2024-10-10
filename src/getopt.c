@@ -22,10 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "getopt.h"
 #if ULIB_ENABLE_GETOPT
 
@@ -308,6 +304,3 @@ void opt_print_help(const char *prefix, const char *postfix, const opt_option_t 
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_GETOPT
-#ifdef __cplusplus
- }
-#endif

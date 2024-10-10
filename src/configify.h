@@ -23,9 +23,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_CONFIGIFY_H
 #define _ULIB_CONFIGIFY_H
 
@@ -77,6 +74,3 @@
 #endif
 
 #endif // _ULIB_CONFIGIFY_H
-#ifdef __cplusplus
- }
-#endif

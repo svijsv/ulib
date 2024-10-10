@@ -37,9 +37,6 @@
 //   is set.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_STRINGS_H
 #define _ULIB_STRINGS_H
 
@@ -210,6 +207,3 @@ string_t* string_truncate(string_t *s, const strlen_t l);
 
 #endif // ULIB_ENABLE_STRINGS
 #endif // _ULIB_STRINGS_H
-#ifdef __cplusplus
- }
-#endif

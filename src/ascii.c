@@ -29,10 +29,6 @@
 //    but the difference isn't always substantial
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "ascii.h"
 #if ULIB_ENABLE_ASCII
 
@@ -299,6 +295,3 @@ uint8_t ascii_from_xdigit(uint8_t c) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_ASCII
-#ifdef __cplusplus
- }
-#endif

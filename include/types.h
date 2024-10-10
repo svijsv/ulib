@@ -24,9 +24,6 @@
 //    int-sized and the macros may be smaller on some systems.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_TYPES_H
 #define _ULIB_TYPES_H
 
@@ -65,6 +62,3 @@ typedef uint_fast8_t uiter_t;
 
 
 #endif // _LIB_TYPES_H
-#ifdef __cplusplus
- }
-#endif

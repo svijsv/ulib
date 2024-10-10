@@ -22,9 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_DEBUG_H
 #define _ULIB_DEBUG_H
 
@@ -117,6 +114,3 @@ void ulib_panic_abort(const char *file_path, uint32_t lineno, const char *func_n
 #define PRINT_CPP_MACRO(_x_) DO_PRAGMA(message #_x_ " == " XTRINGIZE(_x_))
 
 #endif // _ULIB_DEBUG_H
-#ifdef __cplusplus
- }
-#endif

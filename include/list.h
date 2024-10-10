@@ -27,9 +27,6 @@
 //    object passed to them.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_LIST_H
 #define _ULIB_LIST_H
 
@@ -169,6 +166,3 @@ void* list_find_object(const list_t *l, const void *object, int (*compare)(const
 
 #endif // ULIB_ENABLE_LISTS
 #endif // _ULIB_LIST_H
-#ifdef __cplusplus
- }
-#endif

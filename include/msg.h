@@ -31,9 +31,6 @@
 //    an empty string because that's taken to mean leave the value alone.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_MSG_H
 #define _ULIB_MSG_H
 
@@ -256,6 +253,3 @@ int msg_gets(char *s, int size);
 
 #endif // _ULIB_MSG_H
 #endif // ULIB_ENABLE_MSG
-#ifdef __cplusplus
- }
-#endif

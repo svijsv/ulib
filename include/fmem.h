@@ -47,9 +47,6 @@
 //    may not always be worth using in spite of it's ease.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_FMEM_H
 #define _ULIB_FMEM_H
 
@@ -119,6 +116,3 @@ char* FROM_FSTR_TO_BUF(FMEM_STR_T *fs, char *buf);
 
 #endif // ULIB_ENABLE_FMEM
 #endif // _ULIB_FMEM_H
-#ifdef __cplusplus
- }
-#endif

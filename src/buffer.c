@@ -22,10 +22,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "buffer.h"
 #if ULIB_ENABLE_BUFFERS
 
@@ -176,6 +172,3 @@ buflen_t buffer_grow(buffer_t *b, buflen_t add) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_BUFFERS
-#ifdef __cplusplus
- }
-#endif

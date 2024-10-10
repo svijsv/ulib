@@ -27,10 +27,6 @@
 //    Used for div_u64_u64() because the Linux version truncates the divisor.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "math.h"
 #if ULIB_ENABLE_MATH
 
@@ -368,6 +364,3 @@ int32_t log2_fp(int32_t x) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_MATH
-#ifdef __cplusplus
- }
-#endif

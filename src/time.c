@@ -22,10 +22,6 @@
 //
 // NOTES:
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "time.h"
 #if ULIB_ENABLE_TIME
 
@@ -236,6 +232,3 @@ utime_t time_to_seconds(uint8_t hour, uint8_t minute, uint8_t second) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_TIME
-#ifdef __cplusplus
- }
-#endif

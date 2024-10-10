@@ -27,9 +27,6 @@
 //    object passed to them.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_ARRAY_H
 #define _ULIB_ARRAY_H
 
@@ -136,6 +133,3 @@ void* array_find_object(const array_t *a, const void *object, int (*compare)(con
 
 #endif // ULIB_ENABLE_ARRAYS
 #endif // _ULIB_ARRAY_H
-#ifdef __cplusplus
- }
-#endif

@@ -27,10 +27,6 @@
 //   won't cause problems when it's the max size of strlen_t.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "strings.h"
 #if ULIB_ENABLE_STRINGS
 
@@ -852,6 +848,3 @@ string_t* string_pad_from_char(string_t *s, char c, strlen_t len) {
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_STRINGS
-#ifdef __cplusplus
- }
-#endif

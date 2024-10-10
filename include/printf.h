@@ -22,9 +22,6 @@
 //
 // NOTES:
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_PRINTF_H
 #define _ULIB_PRINTF_H
 
@@ -89,6 +86,3 @@ void printf_va(void (*pputc)(uint_fast8_t c), const char *restrict fmt, va_list 
 
 #endif // ULIB_ENABLE_PRINTF
 #endif // _ULIB_PRINTF_H
-#ifdef __cplusplus
- }
-#endif

@@ -36,9 +36,6 @@
 //   https:// gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
 #ifndef _ULIB_BITS_H
 #define _ULIB_BITS_H
 
@@ -381,6 +378,3 @@ BITOP_FUNC_INLINE uint64_t shift_lowest_bit_u64(uint64_t field);
 
 #endif // ULIB_ENABLE_BITOPS
 #endif // _ULIB__H
-#ifdef __cplusplus
- }
-#endif

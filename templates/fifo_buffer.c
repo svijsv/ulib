@@ -24,10 +24,6 @@
 //   necessary types. See the associated header for details.
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "debug.h"
 
 #if FIFO_SIZE
@@ -114,7 +110,3 @@ FIFO_BANK_T FIFO_PEEK(FIFO_STRUCT_T *q) {
 
 	return q->bank[q->head];
 }
-
-#ifdef __cplusplus
- }
-#endif

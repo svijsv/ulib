@@ -23,10 +23,6 @@
 // NOTES:
 //
 //
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 #include "list.h"
 #if ULIB_ENABLE_LISTS
 
@@ -248,6 +244,3 @@ void* list_find_object(const list_t *l, const void *object, int (*compare)(const
 	// ISO C forbids empty translation units, this makes it happy.
 	typedef int make_iso_compilers_happy;
 #endif // ULIB_ENABLE_LISTS
-#ifdef __cplusplus
- }
-#endif
