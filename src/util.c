@@ -29,7 +29,7 @@
 
 #include <string.h>
 
-void mem_init(void *mem, uint8_t value, uint32_t size) {
+void mem_init(void *mem, uint8_t value, size_t size) {
 #if DO_UTIL_SAFETY_CHECKS
 	if (mem == NULL) {
 		return;
