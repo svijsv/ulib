@@ -130,7 +130,7 @@ void mem_init(void *mem, uint8_t value, size_t size);
 
 //
 // Optimize a specific function independent of compiler flags.
-#if !DEBUG
+#if !defined(DEBUG) || !DEBUG
 # define OPTIMIZE_FUNCTION __attribute__((optimize("O2")))
 #else
 # define OPTIMIZE_FUNCTION
