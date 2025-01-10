@@ -104,80 +104,80 @@ int64_t  div_s64_s64( int64_t n,  int64_t d);
 /*
 * Fixed-point math operations
 */
-// fixed_pnt_t is the type used to store representations.
-// fixed_pnt_math_t is the type used for operations that may overflow fixed_pnt_t.
-#if FIXED_PNT_BITS > 64
-# error "FIXED_PNT_BITS is too big"
-#elif FIXED_PNT_BITS == 64
-# define FIXED_PNT_MIN INT64_MIN
-# define FIXED_PNT_MAX INT64_MAX
-  typedef int64_t fixed_pnt_t;
+// fixed_point_t is the type used to store representations.
+// fixed_point_math_t is the type used for operations that may overflow fixed_point_t.
+#if FIXED_POINT_BITS > 64
+# error "FIXED_POINT_BITS is too big"
+#elif FIXED_POINT_BITS == 64
+# define FIXED_POINT_MIN INT64_MIN
+# define FIXED_POINT_MAX INT64_MAX
+  typedef int64_t fixed_point_t;
   // Maybe some day I'll be able to count on int128_t...
-  //typedef __int128 fixed_pnt_math_t;
-  typedef int64_t fixed_pnt_math_t;
-#elif FIXED_PNT_BITS == 32
-# define FIXED_PNT_MIN INT32_MIN
-# define FIXED_PNT_MAX INT32_MAX
-  typedef int32_t fixed_pnt_t;
-  typedef int64_t fixed_pnt_math_t;
-#elif FIXED_PNT_BITS == 16
-# define FIXED_PNT_MIN INT16_MIN
-# define FIXED_PNT_MAX INT16_MAX
-  typedef int16_t fixed_pnt_t;
-  typedef int32_t fixed_pnt_math_t;
-#elif FIXED_PNT_BITS == 8
-# define FIXED_PNT_MIN INT8_MIN
-# define FIXED_PNT_MAX INT8_MAX
-  typedef int8_t fixed_pnt_t;
-  typedef int16_t fixed_pnt_math_t;
+  //typedef __int128 fixed_point_math_t;
+  typedef int64_t fixed_point_math_t;
+#elif FIXED_POINT_BITS == 32
+# define FIXED_POINT_MIN INT32_MIN
+# define FIXED_POINT_MAX INT32_MAX
+  typedef int32_t fixed_point_t;
+  typedef int64_t fixed_point_math_t;
+#elif FIXED_POINT_BITS == 16
+# define FIXED_POINT_MIN INT16_MIN
+# define FIXED_POINT_MAX INT16_MAX
+  typedef int16_t fixed_point_t;
+  typedef int32_t fixed_point_math_t;
+#elif FIXED_POINT_BITS == 8
+# define FIXED_POINT_MIN INT8_MIN
+# define FIXED_POINT_MAX INT8_MAX
+  typedef int8_t fixed_point_t;
+  typedef int16_t fixed_point_math_t;
 #else
-# error "Unsupported FIXED_PNT_BITS size"
+# error "Unsupported FIXED_POINT_BITS size"
 #endif
 //
 // '1' converted to our fixed-point notation.
-#define FIXED_PNT_1 ((fixed_pnt_t )1 << FIXED_PNT_FRACT_BITS)
+#define FIXED_POINT_1 ((fixed_point_t )1 << FIXED_POINT_FRACT_BITS)
 //
 // Create a fixed-point number from an integer
-#define FIXED_PNT_FROM_INT(x) ((fixed_pnt_t )(x) << FIXED_PNT_FRACT_BITS)
-INLINE fixed_pnt_t fixed_pnt_from_int(fixed_pnt_t x) {
-	return x << FIXED_PNT_FRACT_BITS;
+#define FIXED_POINT_FROM_INT(x) ((fixed_point_t )(x) << FIXED_POINT_FRACT_BITS)
+INLINE fixed_point_t fixed_point_from_int(fixed_point_t x) {
+	return x << FIXED_POINT_FRACT_BITS;
 }
 //
 // Create a fixed-point number from a float
-#define FIXED_PNT_FROM_FLOAT(x) ((x) * (float )FIXED_PNT_1)
-INLINE fixed_pnt_t fixed_pnt_from_float(float x) {
-	return (fixed_pnt_t )(x * (float )FIXED_PNT_1);
+#define FIXED_POINT_FROM_FLOAT(x) ((x) * (float )FIXED_POINT_1)
+INLINE fixed_point_t fixed_point_from_float(float x) {
+	return (fixed_point_t )(x * (float )FIXED_POINT_1);
 }
 //
 // Create an integer from a fixed-point number.
-#define FIXED_PNT_TO_INT(x) ((fixed_pnt_t )(x) >> FIXED_PNT_FRACT_BITS)
-INLINE fixed_pnt_t fixed_pnt_to_int(fixed_pnt_t x) {
-	return x >> FIXED_PNT_FRACT_BITS;
+#define FIXED_POINT_TO_INT(x) ((fixed_point_t )(x) >> FIXED_POINT_FRACT_BITS)
+INLINE fixed_point_t fixed_point_to_int(fixed_point_t x) {
+	return x >> FIXED_POINT_FRACT_BITS;
 }
 //
 // Create an integer from a fixed-point number, rounded.
-INLINE fixed_pnt_t fixed_pnt_to_int_rounded(fixed_pnt_t x) {
-	return (x + (FIXED_PNT_1 / 2)) >> FIXED_PNT_FRACT_BITS;
+INLINE fixed_point_t fixed_point_to_int_rounded(fixed_point_t x) {
+	return (x + (FIXED_POINT_1 / 2)) >> FIXED_POINT_FRACT_BITS;
 }
 //
 // Create a float from a fixed-point number.
-INLINE float fixed_pnt_to_float(fixed_pnt_t x) {
-	return (float )x / (float )FIXED_PNT_1;
+INLINE float fixed_point_to_float(fixed_point_t x) {
+	return (float )x / (float )FIXED_POINT_1;
 }
 //
 // Multiply two fixed-point numbers.
 // (X*Sx) * (Y*Sy) = (X*Y) * (Sx*Sy)
 // The scaling factor is squared, so one needs to be removed
 // ((X*Y) * (S*S)) / S
-#define FIXED_PNT_MUL(x, y) ((fixed_pnt_t )(((fixed_pnt_math_t )(x) * (fixed_pnt_math_t )(y)) >> FIXED_PNT_FRACT_BITS))
-INLINE fixed_pnt_t fixed_pnt_mul(fixed_pnt_math_t x, fixed_pnt_math_t y) {
-	return (fixed_pnt_t )((x * y) >> FIXED_PNT_FRACT_BITS);
+#define FIXED_POINT_MUL(x, y) ((fixed_point_t )(((fixed_point_math_t )(x) * (fixed_point_math_t )(y)) >> FIXED_POINT_FRACT_BITS))
+INLINE fixed_point_t fixed_point_mul(fixed_point_math_t x, fixed_point_math_t y) {
+	return (fixed_point_t )((x * y) >> FIXED_POINT_FRACT_BITS);
 }
 //
 // Multiply a fixed-point number by an integer.
 // Integers are unscaled so no shift is necessary.
-#define FIXED_PNT_MUL_BY_INT(f, n) ((fixed_pnt_math_t )(f) * (n))
-INLINE fixed_pnt_t fixed_pnt_mul_by_int(fixed_pnt_t x, fixed_pnt_t y) {
+#define FIXED_POINT_MUL_BY_INT(f, n) ((fixed_point_math_t )(f) * (n))
+INLINE fixed_point_t fixed_point_mul_by_int(fixed_point_t x, fixed_point_t y) {
 	return (x * y);
 }
 //
@@ -189,30 +189,30 @@ INLINE fixed_pnt_t fixed_pnt_mul_by_int(fixed_pnt_t x, fixed_pnt_t y) {
 // Use an overridable macro for division because a certain platform doesn't
 // have native support for 64 bit division and using libc adds a full Kb to
 // the .data section of our binary...
-#if !defined(_FIXED_PNT_DIV_PRIM)
-# define _FIXED_PNT_DIV_PRIM(_n, _d) ((_n) / (_d))
+#if !defined(_FIXED_POINT_DIV_PRIM)
+# define _FIXED_POINT_DIV_PRIM(_n, _d) ((_n) / (_d))
 #endif
-#define FIXED_PNT_DIV(n, d) ((fixed_pnt_t )(_FIXED_PNT_DIV_PRIM(((fixed_pnt_math_t )(n) << FIXED_PNT_FRACT_BITS), (fixed_pnt_t )(d))))
-INLINE fixed_pnt_t fixed_pnt_div(fixed_pnt_math_t n, fixed_pnt_math_t d) {
-	return (fixed_pnt_t )_FIXED_PNT_DIV_PRIM((n << FIXED_PNT_FRACT_BITS), d);
+#define FIXED_POINT_DIV(n, d) ((fixed_point_t )(_FIXED_POINT_DIV_PRIM(((fixed_point_math_t )(n) << FIXED_POINT_FRACT_BITS), (fixed_point_t )(d))))
+INLINE fixed_point_t fixed_point_div(fixed_point_math_t n, fixed_point_math_t d) {
+	return (fixed_point_t )_FIXED_POINT_DIV_PRIM((n << FIXED_POINT_FRACT_BITS), d);
 }
 //
 // Divide a fixed-point number by an integer.
 // Integers are unscaled so no shift is necessary.
-#define FIXED_PNT_DIV_BY_INT(f, n) (_FIXED_PNT_DIV_PRIM((fixed_pnt_t )f, n))
-INLINE fixed_pnt_t fixed_pnt_div_by_int(fixed_pnt_t f, fixed_pnt_t n) {
-	return (fixed_pnt_t )_FIXED_PNT_DIV_PRIM(f, n);
+#define FIXED_POINT_DIV_BY_INT(f, n) (_FIXED_POINT_DIV_PRIM((fixed_point_t )f, n))
+INLINE fixed_point_t fixed_point_div_by_int(fixed_point_t f, fixed_point_t n) {
+	return (fixed_point_t )_FIXED_POINT_DIV_PRIM(f, n);
 }
 
 //
 // Calculate the natural logarithm of a fixed-point number.
-fixed_pnt_t log_fixed_pnt(fixed_pnt_t x);
+fixed_point_t log_fixed_point(fixed_point_t x);
 //
 // Calculate the base 10 logarithm of a fixed-point number.
-fixed_pnt_t log10_fixed_pnt(fixed_pnt_t x);
+fixed_point_t log10_fixed_point(fixed_point_t x);
 //
 // Calculate the base 2 logarithm of a fixed-point number.
-fixed_pnt_t log2_fixed_pnt(fixed_pnt_t x);
+fixed_point_t log2_fixed_point(fixed_point_t x);
 
 
 #endif // ULIB_ENABLE_MATH

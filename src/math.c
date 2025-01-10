@@ -42,18 +42,18 @@
 // point type by shifting the non-fraction part out.
 // logE(2)  == 0.69314718055995
 // log10(2) == 0.30102999566398
-#if FIXED_PNT_BITS <= 32
-# define FIXED_PNT_LOG_ADJUST_SHIFT ((31U - (31U - (FIXED_PNT_BITS-1U))) - FIXED_PNT_FRACT_BITS)
-# define FIXED_PNT_LOGE_2Q31 0x58B90BFBU // ln(2) * (1 << 31)
-# define FIXED_PNT_LOGE_2 (FIXED_PNT_LOGE_2Q31 >> FIXED_PNT_LOG_ADJUST_SHIFT)
-# define FIXED_PNT_LOG10_2Q31 0x268826A1U // log10(2) * (1 << 31)
-# define FIXED_PNT_LOG10_2 (FIXED_PNT_LOG10_2Q31 >> FIXED_PNT_LOG_ADJUST_SHIFT)
+#if FIXED_POINT_BITS <= 32
+# define FIXED_POINT_LOG_ADJUST_SHIFT ((31U - (31U - (FIXED_POINT_BITS-1U))) - FIXED_POINT_FRACT_BITS)
+# define FIXED_POINT_LOGE_2Q31 0x58B90BFBU // ln(2) * (1 << 31)
+# define FIXED_POINT_LOGE_2 (FIXED_POINT_LOGE_2Q31 >> FIXED_POINT_LOG_ADJUST_SHIFT)
+# define FIXED_POINT_LOG10_2Q31 0x268826A1U // log10(2) * (1 << 31)
+# define FIXED_POINT_LOG10_2 (FIXED_POINT_LOG10_2Q31 >> FIXED_POINT_LOG_ADJUST_SHIFT)
 #else
-# define FIXED_PNT_LOG_ADJUST_SHIFT ((63U - (63U - (FIXED_PNT_BITS-1U))) - FIXED_PNT_FRACT_BITS)
-# define FIXED_PNT_LOGE_2Q63 0x58B90BFBE8E865D4U // ln(2) * (1 << 63)
-# define FIXED_PNT_LOGE_2 (FIXED_PNT_LOGE_2Q63 >> FIXED_PNT_LOG_ADJUST_SHIFT)
-# define FIXED_PNT_LOG10_2Q63 0x268826A13EF3D2D6U // log10(2) * (1 << 63)
-# define FIXED_PNT_LOG10_2 (FIXED_PNT_LOG10_2Q63 >> FIXED_PNT_LOG_ADJUST_SHIFT)
+# define FIXED_POINT_LOG_ADJUST_SHIFT ((63U - (63U - (FIXED_POINT_BITS-1U))) - FIXED_POINT_FRACT_BITS)
+# define FIXED_POINT_LOGE_2Q63 0x58B90BFBE8E865D4U // ln(2) * (1 << 63)
+# define FIXED_POINT_LOGE_2 (FIXED_POINT_LOGE_2Q63 >> FIXED_POINT_LOG_ADJUST_SHIFT)
+# define FIXED_POINT_LOG10_2Q63 0x268826A13EF3D2D6U // log10(2) * (1 << 63)
+# define FIXED_POINT_LOG10_2 (FIXED_POINT_LOG10_2Q63 >> FIXED_POINT_LOG_ADJUST_SHIFT)
 #endif
 
 
@@ -237,7 +237,7 @@ uint64_t div_u64_u64(uint64_t n, uint64_t d) {
 }
 */
 
-fixed_pnt_t log10_fixed_pnt(fixed_pnt_t x) {
+fixed_point_t log10_fixed_point(fixed_point_t x) {
 	ulib_assert(x != 0);
 
 #if DO_MATH_SAFETY_CHECKS
@@ -246,9 +246,9 @@ fixed_pnt_t log10_fixed_pnt(fixed_pnt_t x) {
 	}
 #endif
 	// Calculating log2(x) is easi-ish and log10(x) = log2(x) * log10(2)
-	return FIXED_PNT_MUL(log2_fixed_pnt(x), FIXED_PNT_LOG10_2);
+	return FIXED_POINT_MUL(log2_fixed_point(x), FIXED_POINT_LOG10_2);
 }
-fixed_pnt_t log_fixed_pnt(fixed_pnt_t x) {
+fixed_point_t log_fixed_point(fixed_point_t x) {
 	ulib_assert(x != 0);
 
 #if DO_MATH_SAFETY_CHECKS
@@ -258,11 +258,11 @@ fixed_pnt_t log_fixed_pnt(fixed_pnt_t x) {
 #endif
 
 	// Calculating log2(x) is easi-ish and log(x) = log2(x) * log(2)
-	return FIXED_PNT_MUL(log2_fixed_pnt(x), FIXED_PNT_LOGE_2);
+	return FIXED_POINT_MUL(log2_fixed_point(x), FIXED_POINT_LOGE_2);
 }
-fixed_pnt_t log2_fixed_pnt(fixed_pnt_t x) {
-	fixed_pnt_t log2_x, b;
-	fixed_pnt_math_t z;
+fixed_point_t log2_fixed_point(fixed_point_t x) {
+	fixed_point_t log2_x, b;
+	fixed_point_math_t z;
 
 	ulib_assert(x > 0);
 
@@ -273,24 +273,24 @@ fixed_pnt_t log2_fixed_pnt(fixed_pnt_t x) {
 #endif
 
 	log2_x = 0;
-	b = 1U << (FIXED_PNT_FRACT_BITS - 1);
+	b = 1U << (FIXED_POINT_FRACT_BITS - 1);
 
 	// https:// stackoverflow.com/questions/4657468/fast-fixed-point-pow-log-exp-and-sqrt
 	//   (Second answer)
 	//    references http:// www.claysturner.com/dsp/BinaryLogarithm.pdf
 	// https:// github.com/dmoulding/log2fix
-	while (x < FIXED_PNT_1) {
+	while (x < FIXED_POINT_1) {
 		x <<= 1;
-		log2_x -= FIXED_PNT_1;
+		log2_x -= FIXED_POINT_1;
 	}
-	while (x >= (2 << FIXED_PNT_FRACT_BITS)) {
+	while (x >= (2 << FIXED_POINT_FRACT_BITS)) {
 		x >>= 1;
-		log2_x += 1 << FIXED_PNT_FRACT_BITS;
+		log2_x += 1 << FIXED_POINT_FRACT_BITS;
 	}
 	z = x;
-	for (uiter_t i = 0; i < FIXED_PNT_FRACT_BITS; ++i) {
-		z = (z * z) >> FIXED_PNT_FRACT_BITS;
-		if (z >= (2U << FIXED_PNT_FRACT_BITS)) {
+	for (uiter_t i = 0; i < FIXED_POINT_FRACT_BITS; ++i) {
+		z = (z * z) >> FIXED_POINT_FRACT_BITS;
+		if (z >= (2U << FIXED_POINT_FRACT_BITS)) {
 			z >>= 1;
 			log2_x += b;
 		}
@@ -302,10 +302,10 @@ fixed_pnt_t log2_fixed_pnt(fixed_pnt_t x) {
 
 /*
 // https:// stackoverflow.com/questions/54661131/log2-approximation-in-fixed-point
-#define FRAC_BITS_OUT (FIXED_PNT_FRACT_BITS)
-#define INT_BITS_OUT  (32-FIXED_PNT_FRACT_BITS)
-#define FRAC_BITS_IN  (FIXED_PNT_FRACT_BITS)
-#define INT_BITS_IN   (32-FIXED_PNT_FRACT_BITS)
+#define FRAC_BITS_OUT (FIXED_POINT_FRACT_BITS)
+#define INT_BITS_OUT  (32-FIXED_POINT_FRACT_BITS)
+#define FRAC_BITS_IN  (FIXED_POINT_FRACT_BITS)
+#define INT_BITS_IN   (32-FIXED_POINT_FRACT_BITS)
 #define RND_SHIFT     (31 - FRAC_BITS_OUT)
 #define RND_CONST     ((1 << RND_SHIFT) / 2)
 #define RND_ADJUST    (0x10dU) // established heuristically
