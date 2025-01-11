@@ -62,9 +62,17 @@
 #else
 # error "Unsupported FIXED_POINT_BITS size"
 #endif
+
 //
 // '1' converted to our fixed-point notation.
 #define FIXED_POINT_1 ((fixed_point_t )1 << FIXED_POINT_FRACT_BITS)
+//
+// The mask for the fraction bits of a fixed-point number
+#define FIXED_POINT_FRACTION_MASK (FIXED_POINT_1 - 1)
+//
+// The mask for the whole-number bits of a fixed-point number
+#define FIXED_POINT_WHOLE_MASK (~FIXED_POINT_FRACTION_MASK)
+
 //
 // Create a fixed-point number from an integer
 #define FIXED_POINT_FROM_INT(x) ((fixed_point_t )(x) << FIXED_POINT_FRACT_BITS)
