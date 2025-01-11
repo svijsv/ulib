@@ -17,8 +17,8 @@
 *                                                                      *
 *                                                                      *
 ***********************************************************************/
-// math.h
-// Math functions for use when libc isn't worth it
+// fixed_point.h
+// Fixed-point functions for use when floats aren't worth it
 // NOTES:
 //
 //
@@ -31,6 +31,7 @@
 #include "types.h"
 #include "util.h"
 
+#if FIXED_POINT_REPLACE_WITH_FLOAT <= 0
 
 // fixed_point_t is the type used to store representations.
 // fixed_point_math_t is the type used for operations that may overflow fixed_point_t.
@@ -142,6 +143,8 @@ fixed_point_t log10_fixed_point(fixed_point_t x);
 // Calculate the base 2 logarithm of a fixed-point number.
 fixed_point_t log2_fixed_point(fixed_point_t x);
 
-
+#else // FIXED_POINT_REPLACE_WITH_FLOAT <= 0
+# include "fixed_point_floats.h"
+#endif // FIXED_POINT_REPLACE_WITH_FLOAT <= 0
 #endif // ULIB_ENABLE_FIXED_POINT
 #endif // _ULIB_FIXED_POINT_H

@@ -313,6 +313,13 @@
 # define FIXED_POINT_FRACT_BITS 8U
 #endif
 //
+// If 1, replace fixed-point operations with float operations. If > 1, replace
+// with doubles.
+// This requires linking libm.
+#ifndef FIXED_POINT_REPLACE_WITH_FLOAT
+# define FIXED_POINT_REPLACE_WITH_FLOAT 0
+#endif
+//
 // If non-zero, perform additional checks to handle common problems like
 // division by 0.
 #ifndef DO_FIXED_POINT_SAFETY_CHECKS

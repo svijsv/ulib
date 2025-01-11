@@ -17,18 +17,14 @@
 *                                                                      *
 *                                                                      *
 ***********************************************************************/
-// math.c
-// Math functions for use when libc isn't worth it
+// fixed_point.c
+// Fixed-point functions for use when floats aren't worth it
 // NOTES:
-//    https://github.com/torvalds/linux/blob/master/lib/math/div64.c
-//    It's been adapted to my conventions, but that's only cosmetic.
-//
-//    https://www.bbcelite.com/deep_dives/shift-and-subtract_division.html
-//    Used for div_u64_u64() because the Linux version truncates the divisor.
 //
 //
 #include "fixed_point.h"
 #if ULIB_ENABLE_FIXED_POINT
+#if FIXED_POINT_REPLACE_WITH_FLOAT <= 0
 
 #include "debug.h"
 
@@ -58,25 +54,10 @@
 
 
 fixed_point_t log10_fixed_point(fixed_point_t x) {
-	ulib_assert(x != 0);
-
-#if DO_FIXED_POINT_SAFETY_CHECKS
-	if (x == 0) {
-		return 0;
-	}
-#endif
 	// Calculating log2(x) is easi-ish and log10(x) = log2(x) * log10(2)
 	return FIXED_POINT_MUL(log2_fixed_point(x), FIXED_POINT_LOG10_2);
 }
 fixed_point_t log_fixed_point(fixed_point_t x) {
-	ulib_assert(x != 0);
-
-#if DO_FIXED_POINT_SAFETY_CHECKS
-	if (x == 0) {
-		return 0;
-	}
-#endif
-
 	// Calculating log2(x) is easi-ish and log(x) = log2(x) * log(2)
 	return FIXED_POINT_MUL(log2_fixed_point(x), FIXED_POINT_LOGE_2);
 }
@@ -87,7 +68,7 @@ fixed_point_t log2_fixed_point(fixed_point_t x) {
 	ulib_assert(x > 0);
 
 #if DO_FIXED_POINT_SAFETY_CHECKS
-	if (x == 0) {
+	if (x <= 0) {
 		return 0;
 	}
 #endif
@@ -179,6 +160,10 @@ int32_t log2_fp(int32_t x) {
 	return (i << FRAC_BITS_OUT) + approx;
 }
 */
+
+#else // FIXED_POINT_REPLACE_WITH_FLOAT <= 0
+# include "fixed_point_floats.c.h"
+#endif // FIXED_POINT_REPLACE_WITH_FLOAT <= 0
 
 #else
 	// ISO C forbids empty translation units, this makes it happy.
