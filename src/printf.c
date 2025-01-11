@@ -63,9 +63,9 @@
 // one character per bit. If we're not printing binary though, we use one
 // character per three bits.
 #if PRINT_BINARY
-# define PRINTF_BUFFER_BYTES (PRINTF_MAX_INT_BYTES * 8)
+# define PRINTF_BUFFER_BYTES (PRINTF_MAX_INT_BYTES * 8U)
 #else
-# define PRINTF_BUFFER_BYTES (PRINTF_MAX_INT_BYTES * 3)
+# define PRINTF_BUFFER_BYTES (((PRINTF_MAX_INT_BYTES * 8U) / 3U) + 1)
 #endif
 
 
