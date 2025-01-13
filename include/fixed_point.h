@@ -74,34 +74,6 @@
 #define FIXED_POINT_WHOLE_MASK (~FIXED_POINT_FRACTION_MASK)
 
 //
-// Create a fixed-point number from an integer
-#define FIXED_POINT_FROM_INT(x) ((fixed_point_t )(x) << FIXED_POINT_FRACT_BITS)
-INLINE fixed_point_t fixed_point_from_int(fixed_point_t x) {
-	return x << FIXED_POINT_FRACT_BITS;
-}
-//
-// Create a fixed-point number from a float
-#define FIXED_POINT_FROM_FLOAT(x) ((x) * (float )FIXED_POINT_1)
-INLINE fixed_point_t fixed_point_from_float(float x) {
-	return (fixed_point_t )(x * (float )FIXED_POINT_1);
-}
-//
-// Create an integer from a fixed-point number.
-#define FIXED_POINT_TO_INT(x) ((fixed_point_t )(x) >> FIXED_POINT_FRACT_BITS)
-INLINE fixed_point_t fixed_point_to_int(fixed_point_t x) {
-	return x >> FIXED_POINT_FRACT_BITS;
-}
-//
-// Create an integer from a fixed-point number, rounded.
-INLINE fixed_point_t fixed_point_to_int_rounded(fixed_point_t x) {
-	return (x + (FIXED_POINT_1 / 2)) >> FIXED_POINT_FRACT_BITS;
-}
-//
-// Create a float from a fixed-point number.
-INLINE float fixed_point_to_float(fixed_point_t x) {
-	return (float )x / (float )FIXED_POINT_1;
-}
-//
 // Multiply two fixed-point numbers.
 // (X*Sx) * (Y*Sy) = (X*Y) * (Sx*Sy)
 // The scaling factor is squared, so one needs to be removed
@@ -130,7 +102,7 @@ INLINE fixed_point_t fixed_point_mul_by_int(fixed_point_t x, fixed_point_t y) {
 # define _FIXED_POINT_DIV_PRIM(_n, _d) ((_n) / (_d))
 #endif
 #define FIXED_POINT_DIV(n, d) ((fixed_point_t )(_FIXED_POINT_DIV_PRIM(((fixed_point_math_t )(n) << FIXED_POINT_FRACT_BITS), (fixed_point_t )(d))))
-INLINE fixed_point_t fixed_point_div(fixed_point_math_t n, fixed_point_math_t d) {
+INLINE fixed_point_t fixed_point_div(fixed_point_math_t n, fixed_point_t d) {
 	return (fixed_point_t )_FIXED_POINT_DIV_PRIM((n << FIXED_POINT_FRACT_BITS), d);
 }
 //
@@ -150,6 +122,42 @@ fixed_point_t log10_fixed_point(fixed_point_t x);
 //
 // Calculate the base 2 logarithm of a fixed-point number.
 fixed_point_t log2_fixed_point(fixed_point_t x);
+
+//
+// Create a fixed-point number from an integer
+#define FIXED_POINT_FROM_INT(x) ((fixed_point_t )(x) << FIXED_POINT_FRACT_BITS)
+INLINE fixed_point_t fixed_point_from_int(fixed_point_t x) {
+	return x << FIXED_POINT_FRACT_BITS;
+}
+//
+// Create a fixed-point number from an integer numerator and denominator
+#define FIXED_POINT_FROM_INT_FRACTION(n, d) (FIXED_POINT_DIV_BY_INT(FIXED_POINT_FROM_INT(n), d))
+INLINE fixed_point_t fixed_point_from_int_fraction(fixed_point_t n, fixed_point_t d) {
+	return fixed_point_div_by_int(fixed_point_from_int(n), d);
+}
+//
+// Create a fixed-point number from a float
+#define FIXED_POINT_FROM_FLOAT(x) ((x) * (float )FIXED_POINT_1)
+INLINE fixed_point_t fixed_point_from_float(float x) {
+	return (fixed_point_t )(x * (float )FIXED_POINT_1);
+}
+//
+// Create an integer from a fixed-point number.
+#define FIXED_POINT_TO_INT(x) ((fixed_point_t )(x) >> FIXED_POINT_FRACT_BITS)
+INLINE fixed_point_t fixed_point_to_int(fixed_point_t x) {
+	return x >> FIXED_POINT_FRACT_BITS;
+}
+//
+// Create an integer from a fixed-point number, rounded.
+#define FIXED_POINT_TO_INT_ROUNDED(x) (((fixed_point_t )x + (FIXED_POINT_1 / 2)) >> FIXED_POINT_FRACT_BITS)
+INLINE fixed_point_t fixed_point_to_int_rounded(fixed_point_t x) {
+	return (x + (FIXED_POINT_1 / 2)) >> FIXED_POINT_FRACT_BITS;
+}
+//
+// Create a float from a fixed-point number.
+INLINE float fixed_point_to_float(fixed_point_t x) {
+	return (float )x / (float )FIXED_POINT_1;
+}
 
 #else // FIXED_POINT_REPLACE_WITH_FLOAT <= 0
 # include "fixed_point_floats.h"
