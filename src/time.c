@@ -28,7 +28,7 @@
 #include "debug.h"
 
 
-#define MAX_YEARS (((utime_t )-1) / SECONDS_PER_YEAR)
+#define MAX_YEARS ((utime_t )(UTIME_MAX / SECONDS_PER_YEAR))
 
 
 FMEM_STORAGE const uint8_t days_per_month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
