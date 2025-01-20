@@ -30,46 +30,61 @@
 
 #define MAX_YEARS ((utime_t )(UTIME_MAX / SECONDS_PER_YEAR))
 
+FMEM_STORAGE const uint_fast8_t days_per_month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-FMEM_STORAGE const uint8_t days_per_month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+/*
+static bool IS_LEAP_YEAR(time_year_t year) {
+	time_year_t check = year;
 
-// This will return the number of matching years between TIME_YEAR_0 and year
-// excluding TIME_YEAR_0 and year themselves
-static uint8_t GET_LEAPS(uint8_t year, uint16_t factor) {
-	uint16_t check;
-	uint8_t count;
+	return (((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0);
+}
+*/
+#define IS_LEAP_YEAR(_year_) (((((_year_) % 4) == 0) && (((_year_) % 100) != 0)) || (((_year_) % 400) == 0))
 
-	check = factor - (TIME_YEAR_0 % factor);
-	for (count = 0; check < year; check += factor) {
-		++count;
+// Count the number of leap years between TIME_YEAR_0 and end_year, inclusive
+static uint_fast8_t count_leap_years(time_year_t end_year) {
+	uint_fast8_t count = 0;
+
+	// Leap years are years that are divisible by 4 but not by 100, or years
+	// that are divisible by 400
+	if (end_year >= TIME_YEAR_0) {
+		// Count from the first leap year not following year 0
+		// If I understand correctly, (X/Y)*Y can only be optimized into the expected
+		// outcome from the normal division operations, not to X.
+		time_year_t period = (time_year_t )(end_year - ((TIME_YEAR_0 / 4) * 4));
+		count = (uint_fast8_t )(period / 4);
+
+		period = (time_year_t )(end_year - ((TIME_YEAR_0 / 100) * 100));
+		count -= (uint_fast8_t )(period / 100);
+
+		period = (time_year_t )(end_year - ((TIME_YEAR_0 / 400) * 400));
+		count += (uint_fast8_t )(period / 400);
+
+		if (IS_LEAP_YEAR(TIME_YEAR_0)) {
+			++count;
+		}
 	}
 
 	return count;
 }
-static bool IS_LEAP_YEAR(uint16_t year) {
-	uint16_t check = TIME_YEAR_0 + year;
 
-	return (((check % 4) == 0) && ((check % 100) != 0)) || ((check % 400) == 0);
-}
+utime_t date_to_seconds(time_year_t year, uint8_t month, uint8_t day) {
+	uint_fast16_t days;
+	uint_fast8_t leap_days;
 
-utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
-	utime_t days;
-	uint8_t year_4s, year_100s, year_400s, leap_days;
+	// Handle un-set RTCs
+	if (year < TIME_YEAR_0) {
+		year += TIME_YEAR_0;
+	}
 
-	// This is always true because year is only 8 bits
-	/*
-	ulib_assert(year <= MAX_YEARS);
-	*/
+	ulib_assert(year >= TIME_YEAR_0 && year <= (MAX_YEARS - TIME_YEAR_0));
 	ulib_assert(IS_IN_RANGE_INCL(month, 1, 12));
 	ulib_assert(IS_IN_RANGE_INCL(day, 1, 31));
 
 #if DO_TIME_SAFETY_CHECKS
-	// This is always false because year is only 8 bits
-	/*
-	if (year > MAX_YEARS) {
-		year = 0;
+	if (year < TIME_YEAR_0 || year > (MAX_YEARS - TIME_YEAR_0)) {
+		return 0;
 	}
-	*/
 	if (!IS_IN_RANGE_INCL(month, 1, 12)) {
 		month = 1;
 	}
@@ -86,58 +101,36 @@ utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day) {
 		days += days_per_month[i-1];
 	}
 
-	// Leap years are years that are divisible by 4 but not by 100, or years
-	// that are divisible by 400
-	year_4s   = GET_LEAPS(year, 4);
-	year_100s = GET_LEAPS(year, 100);
-	year_400s = GET_LEAPS(year, 400);
-	leap_days = (uint8_t )(year_4s - year_100s) + year_400s;
-	if ((year != 0) && IS_LEAP_YEAR(0)) {
-		++leap_days;
-	}
-	if (IS_LEAP_YEAR(year)) {
-		if (month > 2) {
-			++leap_days;
-		}
+	leap_days = count_leap_years(year);
+	if (IS_LEAP_YEAR(year) && (month <= 2)) {
+		--leap_days;
 	}
 	days += leap_days;
 
-	return (utime_t )((utime_t )year * (utime_t )SECONDS_PER_YEAR) + (utime_t )((utime_t )days * (utime_t )SECONDS_PER_DAY);
+	return (utime_t )((utime_t )(year - TIME_YEAR_0) * (utime_t )SECONDS_PER_YEAR) + (utime_t )((utime_t )days * (utime_t )SECONDS_PER_DAY);
 }
-void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day) {
-	uint8_t tmp_month;
-	uint16_t tmp_year, tmp_day, leap_days = 0;
+void seconds_to_date(utime_t seconds, time_year_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day) {
+	uint_fast8_t tmp_month, leap_days = 0;
+	uint_fast16_t tmp_day;
+	time_year_t tmp_year;
 
 	ulib_assert(ret_year != NULL);
 	ulib_assert(ret_month != NULL);
 	ulib_assert(ret_day != NULL);
 
-	tmp_year = (uint16_t )(seconds / SECONDS_PER_YEAR);
-	tmp_day = (uint16_t )((seconds % SECONDS_PER_YEAR) / SECONDS_PER_DAY);
+	tmp_year = (time_year_t )(seconds / SECONDS_PER_YEAR) + TIME_YEAR_0;
+	tmp_day = (uint_fast16_t )((seconds % SECONDS_PER_YEAR) / SECONDS_PER_DAY);
 
-	// Leap years are years that are divisible by 4 but not by 100, or years
-	// that are divisible by 400
-	// Exclude the current year from the calculation to simplify things later
-	// on
-	if (tmp_year > 0) {
-		uint8_t year_4s, year_100s, year_400s;
+	// Don't count the current year to make it easier to handle the stuff below
+	leap_days = count_leap_years(tmp_year-1);
 
-		year_4s   = GET_LEAPS((uint8_t)(tmp_year-1), 4);
-		year_100s = GET_LEAPS((uint8_t)(tmp_year-1), 100);
-		year_400s = GET_LEAPS((uint8_t)(tmp_year-1), 400);
-		leap_days = (uint8_t )(year_4s - year_100s) + year_400s;
-	}
-	if ((tmp_year != 0) && (IS_LEAP_YEAR(0))) {
-		++leap_days;
-	}
 	// FIXME: Handle leap_days > 365?
 	if (leap_days > tmp_day) {
-		// FIXME: Handle tmp_year == 0? Don't know how we'd get that with so
-		// many leap days though
+		// FIXME: Handle tmp_year == 0? Don't know how we'd ever get that though.
 		--tmp_year;
 		// Day 1 of one year is the same as day 366 of the previous year
 		// We're still 0-indexed so we use 365 instead of 366
-		tmp_day = 365 - (uint16_t )(leap_days - tmp_day);
+		tmp_day = 365 - (uint_fast16_t )(leap_days - tmp_day);
 	} else {
 		tmp_day -= leap_days;
 	}
@@ -159,15 +152,14 @@ void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restr
 			if (tmp_month == 2) {
 				tmp_day = 29;
 			} else {
-				//tmp_day = days_per_month[tmp_month-1];
-				tmp_day = 31;
+				tmp_day = days_per_month[tmp_month-1];
 			}
 		}
 	}
 
 #if DO_TIME_SAFETY_CHECKS
 	if (ret_year != NULL) {
-		*ret_year  = (uint8_t )tmp_year;
+		*ret_year  = (time_year_t )tmp_year;
 	}
 	if (ret_month != NULL) {
 		*ret_month = (uint8_t )tmp_month;
@@ -176,7 +168,7 @@ void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restr
 		*ret_day = (uint8_t )tmp_day;
 	}
 #else
-	*ret_year  = (uint8_t )tmp_year;
+	*ret_year  = (time_year_t )tmp_year;
 	*ret_month = (uint8_t )tmp_month;
 	*ret_day   = (uint8_t )tmp_day;
 #endif

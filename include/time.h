@@ -51,15 +51,15 @@ typedef int32_t  itime_t;
 #define DAYS(x)    ((x) * SECONDS_PER_DAY)
 #define YEARS(x)   ((x) * SECONDS_PER_YEAR)
 */
-#define SECONDS_PER_MINUTE (60)
-#define SECONDS_PER_HOUR   (SECONDS_PER_MINUTE * 60L)
-#define SECONDS_PER_DAY    (SECONDS_PER_HOUR   * 24L)
-#define SECONDS_PER_YEAR   (SECONDS_PER_DAY    * 365L)
+#define SECONDS_PER_MINUTE (60U)
+#define SECONDS_PER_HOUR   (SECONDS_PER_MINUTE * 60U)
+#define SECONDS_PER_DAY    (SECONDS_PER_HOUR   * 24UL)
+#define SECONDS_PER_YEAR   (SECONDS_PER_DAY    * 365UL)
 //
 // Minutes in a given time period.
-#define MINUTES_PER_HOUR (60)
-#define MINUTES_PER_DAY  (MINUTES_PER_HOUR * 24L)
-#define MINUTES_PER_YEAR (MINUTES_PER_DAY  * 365L)
+#define MINUTES_PER_HOUR (60U)
+#define MINUTES_PER_DAY  (MINUTES_PER_HOUR * 24UL)
+#define MINUTES_PER_YEAR (MINUTES_PER_DAY  * 365UL)
 //
 // Convert a frequency to a millisecond time period, truncated.
 #define HZ_TO_MS_TRUNC(freq) (1000U / freq)
@@ -76,13 +76,15 @@ typedef int32_t  itime_t;
 * Dates
 */
 // A list of the number of days in each month.
-extern FMEM_STORAGE const uint8_t days_per_month[];
+extern FMEM_STORAGE const uint_fast8_t days_per_month[];
+//
+// The type used to represent a year.
+typedef uint_fast16_t time_year_t;
 //
 // Convert between epoch-based times and calendar times.
-// year is the number of years after TIME_YEAR_0.
-utime_t date_to_seconds(uint8_t year, uint8_t month, uint8_t day);
+utime_t date_to_seconds(time_year_t year, uint8_t month, uint8_t day);
 utime_t time_to_seconds(uint8_t hour, uint8_t minute, uint8_t second);
-void seconds_to_date(utime_t seconds, uint8_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day);
+void seconds_to_date(utime_t seconds, time_year_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day);
 void seconds_to_time(utime_t seconds, uint8_t *restrict ret_hour, uint8_t *restrict ret_minute, uint8_t *restrict ret_second);
 
 /*
