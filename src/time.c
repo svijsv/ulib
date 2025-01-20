@@ -35,7 +35,7 @@ FMEM_STORAGE const uint8_t days_per_month[12] = { 31, 28, 31, 30, 31, 30, 31, 31
 
 // This will return the number of matching years between TIME_YEAR_0 and year
 // excluding TIME_YEAR_0 and year themselves
-uint8_t GET_LEAPS(uint8_t year, uint16_t factor) {
+static uint8_t GET_LEAPS(uint8_t year, uint16_t factor) {
 	uint16_t check;
 	uint8_t count;
 
@@ -46,7 +46,7 @@ uint8_t GET_LEAPS(uint8_t year, uint16_t factor) {
 
 	return count;
 }
-bool IS_LEAP_YEAR(uint16_t year) {
+static bool IS_LEAP_YEAR(uint16_t year) {
 	uint16_t check = TIME_YEAR_0 + year;
 
 	return (((check % 4) == 0) && ((check % 100) != 0)) || ((check % 400) == 0);
