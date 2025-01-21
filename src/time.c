@@ -28,7 +28,7 @@
 #include "debug.h"
 
 
-#define MAX_YEARS ((utime_t )(UTIME_MAX / SECONDS_PER_YEAR))
+#define MAX_YEARS ((UTIME_MAX / SECONDS_PER_YEAR))
 
 FMEM_STORAGE const uint_fast8_t days_per_month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
@@ -77,12 +77,12 @@ utime_t date_to_seconds(time_year_t year, uint8_t month, uint8_t day) {
 		year += TIME_YEAR_0;
 	}
 
-	ulib_assert(year >= TIME_YEAR_0 && year <= (MAX_YEARS - TIME_YEAR_0));
+	ulib_assert(year >= TIME_YEAR_0 && (year - TIME_YEAR_0) <= MAX_YEARS);
 	ulib_assert(IS_IN_RANGE_INCL(month, 1, 12));
 	ulib_assert(IS_IN_RANGE_INCL(day, 1, 31));
 
 #if DO_TIME_SAFETY_CHECKS
-	if (year < TIME_YEAR_0 || year > (MAX_YEARS - TIME_YEAR_0)) {
+	if (year < TIME_YEAR_0 || (year - TIME_YEAR_0) > MAX_YEARS) {
 		return 0;
 	}
 	if (!IS_IN_RANGE_INCL(month, 1, 12)) {
