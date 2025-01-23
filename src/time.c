@@ -68,55 +68,62 @@ static uint_fast8_t count_leap_years(time_year_t end_year) {
 	return count;
 }
 
-utime_t date_to_seconds(time_year_t year, uint8_t month, uint8_t day) {
+utime_t date_to_seconds(const datetime_t *datetime) {
 	uint_fast16_t days;
 	uint_fast8_t leap_days;
+	time_year_t year;
+
+	ulib_assert(datetime != NULL);
+	//ulib_assert(year >= TIME_YEAR_0 && (year - TIME_YEAR_0) <= MAX_YEARS);
+	ulib_assert(IS_IN_RANGE_INCL(datetime->month, 1, 12));
+	ulib_assert(IS_IN_RANGE_INCL(datetime->day, 1, 31));
 
 	// Handle un-set RTCs
-	if (year < TIME_YEAR_0) {
-		year += TIME_YEAR_0;
-	}
-
-	ulib_assert(year >= TIME_YEAR_0 && (year - TIME_YEAR_0) <= MAX_YEARS);
-	ulib_assert(IS_IN_RANGE_INCL(month, 1, 12));
-	ulib_assert(IS_IN_RANGE_INCL(day, 1, 31));
+	year = (datetime->year < TIME_YEAR_0) ? datetime->year + TIME_YEAR_0 : datetime->year;
 
 #if DO_TIME_SAFETY_CHECKS
+	if (datetime == NULL) {
+		return 0;
+	}
 	if (year < TIME_YEAR_0 || (year - TIME_YEAR_0) > MAX_YEARS) {
 		return 0;
 	}
-	if (!IS_IN_RANGE_INCL(month, 1, 12)) {
-		month = 1;
+	if (!IS_IN_RANGE_INCL(datetime->month, 1, 12)) {
+		return 0;
 	}
-	if (!IS_IN_RANGE_INCL(day, 1, 31)) {
-		day = 1;
+	if (!IS_IN_RANGE_INCL(datetime->day, 1, 31)) {
+		return 0;
 	}
 #endif
 
 	// Dates are 1-indexed, but they're counted in a 0-indexed manner
-	days = day - 1;
+	days = datetime->day - 1;
 
 	// Find the number of days in all previous months
-	for (uiter_t i = 1; i < month; ++i) {
+	for (uiter_t i = 1; i < datetime->month; ++i) {
 		days += days_per_month[i-1];
 	}
 
 	leap_days = count_leap_years(year);
-	if (IS_LEAP_YEAR(year) && (month <= 2)) {
+	if (IS_LEAP_YEAR(year) && (datetime->month <= 2)) {
 		--leap_days;
 	}
 	days += leap_days;
 
 	return (utime_t )((utime_t )(year - TIME_YEAR_0) * (utime_t )SECONDS_PER_YEAR) + (utime_t )((utime_t )days * (utime_t )SECONDS_PER_DAY);
 }
-void seconds_to_date(utime_t seconds, time_year_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day) {
+
+void seconds_to_date(utime_t seconds, datetime_t *ret_datetime) {
 	uint_fast8_t tmp_month, leap_days = 0;
 	uint_fast16_t tmp_day;
 	time_year_t tmp_year;
 
-	ulib_assert(ret_year != NULL);
-	ulib_assert(ret_month != NULL);
-	ulib_assert(ret_day != NULL);
+	ulib_assert(ret_datetime != NULL);
+#if DO_TIME_SAFETY_CHECKS
+	if (ret_datetime == NULL) {
+		return;
+	}
+#endif
 
 	tmp_year = (time_year_t )(seconds / SECONDS_PER_YEAR) + TIME_YEAR_0;
 	tmp_day = (uint_fast16_t )((seconds % SECONDS_PER_YEAR) / SECONDS_PER_DAY);
@@ -157,52 +164,30 @@ void seconds_to_date(utime_t seconds, time_year_t *restrict ret_year, uint8_t *r
 		}
 	}
 
-#if DO_TIME_SAFETY_CHECKS
-	if (ret_year != NULL) {
-		*ret_year  = (time_year_t )tmp_year;
-	}
-	if (ret_month != NULL) {
-		*ret_month = (uint8_t )tmp_month;
-	}
-	if (ret_day != NULL) {
-		*ret_day = (uint8_t )tmp_day;
-	}
-#else
-	*ret_year  = (time_year_t )tmp_year;
-	*ret_month = (uint8_t )tmp_month;
-	*ret_day   = (uint8_t )tmp_day;
-#endif
+	ret_datetime->year  = tmp_year;
+	ret_datetime->month = tmp_month;
+	ret_datetime->day   = (uint_fast8_t )tmp_day;
 
 	return;
 }
 
-void seconds_to_time(utime_t seconds, uint8_t *restrict ret_hour, uint8_t *restrict ret_minute, uint8_t *restrict ret_second) {
-	ulib_assert(ret_hour != NULL);
-	ulib_assert(ret_minute != NULL);
-	ulib_assert(ret_second != NULL);
+utime_t time_to_seconds(const datetime_t *datetime) {
+	uint_fast8_t hour, minute, second;
+
+	ulib_assert(datetime != NULL);
+	ulib_assert(datetime->hour < 24);
+	ulib_assert(datetime->minute < 60);
+	ulib_assert(datetime->second < 60);
 
 #if DO_TIME_SAFETY_CHECKS
-	if (ret_hour != NULL) {
-		*ret_hour   = (uint8_t )((seconds % SECONDS_PER_DAY) / SECONDS_PER_HOUR);
+	if (datetime == NULL) {
+		return 0;
 	}
-	if (ret_minute != NULL) {
-		*ret_minute = (uint8_t )((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
-	}
-	if (ret_second != NULL) {
-		*ret_second = (uint8_t )((seconds % SECONDS_PER_MINUTE));
-	}
-#else
-	*ret_hour   = (uint8_t )((seconds % SECONDS_PER_DAY) / SECONDS_PER_HOUR);
-	*ret_minute = (uint8_t )((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
-	*ret_second = (uint8_t )((seconds % SECONDS_PER_MINUTE));
 #endif
 
-	return;
-}
-utime_t time_to_seconds(uint8_t hour, uint8_t minute, uint8_t second) {
-	ulib_assert(hour < 24);
-	ulib_assert(minute < 60);
-	ulib_assert(second < 60);
+	hour = datetime->hour;
+	minute = datetime->minute;
+	second = datetime->second;
 
 #if DO_TIME_SAFETY_CHECKS
 	if (hour >= 24) {
@@ -216,9 +201,32 @@ utime_t time_to_seconds(uint8_t hour, uint8_t minute, uint8_t second) {
 	}
 #endif
 
-	return ((utime_t )hour * (utime_t )SECONDS_PER_HOUR) + ((utime_t )minute * (utime_t )SECONDS_PER_MINUTE) + (utime_t )second;
+	return (hour * SECONDS_PER_HOUR) + (minute * SECONDS_PER_MINUTE) + second;
+}
+void seconds_to_time(utime_t seconds, datetime_t *ret_datetime) {
+	ulib_assert(ret_datetime != NULL);
+
+#if DO_TIME_SAFETY_CHECKS
+	if (ret_datetime == NULL) {
+		return;
+	}
+#endif
+	ret_datetime->hour   = (uint8_t )((seconds % SECONDS_PER_DAY) / SECONDS_PER_HOUR);
+	ret_datetime->minute = (uint8_t )((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+	ret_datetime->second = (uint8_t )((seconds % SECONDS_PER_MINUTE));
+
+	return;
 }
 
+utime_t datetime_to_seconds(const datetime_t *datetime) {
+	return date_to_seconds(datetime) + time_to_seconds(datetime);
+}
+void seconds_to_datetime(utime_t seconds, datetime_t *ret_datetime) {
+	seconds_to_date(seconds, ret_datetime);
+	seconds_to_time(seconds, ret_datetime);
+
+	return;
+}
 
 #else
 	// ISO C forbids empty translation units, this makes it happy.

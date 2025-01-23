@@ -75,17 +75,30 @@ typedef int32_t  itime_t;
 /*
 * Dates
 */
-// A list of the number of days in each month.
-extern FMEM_STORAGE const uint_fast8_t days_per_month[];
 //
 // The type used to represent a year.
 typedef uint_fast16_t time_year_t;
 //
+// The structure used to define a date/time
+typedef struct {
+	time_year_t  year;
+	uint_fast8_t month;
+	uint_fast8_t day;
+	uint_fast8_t hour;
+	uint_fast8_t minute;
+	uint_fast8_t second;
+} datetime_t;
+//
+// A list of the number of days in each month.
+extern FMEM_STORAGE const uint_fast8_t days_per_month[];
+//
 // Convert between epoch-based times and calendar times.
-utime_t date_to_seconds(time_year_t year, uint8_t month, uint8_t day);
-utime_t time_to_seconds(uint8_t hour, uint8_t minute, uint8_t second);
-void seconds_to_date(utime_t seconds, time_year_t *restrict ret_year, uint8_t *restrict ret_month, uint8_t *restrict ret_day);
-void seconds_to_time(utime_t seconds, uint8_t *restrict ret_hour, uint8_t *restrict ret_minute, uint8_t *restrict ret_second);
+utime_t datetime_to_seconds(const datetime_t *datetime);
+utime_t date_to_seconds(const datetime_t *datetime);
+utime_t time_to_seconds(const datetime_t *datetime);
+void seconds_to_datetime(utime_t seconds, datetime_t *ret_datetime);
+void seconds_to_date(utime_t seconds, datetime_t *ret_datetime);
+void seconds_to_time(utime_t seconds, datetime_t *ret_datetime);
 
 /*
 * Timers
