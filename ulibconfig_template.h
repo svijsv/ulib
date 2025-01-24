@@ -264,6 +264,20 @@
 
 
 /*
+* Error code handling module
+*/
+// Enable this module
+#ifndef ULIB_ENABLE_ERROR
+# define ULIB_ENABLE_ERROR ULIB_ENABLE_DEFAULT
+#endif
+//
+// Enable translation of error codes to strings and to/from errno codes
+#ifndef ULIB_ENABLE_ERROR_TRANSLATION
+# define ULIB_ENABLE_ERROR_TRANSLATION ULIB_ENABLE_DEFAULT
+#endif
+
+
+/*
 * File module configuration
 */
 // Enable this module
