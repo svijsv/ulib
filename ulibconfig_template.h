@@ -471,6 +471,18 @@
 # define MSG_CLOSE_FDS_ON_CONFIG 1
 #endif
 //
+// Any MSG_FLAG_* flags set in this macro are forced to be always on. See
+// msg.h for the flags.
+#ifndef MSG_FORCED_CONFIG_FLAGS
+# define MSG_FORCED_CONFIG_FLAGS 0
+#endif
+//
+// Any MSG_FLAG_* flags set in this macro are forced to be always off. See
+// msg.h for the flags. This take precedence over MSG_FORCED_CONFIG_FLAGS.
+#ifndef MSG_FORBIDDEN_CONFIG_FLAGS
+# define MSG_FORBIDDEN_CONFIG_FLAGS 0
+#endif
+//
 // Maximum size of short printed strings like line prefixes and log file
 // names, including the trailing NUL byte.
 #ifndef MSG_STR_BYTES

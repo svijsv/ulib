@@ -54,6 +54,10 @@
 # endif
 #endif
 
+#define CONFIG_FLAG_FORCED_SET(_f_) ((MSG_FORCED_CONFIG_FLAGS) & (_f_))
+#define CONFIG_FLAG_FORCED_UNSET(_f_) ((MSG_FORBIDDEN_CONFIG_FLAGS) & (_f_))
+#define CONFIG_FLAG_IS_SET(_f_) ((!CONFIG_FLAG_FORCED_UNSET(_f_)) && (CONFIG_FLAG_FORCED_SET(_f_) || (config.flags & (_f_))))
+
 #define DEFAULT_ERROR_PREFIX "ERROR: "
 #define DEFAULT_WARN_PREFIX  "WARNING: "
 #define DEFAULT_DEBUG_PREFIX  "DEBUG: "
@@ -411,7 +415,7 @@ int msg_open_log(const char* path) {
 	}
 #endif
 
-	if (BIT_IS_SET(config.flags, MSG_FLAG_LOG_DIRECT)) {
+	if (CONFIG_FLAG_IS_SET(MSG_FLAG_LOG_DIRECT)) {
 		SET_BIT(o_flags, O_DIRECT);
 	}
 
@@ -466,7 +470,7 @@ bool msg_ask(bool ans_default, bool ans_forced, const char *restrict fmt, ...) {
 
 	ulib_assert(fmt != NULL);
 
-	if (BIT_IS_SET(config.flags, MSG_FLAG_FORCE)) {
+	if (CONFIG_FLAG_IS_SET(MSG_FLAG_FORCE)) {
 		ans = ans_forced;
 	} else {
 		ans = ans_default;
@@ -478,8 +482,7 @@ bool msg_ask(bool ans_default, bool ans_forced, const char *restrict fmt, ...) {
 	}
 #endif
 
-	// Return if and only if neither of these flags is set
-	if (!BIT_IS_SET(config.flags, MSG_FLAG_INTERACT | MSG_FLAG_ALWAYS_PRINT_QUESTIONS)) {
+	if (!CONFIG_FLAG_IS_SET(MSG_FLAG_INTERACT) && !CONFIG_FLAG_IS_SET(MSG_FLAG_ALWAYS_PRINT_QUESTIONS)) {
 		return ans;
 	}
 
@@ -495,7 +498,7 @@ bool msg_ask(bool ans_default, bool ans_forced, const char *restrict fmt, ...) {
 			msg_puts(" (yes/NO): ");
 			def_str = "[NO]" MSG_NEWLINE_STRING;
 		}
-		if (!BIT_IS_SET(config.flags, MSG_FLAG_INTERACT)) {
+		if (!CONFIG_FLAG_IS_SET(MSG_FLAG_INTERACT)) {
 			msg_puts(def_str);
 			return ans;
 		}
@@ -532,7 +535,7 @@ void msg_log(const char *restrict fmt, ...) {
 	if (WRITE_ALLOWED(log)) {
 		va_list args;
 
-		if (BIT_IS_SET(config.flags, MSG_FLAG_LOG_PRINTTIME) && config.print_log_time != NULL) {
+		if (CONFIG_FLAG_IS_SET(MSG_FLAG_LOG_PRINTTIME) && config.print_log_time != NULL) {
 			char time_buf[MSG_STR_BYTES];
 			log_printf("[%s] ", config.print_log_time(time_buf, SIZEOF_ARRAY(time_buf)));
 		}
@@ -606,7 +609,7 @@ void msg_errno(int errnum, const char *restrict fmt, ...) {
 	return;
 }
 void msg_liberrno(int errnum, const char *restrict fmt, ...) {
-	if (BIT_IS_SET(config.flags, MSG_FLAG_LIBERRORS)) {
+	if (CONFIG_FLAG_IS_SET(MSG_FLAG_LIBERRORS)) {
 		va_list args;
 
 		va_start(args, fmt);
